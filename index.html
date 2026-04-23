@@ -4,100 +4,896 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Salehi EchoHemodynamics</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --bg: #f3f6fb;
+      --card: #ffffff;
+      --primary: #173a8a;
+      --primary-dark: #10295f;
+      --text: #162033;
+      --muted: #5f6b7a;
+      --border: #d9e1ec;
+      --success: #0f9f6e;
+      --warning: #d48a00;
+      --danger: #dc3d3d;
+      --neutral: #64748b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .topbar {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 24px 20px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.12);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .topbar h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+    }
+    .topbar p, .topbar small {
+      margin: 0;
+      opacity: .95;
+    }
+    .app {
+      max-width: 1400px;
+      margin: 20px auto 40px;
+      padding: 0 16px;
+    }
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(15,23,42,.05);
+      margin-bottom: 16px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    h2, h3 { margin-top: 0; }
+    p.sub {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: 700;
+    }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font-size: 15px;
+      background: #fbfdff;
+    }
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .primary {
+      background: var(--primary);
+      color: white;
+    }
+    .secondary {
+      background: #e7edf7;
+      color: var(--text);
+    }
+    .danger-btn {
+      background: var(--danger);
+      color: white;
+    }
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 12px;
+    }
+    .metric {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      background: #fbfdff;
+    }
+    .metric .label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .metric .value {
+      font-size: 24px;
+      font-weight: 800;
+    }
+    .metric .unit {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .status-box {
+      border-radius: 14px;
+      padding: 16px;
+      font-weight: 700;
+      line-height: 1.5;
+      border-left: 6px solid var(--neutral);
+      background: #f8fafc;
+    }
+    .status-box.success {
+      border-left-color: var(--success);
+      background: rgba(15,159,110,.08);
+      color: #0b6d4b;
+    }
+    .status-box.warning {
+      border-left-color: var(--warning);
+      background: rgba(212,138,0,.08);
+      color: #8a5d00;
+    }
+    .status-box.danger {
+      border-left-color: var(--danger);
+      background: rgba(220,61,61,.08);
+      color: #9f2121;
+    }
+    .status-box.neutral {
+      border-left-color: var(--neutral);
+      color: #475569;
+    }
+    .alerts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .alert-item {
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .alert-item.warning {
+      background: rgba(212,138,0,.1);
+      color: #7a5300;
+      border: 1px solid rgba(212,138,0,.2);
+    }
+    .alert-item.danger {
+      background: rgba(220,61,61,.1);
+      color: #8d2424;
+      border: 1px solid rgba(220,61,61,.2);
+    }
+    .alert-item.success {
+      background: rgba(15,159,110,.1);
+      color: #0b6d4b;
+      border: 1px solid rgba(15,159,110,.2);
+    }
+    .summary-box {
+      border: 1px solid var(--border);
+      background: #fbfdff;
+      border-radius: 12px;
+      padding: 16px;
+      line-height: 1.6;
+    }
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    @media (max-width: 1100px) {
+      .tabs, .grid-3, .result-grid {
+        grid-template-columns: repeat(2,1fr);
+      }
+    }
+    @media (max-width: 800px) {
+      .tabs, .grid-2, .grid-3, .result-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="topbar">
-    <div>
-      <h1>Salehi EchoHemodynamics</h1>
-      <p>Clinical Echocardiography Assistant</p>
-      <small>Developed by Dr. Salehi · Cardiology Resident</small>
-    </div>
+    <h1>Salehi EchoHemodynamics</h1>
+    <p>Clinical Echocardiography Assistant</p>
+    <small>Developed by Dr. Salehi · Cardiology Resident</small>
   </header>
 
-  <main class="page">
-    <section class="hero card">
-      <h2>Aortic Stenosis Expert Module</h2>
-      <p>
-        Integrated RAo assessment with valve quantification, flow state,
-        LV systolic function, discordance detection, and automated summary.
-      </p>
-    </section>
+  <main class="app">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="tab-btn" data-tab="as">Aortic Stenosis</button>
+      <button class="tab-btn" data-tab="mr">Mitral Regurgitation</button>
+      <button class="tab-btn" data-tab="ms">Mitral Stenosis</button>
+      <button class="tab-btn" data-tab="ar">Aortic Regurgitation</button>
+      <button class="tab-btn" data-tab="tr">TR / PAPs</button>
+      <button class="tab-btn" data-tab="function">Systolic / Diastolic</button>
+    </div>
 
-    <section class="grid">
+    <section id="dashboard" class="panel active">
       <div class="card">
-        <h3>Valve Measurements</h3>
-
-        <label for="lvot">LVOT Diameter (cm)</label>
-        <input id="lvot" type="number" step="0.01" placeholder="e.g. 2.0" />
-
-        <label for="vti_lvot">VTI LVOT (cm)</label>
-        <input id="vti_lvot" type="number" step="0.1" placeholder="e.g. 20" />
-
-        <label for="vti_ao">VTI Aortic Valve (cm)</label>
-        <input id="vti_ao" type="number" step="0.1" placeholder="e.g. 80" />
-
-        <label for="vmax">Vmax Aortic Valve (m/s)</label>
-        <input id="vmax" type="number" step="0.1" placeholder="e.g. 4.2" />
-
-        <label for="gradient">Mean Gradient (mmHg)</label>
-        <input id="gradient" type="number" step="1" placeholder="e.g. 42" />
+        <h2>Integrated Echo Dashboard</h2>
+        <p class="sub">
+          This version gives you one structured app for major valvulopathies,
+          ventricular function, diastolic assessment, PAPs estimation,
+          and automated report text.
+        </p>
       </div>
 
-      <div class="card">
-        <h3>Hemodynamic Context</h3>
-
-        <label for="height">Height (cm)</label>
-<input id="height" type="number" step="1" placeholder="e.g. 170" />
-
-<label for="weight">Weight (kg)</label>
-<input id="weight" type="number" step="0.1" placeholder="e.g. 70" />
-
-        <label for="ef">LVEF (%)</label>
-        <input id="ef" type="number" step="1" placeholder="e.g. 55" />
-
-        <label for="eovere">Average E/e′ (optional)</label>
-        <input id="eovere" type="number" step="0.1" placeholder="e.g. 16" />
-
-        <label for="lavi">LAVI mL/m² (optional)</label>
-        <input id="lavi" type="number" step="1" placeholder="e.g. 42" />
-        <label for="gls">GLS (%) (optional)</label>
-<input id="gls" type="number" step="0.1" placeholder="-18">
-
-<label for="eprime">e′ septal (cm/s)</label>
-<input id="eprime" type="number" step="0.1" placeholder="6">
-
-<label for="trv">TR velocity (m/s)</label>
-<input id="trv" type="number" step="0.1" placeholder="2.8">
-
-        <div class="actions">
-          <button class="primary" onclick="calculateRAo()">Calculate RAo</button>
-          <button class="secondary" onclick="resetForm()">Reset</button>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Included modules</h3>
+          <p class="sub">AS, MR, MS, AR, TR/PAPs, LV/RV function, diastolic profile, automated report blocks.</p>
+        </div>
+        <div class="card">
+          <h3>Clinical logic</h3>
+          <p class="sub">Severity, discordance, flow state, filling pressure hints, and structured wording for echo reporting.</p>
+        </div>
+        <div class="card">
+          <h3>Best next step</h3>
+          <p class="sub">Use one module at a time, validate on known cases, then refine thresholds and reporting language.</p>
         </div>
       </div>
     </section>
 
-    <section class="grid">
+    <section id="as" class="panel">
       <div class="card">
-        <h3>Key Results</h3>
-        <div id="resultCards" class="result-grid"></div>
+        <h2>Aortic Stenosis</h2>
+        <p class="sub">Integrated valve quantification, indexed flow, EF, and basic diastolic context.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Valve Measurements</h3>
+          <label>LVOT Diameter (cm)</label><input id="as_lvot" type="number" step="0.01">
+          <label>VTI LVOT (cm)</label><input id="as_vti_lvot" type="number" step="0.1">
+          <label>VTI Aortic Valve (cm)</label><input id="as_vti_ao" type="number" step="0.1">
+          <label>Vmax Aortic Valve (m/s)</label><input id="as_vmax" type="number" step="0.1">
+          <label>Mean Gradient (mmHg)</label><input id="as_gradient" type="number" step="1">
+        </div>
+
+        <div class="card">
+          <h3>Hemodynamic Context</h3>
+          <label>Height (cm)</label><input id="as_height" type="number" step="1">
+          <label>Weight (kg)</label><input id="as_weight" type="number" step="0.1">
+          <label>LVEF (%)</label><input id="as_ef" type="number" step="1">
+          <label>Average E/e′ (optional)</label><input id="as_eovere" type="number" step="0.1">
+          <label>LAVI mL/m² (optional)</label><input id="as_lavi" type="number" step="1">
+          <label>GLS (%) (optional)</label><input id="as_gls" type="number" step="0.1">
+          <label>e′ septal (cm/s) (optional)</label><input id="as_eprime" type="number" step="0.1">
+          <label>TR velocity (m/s) (optional)</label><input id="as_trv" type="number" step="0.1">
+          <div class="actions">
+            <button class="primary" onclick="calculateAS()">Calculate AS</button>
+            <button class="secondary" onclick="resetAS()">Reset</button>
+          </div>
+        </div>
+      </div>
+            <div class="grid-2">
+        <div class="card">
+          <h3>Key Results</h3>
+          <div id="as_results" class="result-grid"></div>
+        </div>
+        <div class="card">
+          <h3>Integrated Interpretation</h3>
+          <div id="as_status" class="status-box neutral">Awaiting data...</div>
+          <div id="as_alerts" class="alerts"></div>
+        </div>
       </div>
 
       <div class="card">
-        <h3>Integrated Interpretation</h3>
-        <div id="severityBox" class="status-box neutral">Awaiting data...</div>
-        <div id="alerts" class="alerts"></div>
+        <h3>Automated Conclusion</h3>
+        <div id="as_conclusion" class="summary-box">Fill the fields and calculate.</div>
       </div>
     </section>
 
-    <section class="card">
-      <h3>Automated Conclusion</h3>
-      <div id="conclusion" class="conclusion">
-        Fill in the fields and click <strong>Calculate RAo</strong>.
+    <section id="mr" class="panel">
+      <div class="card">
+        <h2>Mitral Regurgitation</h2>
+        <p class="sub">PISA-based quantification with multiparametric support.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <label>PISA radius (cm)</label><input id="mr_r" type="number" step="0.01">
+          <label>Aliasing velocity Va (cm/s)</label><input id="mr_va" type="number" step="1">
+          <label>MR peak velocity (cm/s)</label><input id="mr_vmax" type="number" step="1">
+          <label>MR VTI (cm)</label><input id="mr_vti" type="number" step="1">
+          <label>Vena contracta (mm) (optional)</label><input id="mr_vc" type="number" step="0.1">
+          <label>Mechanism</label>
+          <select id="mr_mech">
+            <option value="primary">Primary</option>
+            <option value="secondary">Secondary</option>
+          </select>
+          <div class="actions">
+            <button class="primary" onclick="calculateMR()">Calculate MR</button>
+            <button class="secondary" onclick="resetMR()">Reset</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Results</h3>
+          <div id="mr_results" class="result-grid"></div>
+          <div id="mr_status" class="status-box neutral">Awaiting data...</div>
+          <div id="mr_alerts" class="alerts"></div>
+          <div id="mr_conclusion" class="summary-box" style="margin-top:12px;">Fill the fields and calculate.</div>
+        </div>
       </div>
     </section>
-  </main>
 
-  <script src="app.js"></script>
+    <section id="ms" class="panel">
+      <div class="card">
+        <h2>Mitral Stenosis</h2>
+        <p class="sub">PHT-based area, gradient, and practical grading.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <label>PHT (ms)</label><input id="ms_pht" type="number" step="1">
+          <label>Mean gradient (mmHg)</label><input id="ms_grad" type="number" step="1">
+          <label>Heart rate (bpm)</label><input id="ms_hr" type="number" step="1">
+          <label>Rhythm</label>
+          <select id="ms_rhythm">
+            <option value="sinus">Sinus</option>
+            <option value="af">AF</option>
+          </select>
+          <div class="actions">
+            <button class="primary" onclick="calculateMS()">Calculate MS</button>
+            <button class="secondary" onclick="resetMS()">Reset</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Results</h3>
+          <div id="ms_results" class="result-grid"></div>
+          <div id="ms_status" class="status-box neutral">Awaiting data...</div>
+          <div id="ms_alerts" class="alerts"></div>
+          <div id="ms_conclusion" class="summary-box" style="margin-top:12px;">Fill the fields and calculate.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ar" class="panel">
+      <div class="card">
+        <h2>Aortic Regurgitation</h2>
+        <p class="sub">Simplified multiparametric AR support.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <label>Pressure half-time (ms)</label><input id="ar_pht" type="number" step="1">
+          <label>Vena contracta (mm)</label><input id="ar_vc" type="number" step="0.1">
+          <label>Holodiastolic flow reversal in descending aorta</label>
+          <select id="ar_flowrev">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+          <div class="actions">
+            <button class="primary" onclick="calculateAR()">Calculate AR</button>
+            <button class="secondary" onclick="resetAR()">Reset</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Results</h3>
+          <div id="ar_results" class="result-grid"></div>
+          <div id="ar_status" class="status-box neutral">Awaiting data...</div>
+          <div id="ar_alerts" class="alerts"></div>
+          <div id="ar_conclusion" class="summary-box" style="margin-top:12px;">Fill the fields and calculate.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tr" class="panel">
+      <div class="card">
+        <h2>TR / PAPs</h2>
+        <p class="sub">TR velocity, RAP estimate, PAPs, and simple TR severity support.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <label>TR velocity (m/s)</label><input id="tr_vmax" type="number" step="0.1">
+          <label>Estimated RAP (mmHg)</label><input id="tr_rap" type="number" step="1" value="8">
+          <label>Vena contracta TR (mm) (optional)</label><input id="tr_vc" type="number" step="0.1">
+          <div class="actions">
+            <button class="primary" onclick="calculateTR()">Calculate TR/PAPs</button>
+            <button class="secondary" onclick="resetTR()">Reset</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Results</h3>
+          <div id="tr_results" class="result-grid"></div>
+          <div id="tr_status" class="status-box neutral">Awaiting data...</div>
+          <div id="tr_alerts" class="alerts"></div>
+          <div id="tr_conclusion" class="summary-box" style="margin-top:12px;">Fill the fields and calculate.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="function" class="panel">
+      <div class="card">
+        <h2>Systolic / Diastolic Function</h2>
+        <p class="sub">Standalone ventricular function and filling-pressure support.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <label>LVEF (%)</label><input id="fn_ef" type="number" step="1">
+          <label>GLS (%)</label><input id="fn_gls" type="number" step="0.1">
+          <label>E/e′</label><input id="fn_eovere" type="number" step="0.1">
+          <label>e′ septal (cm/s)</label><input id="fn_eprime" type="number" step="0.1">
+          <label>LAVI (mL/m²)</label><input id="fn_lavi" type="number" step="1">
+          <label>TR velocity (m/s)</label><input id="fn_trv" type="number" step="0.1">
+          <div class="actions">
+            <button class="primary" onclick="calculateFunction()">Calculate Function</button>
+            <button class="secondary" onclick="resetFunction()">Reset</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Results</h3>
+          <div id="fn_results" class="result-grid"></div>
+          <div id="fn_status" class="status-box neutral">Awaiting data...</div>
+          <div id="fn_alerts" class="alerts"></div>
+          <div id="fn_conclusion" class="summary-box" style="margin-top:12px;">Fill the fields and calculate.</div>
+        </div>
+      </div>
+    </section>
+      </main>
+
+  <script>
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    function g(id) {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const v = parseFloat(el.value);
+      return Number.isNaN(v) ? null : v;
+    }
+
+    function s(id, html) {
+      document.getElementById(id).innerHTML = html;
+    }
+
+    function fmt(v, d = 2) {
+      return isFinite(v) ? Number(v).toFixed(d) : '—';
+    }
+
+    function metric(label, value, unit = '') {
+      return `<div class="metric"><div class="label">${label}</div><div class="value">${value}</div><div class="unit">${unit}</div></div>`;
+    }
+
+    function alertBox(type, text) {
+      return `<div class="alert-item ${type}">${text}</div>`;
+    }
+
+    function status(id, klass, text) {
+      const el = document.getElementById(id);
+      el.className = `status-box ${klass}`;
+      el.innerHTML = text;
+    }
+
+    function resetFields(ids) {
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+    }
+
+    function diastolicAssessment(eovere, eprime, lavi, trv) {
+      let score = 0;
+      if (eovere !== null && eovere > 14) score++;
+      if (eprime !== null && eprime < 7) score++;
+      if (lavi !== null && lavi > 34) score++;
+      if (trv !== null && trv > 2.8) score++;
+      let statusText = 'Normal or indeterminate';
+      if (score >= 2) statusText = 'Diastolic dysfunction likely';
+      return { score, statusText };
+    }
+
+    function glsAssessment(gls) {
+      if (gls === null) return 'Not entered';
+      if (gls > -16) return 'Reduced longitudinal function';
+      return 'Normal GLS';
+    }
+
+    function calculateAS() {
+      const lvot = g('as_lvot');
+      const vtiLVOT = g('as_vti_lvot');
+      const vtiAo = g('as_vti_ao');
+      const vmax = g('as_vmax');
+      const gradient = g('as_gradient');
+      const height = g('as_height');
+      const weight = g('as_weight');
+      const ef = g('as_ef');
+      const eovere = g('as_eovere');
+      const lavi = g('as_lavi');
+      const gls = g('as_gls');
+      const eprime = g('as_eprime');
+      const trv = g('as_trv');
+
+      if ([lvot, vtiLVOT, vtiAo, vmax, gradient, height, weight, ef].some(v => v === null)) {
+        status('as_status', 'warning', 'Please fill all required fields.');
+        s('as_results', '');
+        s('as_alerts', '');
+        s('as_conclusion', 'Calculation cannot be performed until required fields are completed.');
+        return;
+      }
+
+      const alerts = [];
+      const bsa = Math.sqrt((height * weight) / 3600);
+      const lvotArea = Math.PI * Math.pow(lvot / 2, 2);
+      const sv = lvotArea * vtiLVOT;
+      const svi = sv / bsa;
+      const ava = sv / vtiAo;
+      const avai = ava / bsa;
+      const di = vtiLVOT / vtiAo;
+      const flowState = svi < 35 ? 'Low-flow' : 'Normal-flow';
+      const severeByValve = ava <= 1 || avai <= 0.6 || di < 0.25;
+      const severeByHemo = vmax >= 4 || gradient >= 40;
+      const { statusText: diastolicText } = diastolicAssessment(eovere, eprime, lavi, trv);
+      const glsText = glsAssessment(gls);
+
+      let main = 'Likely non-severe or not hemodynamically severe profile.';
+      let klass = 'success';
+      let conclusion =
+        `Current data do not support a concordant severe high-gradient AS profile. ` +
+        `AVA ${fmt(ava)} cm², AVAi ${fmt(avai)} cm²/m², DI ${fmt(di)}, ` +
+        `Vmax ${fmt(vmax, 1)} m/s, mean gradient ${fmt(gradient, 0)} mmHg, ` +
+        `SVI ${fmt(svi, 1)} mL/m².`;
+
+      if (severeByValve && severeByHemo) {
+        main = 'Severe aortic stenosis - high gradient profile.';
+        klass = 'danger';
+        conclusion =
+          `Findings are compatible with severe aortic stenosis with concordant high-gradient hemodynamics: ` +
+          `AVA ${fmt(ava)} cm², AVAi ${fmt(avai)} cm²/m², DI ${fmt(di)}, ` +
+          `Vmax ${fmt(vmax, 1)} m/s, mean gradient ${fmt(gradient, 0)} mmHg, SVI ${fmt(svi, 1)} mL/m².`;
+        alerts.push(alertBox('danger', 'Severe AS profile. Integrate symptoms, valve morphology, and treatment indication.'));
+      } else if (ava <= 1 && svi < 35 && ef < 50 && gradient < 40) {
+        main = 'Classical low-flow low-gradient severe AS possible.';
+        klass = 'warning';
+        conclusion =
+          `Profile suggests possible classical low-flow low-gradient severe AS: ` +
+          `AVA ${fmt(ava)} cm², SVI ${fmt(svi, 1)} mL/m², LVEF ${fmt(ef, 0)}%, mean gradient ${fmt(gradient, 0)} mmHg.`;
+        alerts.push(alertBox('warning', 'Low-flow low-gradient pattern with reduced EF.'));
+      } else if (ava <= 1 && svi < 35 && ef >= 50 && gradient < 40) {
+        main = 'Paradoxical low-flow low-gradient severe AS possible.';
+        klass = 'warning';
+        conclusion =
+          `Profile suggests possible paradoxical low-flow low-gradient severe AS: ` +
+          `AVA ${fmt(ava)} cm², preserved LVEF ${fmt(ef, 0)}%, low SVI ${fmt(svi, 1)} mL/m², low gradient ${fmt(gradient, 0)} mmHg.`;
+        alerts.push(alertBox('warning', 'Discordant severe AS pattern with preserved EF.'));
+      }
+
+      if (lavi !== null && lavi > 34) {
+        alerts.push(alertBox('warning', `Left atrial volume index enlarged (LAVI ${fmt(lavi, 0)} mL/m²).`));
+      }
+      if (diastolicText !== 'Normal or indeterminate') {
+        alerts.push(alertBox('warning', diastolicText));
+      }
+      if (glsText !== 'Not entered' && glsText !== 'Normal GLS') {
+        alerts.push(alertBox('warning', glsText));
+      }
+
+      s('as_results',
+        metric('Calculated BSA', fmt(bsa), 'm²') +
+        metric('LVOT Area', fmt(lvotArea), 'cm²') +
+        metric('Stroke Volume', fmt(sv), 'mL') +
+        metric('SVI', fmt(svi, 1), 'mL/m²') +
+        metric('AVA', fmt(ava), 'cm²') +
+        metric('AVAi', fmt(avai), 'cm²/m²') +
+        metric('Dimensionless Index', fmt(di), '') +
+        metric('Flow State', flowState, '') +
+        metric('LVEF', fmt(ef, 0), '%') +
+        metric('Diastolic Function', diastolicText, '') +
+        metric('GLS Interpretation', glsText, '')
+      );
+
+      status('as_status', klass, main);
+      s('as_alerts', alerts.join(''));
+      s('as_conclusion', conclusion);
+    }
+
+    function resetAS() {
+      resetFields([
+        'as_lvot', 'as_vti_lvot', 'as_vti_ao', 'as_vmax', 'as_gradient',
+        'as_height', 'as_weight', 'as_ef', 'as_eovere', 'as_lavi',
+        'as_gls', 'as_eprime', 'as_trv'
+      ]);
+      s('as_results', '');
+      s('as_alerts', '');
+      status('as_status', 'neutral', 'Awaiting data...');
+      s('as_conclusion', 'Fill the fields and calculate.');
+    }
+
+    function calculateMR() {
+      const r = g('mr_r');
+      const va = g('mr_va');
+      const vmax = g('mr_vmax');
+      const vti = g('mr_vti');
+      const vc = g('mr_vc');
+      const mech = document.getElementById('mr_mech').value;
+
+      if ([r, va, vmax, vti].some(v => v === null)) {
+        status('mr_status', 'warning', 'Please fill required fields.');
+        return;
+      }
+
+      const flow = 2 * Math.PI * Math.pow(r, 2) * va;
+      const eroa = flow / vmax;
+      const rvol = eroa * vti;
+
+      let main = 'MR likely non-severe.';
+      let klass = 'success';
+
+      if ((mech === 'primary' && eroa >= 0.4) || (mech === 'secondary' && eroa >= 0.2) || rvol >= 60 || (vc !== null && vc >= 7)) {
+        main = 'Significant / severe MR likely.';
+        klass = 'danger';
+      }
+
+      s('mr_results',
+        metric('PISA Flow', fmt(flow), 'mL/s') +
+        metric('EROA', fmt(eroa), 'cm²') +
+        metric('Regurgitant Volume', fmt(rvol), 'mL/beat') +
+        metric('Vena Contracta', vc === null ? '—' : fmt(vc, 1), 'mm')
+      );
+
+      status('mr_status', klass, main);
+      s('mr_alerts', klass === 'danger'
+        ? alertBox('danger', 'Interpret with multiparametric assessment and mechanism.')
+        : alertBox('success', 'No clear severe MR pattern from entered data.')
+      );
+      s('mr_conclusion', `MR quantification suggests ${main.toLowerCase()} EROA ${fmt(eroa)} cm² and regurgitant volume ${fmt(rvol)} mL/beat.`);
+    }
+
+    function resetMR() {
+      resetFields(['mr_r', 'mr_va', 'mr_vmax', 'mr_vti', 'mr_vc']);
+      document.getElementById('mr_mech').value = 'primary';
+      s('mr_results', '');
+      s('mr_alerts', '');
+      status('mr_status', 'neutral', 'Awaiting data...');
+      s('mr_conclusion', 'Fill the fields and calculate.');
+    }
+
+    function calculateMS() {
+      const pht = g('ms_pht');
+      const grad = g('ms_grad');
+      const hr = g('ms_hr');
+      const rhythm = document.getElementById('ms_rhythm').value;
+
+      if ([pht, grad, hr].some(v => v === null)) {
+        status('ms_status', 'warning', 'Please fill required fields.');
+        return;
+      }
+
+      const mva = 220 / pht;
+      let main = 'Mild MS likely.';
+      let klass = 'success';
+
+      if (mva <= 1.5) {
+        main = 'Clinically significant MS likely.';
+        klass = 'warning';
+      }
+      if (mva <= 1.0) {
+        main = 'Severe MS likely.';
+        klass = 'danger';
+      }
+
+      const alerts = [];
+      if (rhythm === 'af') alerts.push(alertBox('warning', 'AF may reduce reliability of gradient interpretation.'));
+      if (hr > 100) alerts.push(alertBox('warning', 'Tachycardia may increase transmitral gradient.'));
+
+      s('ms_results',
+        metric('Mitral Valve Area', fmt(mva), 'cm²') +
+        metric('Mean Gradient', fmt(grad, 0), 'mmHg') +
+        metric('Heart Rate', fmt(hr, 0), 'bpm')
+      );
+
+      status('ms_status', klass, main);
+      s('ms_alerts', alerts.join(''));
+      s('ms_conclusion', `MS assessment suggests ${main.toLowerCase()} Calculated MVA ${fmt(mva)} cm² with mean gradient ${fmt(grad, 0)} mmHg.`);
+    }
+
+    function resetMS() {
+      resetFields(['ms_pht', 'ms_grad', 'ms_hr']);
+      document.getElementById('ms_rhythm').value = 'sinus';
+      s('ms_results', '');
+      s('ms_alerts', '');
+      status('ms_status', 'neutral', 'Awaiting data...');
+      s('ms_conclusion', 'Fill the fields and calculate.');
+    }
+
+    function calculateAR() {
+      const pht = g('ar_pht');
+      const vc = g('ar_vc');
+      const flowrev = document.getElementById('ar_flowrev').value;
+
+      if (pht === null && vc === null) {
+        status('ar_status', 'warning', 'Enter at least PHT or vena contracta.');
+        return;
+      }
+
+      let main = 'AR severity indeterminate / non-severe.';
+      let klass = 'success';
+
+      if ((pht !== null && pht < 200) || (vc !== null && vc >= 6) || flowrev === 'yes') {
+        main = 'Significant / severe AR likely.';
+        klass = 'danger';
+      }
+
+      s('ar_results',
+        metric('AR Pressure Half-time', pht === null ? '—' : fmt(pht, 0), 'ms') +
+        metric('Vena Contracta', vc === null ? '—' : fmt(vc, 1), 'mm') +
+        metric('Holodiastolic Flow Reversal', flowrev === 'yes' ? 'Yes' : 'No', '')
+      );
+
+      status('ar_status', klass, main);
+      s('ar_alerts', klass === 'danger' ? alertBox('danger', 'Interpret with full multiparametric AR assessment.') : '');
+      s('ar_conclusion',
+        `AR evaluation suggests ${main.toLowerCase()}${pht !== null ? ` PHT ${fmt(pht, 0)} ms.` : ''}${vc !== null ? ` VC ${fmt(vc, 1)} mm.` : ''}`
+      );
+    }
+
+    function resetAR() {
+      resetFields(['ar_pht', 'ar_vc']);
+      document.getElementById('ar_flowrev').value = 'no';
+      s('ar_results', '');
+      s('ar_alerts', '');
+      status('ar_status', 'neutral', 'Awaiting data...');
+      s('ar_conclusion', 'Fill the fields and calculate.');
+    }
+
+    function calculateTR() {
+      const vmax = g('tr_vmax');
+      const rap = g('tr_rap');
+      const vc = g('tr_vc');
+
+      if (vmax === null || rap === null) {
+        status('tr_status', 'warning', 'Please fill TR velocity and RAP.');
+        return;
+      }
+
+      const grad = 4 * Math.pow(vmax, 2);
+      const paps = grad + rap;
+
+      let main = 'No marked pulmonary pressure elevation suggested.';
+      let klass = 'success';
+
+      if (paps > 40) {
+        main = 'Elevated PAPs likely.';
+        klass = 'warning';
+      }
+      if (paps > 60) {
+        main = 'Marked PAPs elevation likely.';
+        klass = 'danger';
+      }
+
+      s('tr_results',
+        metric('TR Gradient', fmt(grad, 0), 'mmHg') +
+        metric('Estimated RAP', fmt(rap, 0), 'mmHg') +
+        metric('Estimated PAPs', fmt(paps, 0), 'mmHg') +
+        metric('TR Vena Contracta', vc === null ? '—' : fmt(vc, 1), 'mm')
+      );
+
+      status('tr_status', klass, main);
+      s('tr_alerts', vc !== null && vc >= 7 ? alertBox('warning', 'Large TR vena contracta supports significant TR.') : '');
+      s('tr_conclusion', `TR/PAPs assessment suggests ${main.toLowerCase()} Estimated PAPs ${fmt(paps, 0)} mmHg from TR velocity ${fmt(vmax, 1)} m/s and RAP ${fmt(rap, 0)} mmHg.`);
+    }
+
+    function resetTR() {
+      resetFields(['tr_vmax', 'tr_vc']);
+      document.getElementById('tr_rap').value = '8';
+      s('tr_results', '');
+      s('tr_alerts', '');
+      status('tr_status', 'neutral', 'Awaiting data...');
+      s('tr_conclusion', 'Fill the fields and calculate.');
+    }
+
+    function calculateFunction() {
+      const ef = g('fn_ef');
+      const gls = g('fn_gls');
+      const eovere = g('fn_eovere');
+      const eprime = g('fn_eprime');
+      const lavi = g('fn_lavi');
+      const trv = g('fn_trv');
+
+      if ([ef, eovere, eprime, lavi, trv].some(v => v === null)) {
+        status('fn_status', 'warning', 'Please fill required function fields.');
+        return;
+      }
+
+      const { score, statusText } = diastolicAssessment(eovere, eprime, lavi, trv);
+      const glsText = glsAssessment(gls);
+      const systolicText = ef >= 50 ? 'Preserved LVEF' : 'Reduced LVEF';
+
+      let main = 'Function profile without major abnormality.';
+      let klass = 'success';
+
+      if (ef < 50 || statusText !== 'Normal or indeterminate' || glsText !== 'Normal GLS') {
+        main = 'Abnormal ventricular / filling-pressure profile likely.';
+        klass = 'warning';
+      }
+
+      s('fn_results',
+        metric('LVEF', fmt(ef, 0), '%') +
+        metric('GLS', gls === null ? '—' : fmt(gls, 1), '%') +
+        metric('Systolic Status', systolicText, '') +
+        metric('Diastolic Score', fmt(score, 0), '') +
+        metric('Diastolic Function', statusText, '') +
+        metric('GLS Interpretation', glsText, '')
+      );
+
+      status('fn_status', klass, main);
+      s('fn_alerts',
+        [
+          statusText !== 'Normal or indeterminate' ? alertBox('warning', statusText) : '',
+          glsText !== 'Normal GLS' && glsText !== 'Not entered' ? alertBox('warning', glsText) : ''
+        ].join('')
+      );
+
+      s('fn_conclusion', `Function assessment: ${systolicText.toLowerCase()}, ${statusText.toLowerCase()}, GLS interpretation: ${glsText.toLowerCase()}.`);
+    }
+
+    function resetFunction() {
+      resetFields(['fn_ef', 'fn_gls', 'fn_eovere', 'fn_eprime', 'fn_lavi', 'fn_trv']);
+      s('fn_results', '');
+      s('fn_alerts', '');
+      status('fn_status', 'neutral', 'Awaiting data...');
+      s('fn_conclusion', 'Fill the fields and calculate.');
+    }
+  </script>
 </body>
 </html>
