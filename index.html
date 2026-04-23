@@ -352,8 +352,25 @@
     <label>e′ septal</label>
     <input id="sd_eprime" type="number">
 
-    <label>LAVI</label>
-    <input id="sd_lavi" type="number">
+    <h3>Body Size</h3>
+
+<label>Height (cm)</label>
+<input id="sd_height" type="number" placeholder="e.g. 170">
+
+<label>Weight (kg)</label>
+<input id="sd_weight" type="number" placeholder="e.g. 70">
+
+
+<h3>Left Atrium</h3>
+
+<label>LA area A4C (cm²)</label>
+<input id="sd_la_a4c" type="number" placeholder="e.g. 22">
+
+<label>LA area A2C (cm²)</label>
+<input id="sd_la_a2c" type="number" placeholder="e.g. 20">
+
+<label>LA length (cm)</label>
+<input id="sd_la_length" type="number" placeholder="e.g. 5.5">
 
     <label>TR velocity</label>
     <input id="sd_trv" type="number">
@@ -1023,7 +1040,27 @@
   const tapse = g('sd_tapse');
   const ee = g('sd_ee');
   const eprime = g('sd_eprime');
-  const lavi = g('sd_lavi');
+  const height = g('sd_height');
+const weight = g('sd_weight');
+const laA4C = g('sd_la_a4c');
+const laA2C = g('sd_la_a2c');
+const laLength = g('sd_la_length');
+
+let bsa = null;
+let lav = null;
+let lavi = null;
+
+if (height !== null && weight !== null) {
+  bsa = Math.sqrt((height * weight) / 3600);
+}
+
+if (laA4C !== null && laA2C !== null && laLength !== null && laLength > 0) {
+  lav = (8 / (3 * Math.PI)) * ((laA4C * laA2C) / laLength);
+}
+
+if (lav !== null && bsa !== null && bsa > 0) {
+  lavi = lav / bsa;
+}
   const trv = g('sd_trv');
 
   let result = '';
@@ -1059,7 +1096,10 @@
     metric('S′ mitral', sprime === null ? '—' : fmt(sprime, 1), 'cm/s') +
     metric('TAPSE', tapse === null ? '—' : fmt(tapse, 1), 'mm') +
     metric('E/e′', ee === null ? '—' : fmt(ee, 1), '') +
-    metric('LAVI', lavi === null ? '—' : fmt(lavi, 0), 'mL/m²') +
+    metric('BSA', bsa === null ? '—' : fmt(bsa, 2), 'm²') +
+metric('LAV', lav === null ? '—' : fmt(lav, 0), 'mL') +
+metric('LAVI', lavi === null ? '—' : fmt(lavi, 0), 'mL/m²') +
+metric('LA Interpretation', lavi === null ? 'Not calculated' : (lavi > 34 ? 'Enlarged LA' : 'Normal LA'), '') +
     metric('TR velocity', trv === null ? '—' : fmt(trv, 1), 'm/s') +
     metric('Diastolic score', fmt(diastolicScore, 0), '');
 
