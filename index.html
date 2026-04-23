@@ -320,6 +320,60 @@
         </div>
       </div>
     </section>
+    <section id="function" class="panel">
+
+  <div class="card">
+    <h2>Systolic & Diastolic Function</h2>
+  </div>
+
+  <div class="card">
+
+    <h3>LV Systolic Function</h3>
+
+    <label>LVEF (%)</label>
+    <input id="sd_ef" type="number">
+
+    <label>MAPSE (mm)</label>
+    <input id="sd_mapse" type="number">
+
+    <label>S′ (cm/s)</label>
+    <input id="sd_sprime" type="number">
+
+    <h3>RV Function</h3>
+
+    <label>TAPSE (mm)</label>
+    <input id="sd_tapse" type="number">
+
+    <h3>Diastolic Function</h3>
+
+    <label>E/e′</label>
+    <input id="sd_ee" type="number">
+
+    <label>e′ septal</label>
+    <input id="sd_eprime" type="number">
+
+    <label>LAVI</label>
+    <input id="sd_lavi" type="number">
+
+    <label>TR velocity</label>
+    <input id="sd_trv" type="number">
+
+    <br><br>
+    <button onclick="calculateSD()">Calculate</button>
+
+  </div>
+
+  <div class="card">
+    <h3>Results</h3>
+    <div id="sd_results"></div>
+  </div>
+
+  <div class="card">
+    <h3>Interpretation</h3>
+    <div id="sd_interpretation"></div>
+  </div>
+
+</section>
 
     <section id="as" class="panel">
       <div class="card">
@@ -963,5 +1017,63 @@
       s('fn_conclusion', 'Fill the fields and calculate.');
     }
   </script>
+  function calculateSD() {
+  const ef = g('sd_ef');
+  const mapse = g('sd_mapse');
+  const sprime = g('sd_sprime');
+  const tapse = g('sd_tapse');
+  const ee = g('sd_ee');
+  const eprime = g('sd_eprime');
+  const lavi = g('sd_lavi');
+  const trv = g('sd_trv');
+
+  let result = '';
+  let interp = '';
+
+  let lv = 'Normal';
+  if (ef !== null && ef < 50) lv = 'Reduced';
+  if (ef !== null && ef >= 40 && ef < 50) lv = 'Mildly reduced';
+
+  let longitudinal = 'Normal';
+  if ((mapse !== null && mapse < 10) || (sprime !== null && sprime < 7)) {
+    longitudinal = 'Reduced longitudinal function';
+  }
+
+  let rv = 'Normal';
+  if (tapse !== null && tapse < 17) {
+    rv = 'RV systolic dysfunction';
+  }
+
+  let diastolicScore = 0;
+  if (ee !== null && ee > 14) diastolicScore++;
+  if (eprime !== null && eprime < 7) diastolicScore++;
+  if (lavi !== null && lavi > 34) diastolicScore++;
+  if (trv !== null && trv > 2.8) diastolicScore++;
+
+  let diastolic = 'Normal filling pressure likely';
+  if (diastolicScore === 1) diastolic = 'Indeterminate';
+  if (diastolicScore >= 2) diastolic = 'Elevated filling pressure likely';
+
+  result =
+    metric('LVEF', ef === null ? '—' : fmt(ef, 0), '%') +
+    metric('MAPSE', mapse === null ? '—' : fmt(mapse, 1), 'mm') +
+    metric('S′ mitral', sprime === null ? '—' : fmt(sprime, 1), 'cm/s') +
+    metric('TAPSE', tapse === null ? '—' : fmt(tapse, 1), 'mm') +
+    metric('E/e′', ee === null ? '—' : fmt(ee, 1), '') +
+    metric('LAVI', lavi === null ? '—' : fmt(lavi, 0), 'mL/m²') +
+    metric('TR velocity', trv === null ? '—' : fmt(trv, 1), 'm/s') +
+    metric('Diastolic score', fmt(diastolicScore, 0), '');
+
+  interp =
+    `<div class="status-box warning">
+      <b>LV systolic function:</b> ${lv}<br>
+      <b>Longitudinal LV function:</b> ${longitudinal}<br>
+      <b>RV systolic function:</b> ${rv}<br>
+      <b>Diastolic function:</b> ${diastolic}
+    </div>`;
+
+  document.getElementById('sd_results').innerHTML = result;
+  document.getElementById('sd_interpretation').innerHTML = interp;
+}
 </body>
 </html>
