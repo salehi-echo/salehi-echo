@@ -1,48 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Salehi EchoHemodynamics</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
+  <header class="topbar">
+    <div>
+      <h1>Salehi EchoHemodynamics</h1>
+      <p>Clinical Echocardiography Assistant</p>
+      <small>Developed by Dr. Salehi · Cardiology Resident</small>
+    </div>
+  </header>
 
-<header>
-  <h1>Salehi EchoHemodynamics</h1>
-  <p>Clinical Echocardiography Assistant</p>
-  <small>Developed by Dr. Salehi</small>
-</header>
+  <main class="page">
+    <section class="hero card">
+      <h2>Aortic Stenosis Expert Module</h2>
+      <p>
+        Integrated RAo assessment with valve quantification, flow state,
+        LV systolic function, discordance detection, and automated summary.
+      </p>
+    </section>
 
-<div class="container">
+    <section class="grid">
+      <div class="card">
+        <h3>Valve Measurements</h3>
 
-  <h2>Aortic Stenosis Calculator</h2>
+        <label for="lvot">LVOT Diameter (cm)</label>
+        <input id="lvot" type="number" step="0.01" placeholder="e.g. 2.0" />
 
-  <label>LVOT Diameter (cm)</label>
-  <input id="lvot" type="number">
+        <label for="vti_lvot">VTI LVOT (cm)</label>
+        <input id="vti_lvot" type="number" step="0.1" placeholder="e.g. 20" />
 
-  <label>VTI LVOT (cm)</label>
-  <input id="vti_lvot" type="number">
+        <label for="vti_ao">VTI Aortic Valve (cm)</label>
+        <input id="vti_ao" type="number" step="0.1" placeholder="e.g. 80" />
 
-  <label>VTI Ao (cm)</label>
-  <input id="vti_ao" type="number">
+        <label for="vmax">Vmax Aortic Valve (m/s)</label>
+        <input id="vmax" type="number" step="0.1" placeholder="e.g. 4.2" />
 
-  <label>Vmax Ao (m/s)</label>
-  <input id="vmax" type="number">
+        <label for="gradient">Mean Gradient (mmHg)</label>
+        <input id="gradient" type="number" step="1" placeholder="e.g. 42" />
+      </div>
 
-  <label>Mean Gradient (mmHg)</label>
-  <input id="gradient" type="number">
+      <div class="card">
+        <h3>Hemodynamic Context</h3>
 
-  <label>BSA</label>
-  <input id="bsa" type="number">
+        <label for="bsa">Body Surface Area (m²)</label>
+        <input id="bsa" type="number" step="0.01" placeholder="e.g. 1.85" />
 
-  <button onclick="calculate()">Calculate</button>
+        <label for="ef">LVEF (%)</label>
+        <input id="ef" type="number" step="1" placeholder="e.g. 55" />
 
-  <div id="result"></div>
+        <label for="eovere">Average E/e′ (optional)</label>
+        <input id="eovere" type="number" step="0.1" placeholder="e.g. 16" />
 
-</div>
+        <label for="lavi">LAVI mL/m² (optional)</label>
+        <input id="lavi" type="number" step="1" placeholder="e.g. 42" />
 
-<script src="app.js"></script>
+        <div class="actions">
+          <button class="primary" onclick="calculateRAo()">Calculate RAo</button>
+          <button class="secondary" onclick="resetForm()">Reset</button>
+        </div>
+      </div>
+    </section>
 
+    <section class="grid">
+      <div class="card">
+        <h3>Key Results</h3>
+        <div id="resultCards" class="result-grid"></div>
+      </div>
+
+      <div class="card">
+        <h3>Integrated Interpretation</h3>
+        <div id="severityBox" class="status-box neutral">Awaiting data...</div>
+        <div id="alerts" class="alerts"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Automated Conclusion</h3>
+      <div id="conclusion" class="conclusion">
+        Fill in the fields and click <strong>Calculate RAo</strong>.
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
