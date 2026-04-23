@@ -548,7 +548,11 @@
       <div class="grid-2">
         <div class="card">
           <label>TR velocity (m/s)</label><input id="tr_vmax" type="number" step="0.1">
-          <label>Estimated RAP (mmHg)</label><input id="tr_rap" type="number" step="1" value="8">
+          <label>IVC diameter (mm)</label>
+<input id="tr_ivc" type="number" step="1" placeholder="e.g. 18">
+
+<label>IVC collapsibility (%)</label>
+<input id="tr_ivc_collapse" type="number" step="1" placeholder="e.g. 50">
           <label>Vena contracta TR (mm) (optional)</label><input id="tr_vc" type="number" step="0.1">
           <div class="actions">
             <button class="primary" onclick="calculateTR()">Calculate TR/PAPs</button>
@@ -937,13 +941,26 @@
 
     function calculateTR() {
       const vmax = g('tr_vmax');
-      const rap = g('tr_rap');
+      const ivc = g('tr_ivc');
+const ivcCollapse = g('tr_ivc_collapse');
+
+let rap = null;
+
+if (ivc !== null && ivcCollapse !== null) {
+  if (ivc <= 21 && ivcCollapse > 50) {
+    rap = 3;
+  } else if (ivc > 21 && ivcCollapse < 50) {
+    rap = 15;
+  } else {
+    rap = 8;
+  }
+}
       const vc = g('tr_vc');
 
-      if (vmax === null || rap === null) {
-        status('tr_status', 'warning', 'Please fill TR velocity and RAP.');
-        return;
-      }
+     if (vmax === null || rap === null) {
+  status('tr_status','warning','Please fill TR velocity, IVC diameter, and IVC collapsibility.');
+  return;
+}
 
       const grad = 4 * Math.pow(vmax, 2);
       const paps = grad + rap;
@@ -962,7 +979,9 @@
 
       s('tr_results',
         metric('TR Gradient', fmt(grad, 0), 'mmHg') +
-        metric('Estimated RAP', fmt(rap, 0), 'mmHg') +
+        metric('IVC Diameter', ivc === null ? '—' : fmt(ivc, 0), 'mm') +
+metric('IVC Collapse', ivcCollapse === null ? '—' : fmt(ivcCollapse, 0), '%') +
+metric('Estimated RAP', fmt(rap, 0), 'mmHg') +
         metric('Estimated PAPs', fmt(paps, 0), 'mmHg') +
         metric('TR Vena Contracta', vc === null ? '—' : fmt(vc, 1), 'mm')
       );
@@ -973,8 +992,7 @@
     }
 
     function resetTR() {
-      resetFields(['tr_vmax', 'tr_vc']);
-      document.getElementById('tr_rap').value = '8';
+     resetFields(['tr_vmax', 'tr_vc', 'tr_ivc', 'tr_ivc_collapse']);
       s('tr_results', '');
       s('tr_alerts', '');
       status('tr_status', 'neutral', 'Awaiting data...');
