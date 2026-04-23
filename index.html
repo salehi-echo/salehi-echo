@@ -18,13 +18,16 @@
       --danger: #dc3d3d;
       --neutral: #64748b;
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
       background: var(--bg);
       color: var(--text);
     }
+
     .topbar {
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       color: white;
@@ -34,25 +37,30 @@
       top: 0;
       z-index: 10;
     }
+
     .topbar h1 {
       margin: 0 0 6px;
       font-size: 28px;
     }
+
     .topbar p, .topbar small {
       margin: 0;
       opacity: .95;
     }
+
     .app {
       max-width: 1400px;
       margin: 20px auto 40px;
       padding: 0 16px;
     }
+
     .tabs {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 10px;
       margin-bottom: 16px;
     }
+
     .tab-btn {
       border: 1px solid var(--border);
       background: white;
@@ -62,13 +70,16 @@
       font-weight: 700;
       cursor: pointer;
     }
+
     .tab-btn.active {
       background: var(--primary);
       color: white;
       border-color: var(--primary);
     }
+
     .panel { display: none; }
     .panel.active { display: block; }
+
     .card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -77,26 +88,34 @@
       box-shadow: 0 8px 20px rgba(15,23,42,.05);
       margin-bottom: 16px;
     }
+
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
+
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
     }
-    h2, h3 { margin-top: 0; }
+
+    h2, h3 {
+      margin-top: 0;
+    }
+
     p.sub {
       color: var(--muted);
       line-height: 1.55;
     }
+
     label {
       display: block;
       margin: 12px 0 6px;
       font-weight: 700;
     }
+
     input, select, textarea {
       width: 100%;
       border: 1px solid var(--border);
@@ -105,16 +124,19 @@
       font-size: 15px;
       background: #fbfdff;
     }
+
     textarea {
       min-height: 140px;
       resize: vertical;
     }
+
     .actions {
       display: flex;
       gap: 10px;
       margin-top: 16px;
       flex-wrap: wrap;
     }
+
     button {
       border: none;
       border-radius: 12px;
@@ -123,43 +145,52 @@
       font-weight: 700;
       cursor: pointer;
     }
+
     .primary {
       background: var(--primary);
       color: white;
     }
+
     .secondary {
       background: #e7edf7;
       color: var(--text);
     }
+
     .danger-btn {
       background: var(--danger);
       color: white;
     }
+
     .result-grid {
       display: grid;
-      grid-template-columns: repeat(3,1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 12px;
     }
+
     .metric {
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 14px;
       background: #fbfdff;
     }
+
     .metric .label {
       font-size: 13px;
       color: var(--muted);
       margin-bottom: 6px;
     }
+
     .metric .value {
       font-size: 24px;
       font-weight: 800;
     }
+
     .metric .unit {
       font-size: 12px;
       color: var(--muted);
       margin-top: 4px;
     }
+
     .status-box {
       border-radius: 14px;
       padding: 16px;
@@ -168,68 +199,77 @@
       border-left: 6px solid var(--neutral);
       background: #f8fafc;
     }
+
     .status-box.success {
       border-left-color: var(--success);
       background: rgba(15,159,110,.08);
       color: #0b6d4b;
     }
+
     .status-box.warning {
       border-left-color: var(--warning);
       background: rgba(212,138,0,.08);
       color: #8a5d00;
     }
+
     .status-box.danger {
       border-left-color: var(--danger);
       background: rgba(220,61,61,.08);
       color: #9f2121;
     }
+
     .status-box.neutral {
       border-left-color: var(--neutral);
       color: #475569;
     }
+
     .alerts {
       display: flex;
       flex-direction: column;
       gap: 10px;
       margin-top: 12px;
     }
+
     .alert-item {
       border-radius: 10px;
       padding: 12px 14px;
       font-size: 14px;
       line-height: 1.5;
     }
+
     .alert-item.warning {
       background: rgba(212,138,0,.1);
       color: #7a5300;
       border: 1px solid rgba(212,138,0,.2);
     }
+
     .alert-item.danger {
       background: rgba(220,61,61,.1);
       color: #8d2424;
       border: 1px solid rgba(220,61,61,.2);
     }
+
     .alert-item.success {
       background: rgba(15,159,110,.1);
       color: #0b6d4b;
       border: 1px solid rgba(15,159,110,.2);
     }
+
     .summary-box {
       border: 1px solid var(--border);
       background: #fbfdff;
       border-radius: 12px;
       padding: 16px;
       line-height: 1.6;
+      white-space: pre-line;
     }
-    .small {
-      color: var(--muted);
-      font-size: 13px;
-    }
+
     @media (max-width: 1100px) {
       .tabs, .grid-3, .result-grid {
         grid-template-columns: repeat(2,1fr);
       }
     }
+
     @media (max-width: 800px) {
       .tabs, .grid-2, .grid-3, .result-grid {
         grid-template-columns: 1fr;
@@ -313,7 +353,8 @@
           </div>
         </div>
       </div>
-            <div class="grid-2">
+
+      <div class="grid-2">
         <div class="card">
           <h3>Key Results</h3>
           <div id="as_results" class="result-grid"></div>
@@ -396,8 +437,7 @@
         </div>
       </div>
     </section>
-
-    <section id="ar" class="panel">
+        <section id="ar" class="panel">
       <div class="card">
         <h2>Aortic Regurgitation</h2>
         <p class="sub">Simplified multiparametric AR support.</p>
@@ -484,7 +524,7 @@
         </div>
       </div>
     </section>
-      </main>
+  </main>
 
   <script>
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -538,8 +578,10 @@
       if (eprime !== null && eprime < 7) score++;
       if (lavi !== null && lavi > 34) score++;
       if (trv !== null && trv > 2.8) score++;
+
       let statusText = 'Normal or indeterminate';
       if (score >= 2) statusText = 'Diastolic dysfunction likely';
+
       return { score, statusText };
     }
 
@@ -581,40 +623,65 @@
       const avai = ava / bsa;
       const di = vtiLVOT / vtiAo;
       const flowState = svi < 35 ? 'Low-flow' : 'Normal-flow';
+
+      let asProfile = '';
+      if (flowState === 'Normal-flow' && gradient >= 40) {
+        asProfile = 'High-gradient severe AS';
+      } else if (flowState === 'Low-flow' && gradient < 40 && ava <= 1) {
+        asProfile = 'Low-flow low-gradient AS (confirm with DSE)';
+      } else if (flowState === 'Normal-flow' && gradient < 40 && ava <= 1) {
+        asProfile = 'Discordant AS (check measurements)';
+      } else {
+        asProfile = 'Non-severe AS';
+      }
+
       const severeByValve = ava <= 1 || avai <= 0.6 || di < 0.25;
       const severeByHemo = vmax >= 4 || gradient >= 40;
       const { statusText: diastolicText } = diastolicAssessment(eovere, eprime, lavi, trv);
       const glsText = glsAssessment(gls);
 
+      if (ava <= 1 && gradient < 40 && vmax < 4) {
+        alerts.push(alertBox('warning', 'Discordant grading: verify LVOT measurement and Doppler alignment.'));
+      }
+
+      if (svi < 35) {
+        alerts.push(alertBox('warning', 'Low-flow state detected (SVI < 35 mL/m²).'));
+      }
+
       let main = 'Likely non-severe or not hemodynamically severe profile.';
       let klass = 'success';
       let conclusion =
-        `Current data do not support a concordant severe high-gradient AS profile. ` +
+        `Current data do not support a concordant severe high-gradient AS profile.\n` +
         `AVA ${fmt(ava)} cm², AVAi ${fmt(avai)} cm²/m², DI ${fmt(di)}, ` +
         `Vmax ${fmt(vmax, 1)} m/s, mean gradient ${fmt(gradient, 0)} mmHg, ` +
-        `SVI ${fmt(svi, 1)} mL/m².`;
+        `SVI ${fmt(svi, 1)} mL/m².\n` +
+        `AS profile: ${asProfile}.`;
 
       if (severeByValve && severeByHemo) {
         main = 'Severe aortic stenosis - high gradient profile.';
         klass = 'danger';
         conclusion =
-          `Findings are compatible with severe aortic stenosis with concordant high-gradient hemodynamics: ` +
+          `Findings are compatible with severe aortic stenosis with concordant high-gradient hemodynamics.\n` +
           `AVA ${fmt(ava)} cm², AVAi ${fmt(avai)} cm²/m², DI ${fmt(di)}, ` +
-          `Vmax ${fmt(vmax, 1)} m/s, mean gradient ${fmt(gradient, 0)} mmHg, SVI ${fmt(svi, 1)} mL/m².`;
+          `Vmax ${fmt(vmax, 1)} m/s, mean gradient ${fmt(gradient, 0)} mmHg, ` +
+          `SVI ${fmt(svi, 1)} mL/m².\n` +
+          `AS profile: ${asProfile}.`;
         alerts.push(alertBox('danger', 'Severe AS profile. Integrate symptoms, valve morphology, and treatment indication.'));
       } else if (ava <= 1 && svi < 35 && ef < 50 && gradient < 40) {
         main = 'Classical low-flow low-gradient severe AS possible.';
         klass = 'warning';
         conclusion =
-          `Profile suggests possible classical low-flow low-gradient severe AS: ` +
-          `AVA ${fmt(ava)} cm², SVI ${fmt(svi, 1)} mL/m², LVEF ${fmt(ef, 0)}%, mean gradient ${fmt(gradient, 0)} mmHg.`;
+          `Profile suggests possible classical low-flow low-gradient severe AS.\n` +
+          `AVA ${fmt(ava)} cm², SVI ${fmt(svi, 1)} mL/m², LVEF ${fmt(ef, 0)}%, mean gradient ${fmt(gradient, 0)} mmHg.\n` +
+          `AS profile: ${asProfile}.`;
         alerts.push(alertBox('warning', 'Low-flow low-gradient pattern with reduced EF.'));
       } else if (ava <= 1 && svi < 35 && ef >= 50 && gradient < 40) {
         main = 'Paradoxical low-flow low-gradient severe AS possible.';
         klass = 'warning';
         conclusion =
-          `Profile suggests possible paradoxical low-flow low-gradient severe AS: ` +
-          `AVA ${fmt(ava)} cm², preserved LVEF ${fmt(ef, 0)}%, low SVI ${fmt(svi, 1)} mL/m², low gradient ${fmt(gradient, 0)} mmHg.`;
+          `Profile suggests possible paradoxical low-flow low-gradient severe AS.\n` +
+          `AVA ${fmt(ava)} cm², preserved LVEF ${fmt(ef, 0)}%, low SVI ${fmt(svi, 1)} mL/m², low gradient ${fmt(gradient, 0)} mmHg.\n` +
+          `AS profile: ${asProfile}.`;
         alerts.push(alertBox('warning', 'Discordant severe AS pattern with preserved EF.'));
       }
 
@@ -637,6 +704,7 @@
         metric('AVAi', fmt(avai), 'cm²/m²') +
         metric('Dimensionless Index', fmt(di), '') +
         metric('Flow State', flowState, '') +
+        metric('AS Profile', asProfile, '') +
         metric('LVEF', fmt(ef, 0), '%') +
         metric('Diastolic Function', diastolicText, '') +
         metric('GLS Interpretation', glsText, '')
@@ -646,8 +714,7 @@
       s('as_alerts', alerts.join(''));
       s('as_conclusion', conclusion);
     }
-
-    function resetAS() {
+        function resetAS() {
       resetFields([
         'as_lvot', 'as_vti_lvot', 'as_vti_ao', 'as_vmax', 'as_gradient',
         'as_height', 'as_weight', 'as_ef', 'as_eovere', 'as_lavi',
@@ -692,11 +759,12 @@
       );
 
       status('mr_status', klass, main);
-      s('mr_alerts', klass === 'danger'
-        ? alertBox('danger', 'Interpret with multiparametric assessment and mechanism.')
-        : alertBox('success', 'No clear severe MR pattern from entered data.')
+      s('mr_alerts',
+        klass === 'danger'
+          ? alertBox('danger', 'Interpret with multiparametric assessment and mechanism.')
+          : alertBox('success', 'No clear severe MR pattern from entered data.')
       );
-      s('mr_conclusion', `MR quantification suggests ${main.toLowerCase()} EROA ${fmt(eroa)} cm² and regurgitant volume ${fmt(rvol)} mL/beat.`);
+      s('mr_conclusion', `MR quantification suggests ${main.toLowerCase()}\nEROA ${fmt(eroa)} cm² and regurgitant volume ${fmt(rvol)} mL/beat.`);
     }
 
     function resetMR() {
@@ -744,7 +812,7 @@
 
       status('ms_status', klass, main);
       s('ms_alerts', alerts.join(''));
-      s('ms_conclusion', `MS assessment suggests ${main.toLowerCase()} Calculated MVA ${fmt(mva)} cm² with mean gradient ${fmt(grad, 0)} mmHg.`);
+      s('ms_conclusion', `MS assessment suggests ${main.toLowerCase()}\nCalculated MVA ${fmt(mva)} cm² with mean gradient ${fmt(grad, 0)} mmHg.`);
     }
 
     function resetMS() {
@@ -783,7 +851,7 @@
       status('ar_status', klass, main);
       s('ar_alerts', klass === 'danger' ? alertBox('danger', 'Interpret with full multiparametric AR assessment.') : '');
       s('ar_conclusion',
-        `AR evaluation suggests ${main.toLowerCase()}${pht !== null ? ` PHT ${fmt(pht, 0)} ms.` : ''}${vc !== null ? ` VC ${fmt(vc, 1)} mm.` : ''}`
+        `AR evaluation suggests ${main.toLowerCase()}${pht !== null ? `\nPHT ${fmt(pht, 0)} ms.` : ''}${vc !== null ? `\nVC ${fmt(vc, 1)} mm.` : ''}`
       );
     }
 
@@ -830,7 +898,7 @@
 
       status('tr_status', klass, main);
       s('tr_alerts', vc !== null && vc >= 7 ? alertBox('warning', 'Large TR vena contracta supports significant TR.') : '');
-      s('tr_conclusion', `TR/PAPs assessment suggests ${main.toLowerCase()} Estimated PAPs ${fmt(paps, 0)} mmHg from TR velocity ${fmt(vmax, 1)} m/s and RAP ${fmt(rap, 0)} mmHg.`);
+      s('tr_conclusion', `TR/PAPs assessment suggests ${main.toLowerCase()}\nEstimated PAPs ${fmt(paps, 0)} mmHg from TR velocity ${fmt(vmax, 1)} m/s and RAP ${fmt(rap, 0)} mmHg.`);
     }
 
     function resetTR() {
@@ -876,7 +944,6 @@
         metric('GLS Interpretation', glsText, '')
       );
 
-      status('fn_status', klass, main);
       s('fn_alerts',
         [
           statusText !== 'Normal or indeterminate' ? alertBox('warning', statusText) : '',
@@ -884,7 +951,8 @@
         ].join('')
       );
 
-      s('fn_conclusion', `Function assessment: ${systolicText.toLowerCase()}, ${statusText.toLowerCase()}, GLS interpretation: ${glsText.toLowerCase()}.`);
+      status('fn_status', klass, main);
+      s('fn_conclusion', `Function assessment:\n${systolicText.toLowerCase()}, ${statusText.toLowerCase()}, GLS interpretation: ${glsText.toLowerCase()}.`);
     }
 
     function resetFunction() {
