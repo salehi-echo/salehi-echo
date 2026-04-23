@@ -310,3 +310,60 @@ metricCard("GLS Interpretation", glsStatus, "");
   alertsBox.innerHTML = alerts.join("");
   conclusionBox.innerHTML = conclusion;
 }
+function calculateSD() {
+  const ef = g('sd_ef');
+  const mapse = g('sd_mapse');
+  const sprime = g('sd_sprime');
+  const tapse = g('sd_tapse');
+  const ee = g('sd_ee');
+  const eprime = g('sd_eprime');
+  const lavi = g('sd_lavi');
+  const trv = g('sd_trv');
+
+  let result = '';
+  let interp = '';
+
+  let lv = 'Normal';
+  if (ef !== null && ef < 50) lv = 'Reduced';
+  if (ef !== null && ef >= 40 && ef < 50) lv = 'Mildly reduced';
+
+  let longitudinal = 'Normal';
+  if ((mapse !== null && mapse < 10) || (sprime !== null && sprime < 7)) {
+    longitudinal = 'Reduced longitudinal function';
+  }
+
+  let rv = 'Normal';
+  if (tapse !== null && tapse < 17) {
+    rv = 'RV systolic dysfunction';
+  }
+
+  let diastolicScore = 0;
+  if (ee !== null && ee > 14) diastolicScore++;
+  if (eprime !== null && eprime < 7) diastolicScore++;
+  if (lavi !== null && lavi > 34) diastolicScore++;
+  if (trv !== null && trv > 2.8) diastolicScore++;
+
+  let diastolic = 'Normal filling pressure likely';
+  if (diastolicScore === 1) diastolic = 'Indeterminate';
+  if (diastolicScore >= 2) diastolic = 'Elevated filling pressure likely';
+
+  result =
+    metricCard('LVEF', formatNumber(ef, 0), '%') +
+    metricCard('MAPSE', formatNumber(mapse, 1), 'mm') +
+    metricCard('S′ mitral', formatNumber(sprime, 1), 'cm/s') +
+    metricCard('TAPSE', formatNumber(tapse, 1), 'mm') +
+    metricCard('E/e′', formatNumber(ee, 1), '') +
+    metricCard('LAVI', formatNumber(lavi, 0), 'mL/m²') +
+    metricCard('TR velocity', formatNumber(trv, 1), 'm/s');
+
+  interp =
+    `<div class="status-box warning">
+      <b>LV systolic function:</b> ${lv}<br>
+      <b>Longitudinal LV function:</b> ${longitudinal}<br>
+      <b>RV systolic function:</b> ${rv}<br>
+      <b>Diastolic function:</b> ${diastolic}
+    </div>`;
+
+  document.getElementById('sd_results').innerHTML = result;
+  document.getElementById('sd_interpretation').innerHTML = interp;
+}
