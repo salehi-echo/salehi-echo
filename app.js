@@ -301,7 +301,6 @@ if (gls !== null) {
     metricCard("AVAi", formatNumber(avai), "cm²/m²") +
     metricCard("Dimensionless Index", formatNumber(di), "") +
     metricCard("Flow State", flowState, "") +
-   ... +
 metricCard("LVEF", formatNumber(ef, 0), "%") +
 metricCard("Diastolic Function", diastolicStatus, "") +
 metricCard("GLS Interpretation", glsStatus, "");
