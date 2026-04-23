@@ -25,18 +25,21 @@ function addAlert(type, text) {
 }
 
 function resetForm() {
-  [
-    "lvot",
-    "vti_lvot",
-    "vti_ao",
-    "vmax",
-    "gradient",
-    "height",
-    "weight",
-    "ef",
-    "eovere",
-    "lavi"
-  ].forEach((id) => {
+ [
+  "lvot",
+  "vti_lvot",
+  "vti_ao",
+  "vmax",
+  "gradient",
+  "height",
+  "weight",
+  "ef",
+  "eovere",
+  "lavi",
+  "gls",
+  "eprime",
+  "trv"
+].forEach((id) => {
     const el = document.getElementById(id);
     if (el) el.value = "";
   });
@@ -58,6 +61,9 @@ function calculateRAo() {
   const height = getValue("height");
   const weight = getValue("weight");
   const ef = getValue("ef");
+  const gls = getValue("gls");
+const eprime = getValue("eprime");
+const trv = getValue("trv");
   const eovere = getValue("eovere");
   const lavi = getValue("lavi");
 
@@ -144,6 +150,28 @@ function calculateRAo() {
   const severeByValveCriteria = ava <= 1 || avai <= 0.6 || di < 0.25;
   const severeByHemodynamics = vmax >= 4 || gradient >= 40;
   const discordant = ava <= 1 && gradient < 40 && vmax < 4;
+  let diastolicScore = 0;
+
+if (eovere !== null && eovere > 14) diastolicScore++;
+if (eprime !== null && eprime < 7) diastolicScore++;
+if (lavi !== null && lavi > 34) diastolicScore++;
+if (trv !== null && trv > 2.8) diastolicScore++;
+
+let diastolicStatus = "Normal or indeterminate";
+
+if (diastolicScore >= 2) {
+  diastolicStatus = "Diastolic dysfunction likely";
+}
+
+let glsStatus = "Not entered";
+
+if (gls !== null) {
+  if (gls > -16) {
+    glsStatus = "Reduced longitudinal function";
+  } else {
+    glsStatus = "Normal GLS";
+  }
+}
 
   let severityText = "";
   let severityClass = "neutral";
@@ -273,7 +301,10 @@ function calculateRAo() {
     metricCard("AVAi", formatNumber(avai), "cm²/m²") +
     metricCard("Dimensionless Index", formatNumber(di), "") +
     metricCard("Flow State", flowState, "") +
-    metricCard("LVEF", formatNumber(ef, 0), "%");
+   ... +
+metricCard("LVEF", formatNumber(ef, 0), "%") +
+metricCard("Diastolic Function", diastolicStatus, "") +
+metricCard("GLS Interpretation", glsStatus, "");
 
   severityBox.className = `status-box ${severityClass}`;
   severityBox.innerHTML = severityText;
