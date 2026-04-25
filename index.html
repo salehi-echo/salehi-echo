@@ -824,14 +824,78 @@
     Module d’orientation rapide devant un état de choc.
   </p>
 
-  <div class="card">
-    <h3>Contenu à développer</h3>
-    <p>
-      Cette page sera dédiée à l’orientation échographique du choc :
-      fonction VG, fonction VD, VCI, épanchement péricardique, hypovolémie,
-      congestion, embolie pulmonaire et tamponnade.
-    </p>
+ <div class="card">
+  <h3>Clinical status</h3>
+
+  <label>Hypotension (SBP &lt; 90 mmHg)</label>
+  <select id="shock_hypotension">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>Signs of congestion?</label>
+  <select id="shock_congestion">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>Signs of hypovolemia?</label>
+  <select id="shock_hypovolemia">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+</div>
+
+<div class="card">
+  <h3>Echo findings</h3>
+
+  <label>LV function</label>
+  <select id="shock_lv">
+    <option value="normal">Normal</option>
+    <option value="reduced">Reduced</option>
+  </select>
+
+  <label>RV dilatation</label>
+  <select id="shock_rv">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>Pericardial effusion</label>
+  <select id="shock_effusion">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>IVC status</label>
+  <select id="shock_ivc">
+    <option value="normal">Normal</option>
+    <option value="collapsed">Collapsed</option>
+    <option value="dilated">Dilated</option>
+  </select>
+
+  <div class="actions">
+    <button class="primary" onclick="calculateShock()">Calculate Shock</button>
   </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <h3>Results</h3>
+    <div id="shock_results" class="result-grid"></div>
+  </div>
+
+  <div class="card">
+    <h3>Interpretation</h3>
+    <div id="shock_status" class="status-box neutral">Awaiting data...</div>
+    <div id="shock_alerts" class="alerts"></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Conduite à tenir</h3>
+  <div id="shock_conclusion" class="summary-box">Fill the fields and calculate.</div>
+</div>
 </section>
   </main>
 <script>
@@ -1494,6 +1558,66 @@ metric('Estimated RAP', fmt(rap, 0), 'mmHg') +
     '<strong>Interpretation:</strong> ' + interpretation + '<br>' +
     '<strong>Conduite:</strong> ' + recommendation;
  
+}
+  function calculateShock() {
+  const hypotension = document.getElementById('shock_hypotension').value;
+  const congestion = document.getElementById('shock_congestion').value;
+  const hypovolemia = document.getElementById('shock_hypovolemia').value;
+
+  const lv = document.getElementById('shock_lv').value;
+  const rv = document.getElementById('shock_rv').value;
+  const effusion = document.getElementById('shock_effusion').value;
+  const ivc = document.getElementById('shock_ivc').value;
+
+  let diagnosis = 'Undifferentiated shock profile';
+  let recommendation = 'Repeat focused echo, assess ECG, lactate, infection/bleeding context, and reassess dynamically.';
+  let statusClass = 'neutral';
+  let alerts = [];
+
+  if (hypotension === 'no') {
+    diagnosis = 'No clear shock from entered clinical data';
+    recommendation = 'Interpret echo findings in clinical context; continue monitoring if suspicion remains.';
+    statusClass = 'success';
+  } else if (lv === 'reduced' && congestion === 'yes') {
+    diagnosis = 'Cardiogenic shock profile';
+    recommendation = 'Urgent senior/ICU discussion. Consider inotropes/vasopressors and treat the cause.';
+    statusClass = 'danger';
+    alerts.push(alertBox('danger', 'Reduced LV function with congestion suggests cardiogenic shock.'));
+  } else if (rv === 'yes' && ivc === 'dilated') {
+    diagnosis = 'Obstructive shock profile - PE likely';
+    recommendation = 'Assess PE probability, RV strain, biomarkers, and consider urgent reperfusion strategy if unstable.';
+    statusClass = 'danger';
+    alerts.push(alertBox('danger', 'RV dilatation with dilated IVC suggests obstructive shock, especially PE.'));
+  } else if (effusion === 'yes' && ivc === 'dilated') {
+    diagnosis = 'Obstructive shock profile - tamponade possible';
+    recommendation = 'Look for RA/RV collapse and Doppler respiratory variation; urgent drainage if tamponade physiology.';
+    statusClass = 'danger';
+    alerts.push(alertBox('danger', 'Pericardial effusion with dilated IVC may suggest tamponade physiology.'));
+  } else if (ivc === 'collapsed' || hypovolemia === 'yes') {
+    diagnosis = 'Hypovolemic shock profile';
+    recommendation = 'Consider cautious fluid resuscitation and search for bleeding/dehydration cause.';
+    statusClass = 'warning';
+    alerts.push(alertBox('warning', 'Collapsed IVC or clinical hypovolemia supports low preload.'));
+  } else if (lv === 'normal' && ivc !== 'collapsed' && congestion === 'no') {
+    diagnosis = 'Distributive / septic shock possible';
+    recommendation = 'Search for infection/distributive cause; vasopressor strategy and fluids according to dynamic assessment.';
+    statusClass = 'warning';
+  }
+
+  document.getElementById('shock_results').innerHTML =
+    metric('Hypotension', hypotension, '') +
+    metric('LV function', lv, '') +
+    metric('RV dilatation', rv, '') +
+    metric('IVC', ivc, '') +
+    metric('Congestion', congestion, '');
+
+  document.getElementById('shock_status').className = 'status-box ' + statusClass;
+  document.getElementById('shock_status').innerHTML = diagnosis;
+
+  document.getElementById('shock_alerts').innerHTML = alerts.join('');
+
+  document.getElementById('shock_conclusion').innerHTML =
+    '<strong>Conduite:</strong> ' + recommendation;
 }
   </script>
 </body>
