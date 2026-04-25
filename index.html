@@ -285,176 +285,120 @@
   </header>
 
   <main class="app">
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
-      <button class="tab-btn" data-tab="as">Aortic Stenosis</button>
-      <button class="tab-btn" data-tab="mr">Mitral Regurgitation</button>
-      <button class="tab-btn" data-tab="ms">Mitral Stenosis</button>
-      <button class="tab-btn" data-tab="ar">Aortic Regurgitation</button>
-      <button class="tab-btn" data-tab="tr">TR / PAPs</button>
-      <button class="tab-btn" data-tab="function">Systolic / Diastolic</button>
-      <button class="tab-btn" data-tab="diagnostic">Diagnostic Engine</button>
+   <div class="tabs main-tabs">
+  <button class="tab-btn active" data-tab="dashboard">Home</button>
+  <button class="tab-btn" data-tab="echo-menu">Echo Measurement</button>
+  <button class="tab-btn" data-tab="diagnostic">Diagnostic Engine</button>
+</div>
+
+     <section id="dashboard" class="panel active">
+  <div class="grid-2">
+    <div class="card">
+      <h2>Echo Measurement</h2>
+      <p class="sub">
+        Module de mesures échocardiographiques : valvulopathies, PAPs, fonction VD/VG,
+        fonction diastolique et génération de compte rendu.
+      </p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="echo-menu">Open Echo Measurement</button>
+      </div>
     </div>
 
-      <div class="grid-3">
-        <div class="card">
-          <h3>Included modules</h3>
-          <p class="sub">AS, MR, MS, AR, TR/PAPs, LV/RV function, diastolic profile, automated report blocks.</p>
-        </div>
-        <div class="card">
-          <h3>Clinical logic</h3>
-          <p class="sub">Severity, discordance, flow state, filling pressure hints, and structured wording for echo reporting.</p>
-        </div>
-        <div class="card">
-          <h3>Best next step</h3>
-          <p class="sub">Use one module at a time, validate on known cases, then refine thresholds and reporting language.</p>
-        </div>
+    <div class="card">
+      <h2>Diagnostic Engine</h2>
+      <p class="sub">
+        Module d’aide à l’orientation diagnostique en urgence : embolie pulmonaire,
+        tamponnade, choc et situations critiques.
+      </p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="diagnostic">Open Diagnostic Engine</button>
       </div>
+    </div>
+  </div>
     </section>
-    <section id="function" class="panel">
-
+<section id="echo-menu" class="panel">
   <div class="card">
-    <h2>Systolic & Diastolic Function</h2>
+    <h2>Echo Measurement</h2>
+    <p class="sub">
+      Choose the echocardiography module you want to use.
+    </p>
   </div>
 
-  <div class="card">
+  <div class="grid-3">
+    <div class="card">
+      <h3>Aortic Stenosis</h3>
+      <p class="sub">AVA, mean gradient, Vmax, DVI, indexed AVA.</p>
+      <button class="primary module-btn" data-tab="as">Open</button>
+    </div>
 
-    <h3>LV Systolic Function</h3>
+    <div class="card">
+      <h3>Mitral Regurgitation</h3>
+      <p class="sub">EROA, regurgitant volume, vena contracta, pulmonary vein flow.</p>
+      <button class="primary module-btn" data-tab="mr">Open</button>
+    </div>
 
-    <label>LVEF (%)</label>
-    <input id="sd_ef" type="number">
+    <div class="card">
+      <h3>Mitral Stenosis</h3>
+      <p class="sub">MVA by PHT, mean gradient, PAPs, rhythm and severity logic.</p>
+      <button class="primary module-btn" data-tab="ms">Open</button>
+    </div>
 
-    <label>MAPSE (mm)</label>
-    <input id="sd_mapse" type="number">
+    <div class="card">
+      <h3>Aortic Regurgitation</h3>
+      <p class="sub">Vena contracta, PHT, holodiastolic flow reversal, LV impact.</p>
+      <button class="primary module-btn" data-tab="ar">Open</button>
+    </div>
 
-    <label>S′ (cm/s)</label>
-    <input id="sd_sprime" type="number">
+    <div class="card">
+      <h3>TR / PAPs</h3>
+      <p class="sub">TR Vmax, estimated RAP, PAPs and TR severity support.</p>
+      <button class="primary module-btn" data-tab="tr">Open</button>
+    </div>
 
-    <h3>RV Function</h3>
-
-    <label>TAPSE (mm)</label>
-    <input id="sd_tapse" type="number">
-
-    <h3>Diastolic Function</h3>
-
-    <label>E/e′</label>
-    <input id="sd_ee" type="number">
-
-    <label>e′ septal</label>
-    <input id="sd_eprime" type="number">
-
-    <h3>Body Size</h3>
-
-<label>Height (cm)</label>
-<input id="sd_height" type="number" placeholder="e.g. 170">
-
-<label>Weight (kg)</label>
-<input id="sd_weight" type="number" placeholder="e.g. 70">
-
-
-<h3>Left Atrium</h3>
-
-<label>LA area A4C (cm²)</label>
-<input id="sd_la_a4c" type="number" placeholder="e.g. 22">
-
-<label>LA area A2C (cm²)</label>
-<input id="sd_la_a2c" type="number" placeholder="e.g. 20">
-
-<label>LA length (cm)</label>
-<input id="sd_la_length" type="number" placeholder="e.g. 5.5">
-
-    <label>TR velocity</label>
-    <input id="sd_trv" type="number">
-
-    <br><br>
-    <button onclick="calculateSD()">Calculate</button>
-
+    <div class="card">
+      <h3>Systolic / Diastolic</h3>
+      <p class="sub">LVEF, TAPSE, S’, E/e’, e’, TR velocity and diastolic profile.</p>
+      <button class="primary module-btn" data-tab="function">Open</button>
+    </div>
   </div>
-
-  <div class="card">
-    <h3>Results</h3>
-    <div id="sd_results"></div>
-  </div>
-
-  <div class="card">
-    <h3>Interpretation</h3>
-    <div id="sd_interpretation"></div>
-  </div>
-
 </section>
-    <section id="diagnostic" class="panel">
+   <section id="diagnostic" class="panel">
   <div class="card">
     <h2>Diagnostic Engine</h2>
     <p class="sub">
-      Module d’aide à l’orientation diagnostique basé sur les signes cliniques et échocardiographiques.
+      Module d’aide à l’orientation diagnostique en urgence : embolie pulmonaire,
+      tamponnade, choc et situations critiques.
     </p>
   </div>
 
-  <div class="card">
-    <h3>Embolie pulmonaire — Echo RV Strain</h3>
-    <p class="sub">
-      Évaluation rapide du retentissement droit en cas de suspicion d’embolie pulmonaire aiguë.
-    </p>
+  <div class="grid-3">
+    <div class="card">
+      <h3>Embolie pulmonaire – Echo RV Strain</h3>
+      <p class="sub">
+        Évaluation rapide du retentissement droit en cas de suspicion d’embolie pulmonaire aiguë.
+      </p>
+      <button class="primary module-btn" data-tab="pe">Open</button>
+    </div>
 
-    <label>
-      <input type="checkbox" class="pe-score" value="2">
-      D-shaped LV en petit axe parasternal / aplatissement septal
-    </label>
+    <div class="card">
+      <h3>Tamponnade cardiaque</h3>
+      <p class="sub">
+        Épanchement péricardique, collapsus OD/VD, VCI pléthorique,
+        variations respiratoires Doppler et profil de choc obstructif.
+      </p>
+      <button class="primary module-btn" data-tab="tamponade">Open</button>
+    </div>
 
-    <label>
-      <input type="checkbox" class="pe-score" value="2">
-      Dilatation VD avec rapport VD/VG &gt; 1
-    </label>
-
-    <label>
-      <input type="checkbox" class="pe-score" value="2">
-      TAPSE &lt; 16 mm ou S’ VD &lt; 9,5 cm/s
-    </label>
-
-    <label>
-      <input type="checkbox" class="pe-score" value="2">
-      Signe de McConnell
-    </label>
-
-    <label>
-      <input type="checkbox" class="pe-score" value="2">
-      Signe 60/60
-    </label>
-
-    <label>
-      <input type="checkbox" class="pe-score" value="3">
-      Thrombus droit mobile OD/VD/AP
-    </label>
-
-    <label>
-      <input type="checkbox" class="pe-score" value="1">
-      VCI dilatée avec faible collapsibilité
-    </label>
-
-    <label>
-      <input type="checkbox" class="pe-score" value="1">
-      PAPs élevée / TR Vmax augmentée
-    </label>
-
-    <button onclick="calculatePEScore()">Calculer le score EP</button>
-
-    <div id="peResult" class="result"></div>
-  </div>
-
-  <div class="card">
-    <h3>Focus : D-shaped LV</h3>
-    <p>
-      Le VG en forme de D en petit axe parasternal traduit un aplatissement du septum interventriculaire
-      par surcharge de pression du VD. En contexte aigu, ce signe renforce fortement la suspicion
-      d’embolie pulmonaire avec retentissement VD.
-    </p>
-    <p class="sub">
-      Attention : ce signe n’est pas spécifique. Il peut aussi être observé dans l’HTAP chronique,
-      l’insuffisance tricuspide sévère, les shunts droits ou d’autres causes de surcharge VD.
-    </p>
+    <div class="card">
+      <h3>Choc</h3>
+      <p class="sub">
+        Orientation échographique rapide : choc cardiogénique, obstructif,
+        hypovolémique ou distributif.
+      </p>
+      <button class="primary module-btn" data-tab="shock">Open</button>
+    </div>
   </div>
 </section>
-
     <section id="as" class="panel">
       <div class="card">
         <h2>Aortic Stenosis</h2>
@@ -665,15 +609,32 @@
   </main>
 
   <script>
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById(btn.dataset.tab).classList.add('active');
-      });
-    });
+   function openPanel(tabId) {
+  document.querySelectorAll('.panel').forEach(p => {
+    p.classList.remove('active');
+  });
 
+document.querySelectorAll('.tab-btn, .module-btn').forEach(b => {
+  b.classList.remove('active');
+});
+  const panel = document.getElementById(tabId);
+  if (panel) {
+    panel.classList.add('active');
+  }
+
+  const topBtn = document.querySelector('.tab-btn[data-tab="' + tabId + '"]');
+  if (topBtn) {
+    topBtn.classList.add('active');
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.querySelectorAll('[data-tab]').forEach(btn => {
+  btn.addEventListener('click', function () {
+    openPanel(this.dataset.tab);
+  });
+});
     function g(id) {
       const el = document.getElementById(id);
       if (!el) return null;
