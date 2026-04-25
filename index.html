@@ -302,21 +302,32 @@
   display: block;
 }  
     .lang-switch {
-  position: absolute;
-  right: 20px;
-  top: 22px;
+  position: fixed;
+  right: 18px;
+  top: 18px;
+  z-index: 9999;
   background: white;
   color: var(--primary);
   text-decoration: none;
   font-weight: 800;
+  font-size: 14px;
   border-radius: 999px;
   padding: 8px 14px;
-  border: 1px solid rgba(255,255,255,.7);
-  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+  border: 1px solid rgba(255,255,255,.8);
+  box-shadow: 0 4px 12px rgba(0,0,0,.18);
 }
 
 .lang-switch:hover {
   background: #e7edf7;
+}
+
+@media (max-width: 600px) {
+  .lang-switch {
+    right: 12px;
+    top: 12px;
+    padding: 7px 12px;
+    font-size: 13px;
+  }
 }
   </style>
 </head>
