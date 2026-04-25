@@ -1468,7 +1468,34 @@ metric('Estimated RAP', fmt(rap, 0), 'mmHg') +
   let recommendation = '';
   let statusClass = 'neutral';
 
-  if (score >= 7) {
+  let tamponadeLikely = (
+  (rvCollapse === 'yes' || raCollapse === 'yes') &&
+  ivc === 'yes'
+);
+
+let clinicalShock = (shock === 'yes');
+
+if (tamponadeLikely && clinicalShock) {
+  interpretation = 'Hemodynamic tamponade (HIGH RISK)';
+  recommendation = 'Immediate pericardiocentesis (emergency).';
+  statusClass = 'danger';
+  alerts.push('⚠️ Life-threatening tamponade');
+}
+else if (tamponadeLikely) {
+  interpretation = 'Probable tamponade physiology';
+  recommendation = 'Urgent expert echo + prepare drainage.';
+  statusClass = 'warning';
+}
+else if (size === 'large') {
+  interpretation = 'Large effusion without tamponade signs';
+  recommendation = 'Close monitoring and repeat echo.';
+  statusClass = 'neutral';
+}
+else {
+  interpretation = 'No tamponade';
+  recommendation = 'Routine follow-up.';
+  statusClass = 'success';
+}
     interpretation = 'High probability tamponade';
     recommendation = 'URGENT pericardiocentesis. Do not delay.';
     statusClass = 'danger';
