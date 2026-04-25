@@ -1436,94 +1436,64 @@ metric('Estimated RAP', fmt(rap, 0), 'mmHg') +
   s('pe_conclusion', conclusion);
 }
   function calculateTamponade() {
-
-  let score = 0;
-  let alerts = [];
-
   const shock = document.getElementById('tam_shock').value;
   const tachy = document.getElementById('tam_tachy').value;
   const pulsus = document.getElementById('tam_pulsus').value;
-
   const size = document.getElementById('tam_size').value;
   const raCollapse = document.getElementById('tam_ra_collapse').value;
   const rvCollapse = document.getElementById('tam_rv_collapse').value;
   const ivc = document.getElementById('tam_ivc').value;
   const doppler = document.getElementById('tam_doppler').value;
 
-  // Clinical
+  let score = 0;
   if (shock === 'yes') score += 3;
   if (tachy === 'yes') score += 1;
   if (pulsus === 'yes') score += 1;
-
-  // Echo
-  if (size === 'large') score += 2;
   if (size === 'moderate') score += 1;
-
+  if (size === 'large') score += 2;
   if (raCollapse === 'yes') score += 2;
   if (rvCollapse === 'yes') score += 3;
   if (ivc === 'yes') score += 2;
   if (doppler === 'yes') score += 2;
 
-  let interpretation = '';
-  let recommendation = '';
-  let statusClass = 'neutral';
+  const tamponadeLikely = ((raCollapse === 'yes' || rvCollapse === 'yes') && ivc === 'yes');
+  const clinicalShock = (shock === 'yes');
 
-  let tamponadeLikely = (
-  (rvCollapse === 'yes' || raCollapse === 'yes') &&
-  ivc === 'yes'
-);
+  let interpretation = 'Low probability tamponade';
+  let recommendation = 'Clinical and echo follow-up.';
+  let statusClass = 'success';
 
-let clinicalShock = (shock === 'yes');
-
-if (tamponadeLikely && clinicalShock) {
-  interpretation = 'Hemodynamic tamponade (HIGH RISK)';
-  recommendation = 'Immediate pericardiocentesis (emergency).';
-  statusClass = 'danger';
-  alerts.push('⚠️ Life-threatening tamponade');
-}
-else if (tamponadeLikely) {
-  interpretation = 'Probable tamponade physiology';
-  recommendation = 'Urgent expert echo + prepare drainage.';
-  statusClass = 'warning';
-}
-else if (size === 'large') {
-  interpretation = 'Large effusion without tamponade signs';
-  recommendation = 'Close monitoring and repeat echo.';
-  statusClass = 'neutral';
-}
-else {
-  interpretation = 'No tamponade';
-  recommendation = 'Routine follow-up.';
-  statusClass = 'success';
-}
-    interpretation = 'High probability tamponade';
-    recommendation = 'URGENT pericardiocentesis. Do not delay.';
+  if (tamponadeLikely && clinicalShock) {
+    interpretation = 'Hemodynamic tamponade (HIGH RISK)';
+    recommendation = 'Immediate senior/ICU discussion and urgent pericardial drainage according to local protocol.';
     statusClass = 'danger';
-    alerts.push('⚠️ Hemodynamic tamponade likely');
-  } 
-  else if (score >= 4) {
-    interpretation = 'Possible tamponade';
-    recommendation = 'Urgent expert echo and close monitoring.';
+  } else if (tamponadeLikely) {
+    interpretation = 'Probable tamponade physiology';
+    recommendation = 'Urgent expert echo, close monitoring, and prepare drainage if clinical deterioration.';
     statusClass = 'warning';
-  } 
-  else {
-    interpretation = 'Low probability tamponade';
-    recommendation = 'Clinical and echo follow-up.';
-    statusClass = 'success';
+  } else if (size === 'large') {
+    interpretation = 'Large effusion without clear tamponade signs';
+    recommendation = 'Close monitoring and repeat echo.';
+    statusClass = 'neutral';
   }
 
-  // OUTPUT
   document.getElementById('tam_results').innerHTML =
-    '<strong>Score :</strong> ' + score;
+    metric('Tamponade score', fmt(score, 0), 'points') +
+    metric('Effusion size', size, '') +
+    metric('RA collapse', raCollapse, '') +
+    metric('RV collapse', rvCollapse, '') +
+    metric('IVC plethoric', ivc, '');
 
   document.getElementById('tam_status').className = 'status-box ' + statusClass;
   document.getElementById('tam_status').innerHTML = interpretation;
 
-  document.getElementById('tam_alerts').innerHTML = alerts.join('<br>');
+  document.getElementById('tam_alerts').innerHTML =
+    tamponadeLikely ? alertBox(statusClass, 'Echo signs suggest tamponade physiology.') : '';
 
   document.getElementById('tam_conclusion').innerHTML =
-    '<strong>Interpretation :</strong> ' + interpretation + '<br>' +
-    '<strong>Conduite :</strong> ' + recommendation;
+    '<strong>Interpretation:</strong> ' + interpretation + '<br>' +
+    '<strong>Conduite:</strong> ' + recommendation;
+ 
 }
   </script>
 </body>
