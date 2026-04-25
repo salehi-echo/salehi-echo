@@ -300,10 +300,28 @@
 .panel.active {
   display: block;
 }  
+.lang-switch {
+  position: absolute;
+  right: 20px;
+  top: 22px;
+  background: white;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255,255,255,.7);
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+}
+
+.lang-switch:hover {
+  background: #e7edf7;
+}    
   </style>
 </head>
 <body>
   <header class="topbar">
+    <a class="lang-switch" href="index.html">EN</a>
     <h1>Salehi EchoHemodynamics</h1>
     <p>Assistant clinique d’échocardiographie</p>
     <small>Développé par Dr Salehi · Résident en cardiologie</small>
