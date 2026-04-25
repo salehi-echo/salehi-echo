@@ -626,35 +626,85 @@
       </div>
     </section>
 
-    <section id="function" class="panel">
-      <div class="card">
-        <h2>Systolic / Diastolic Function</h2>
-        <p class="sub">Standalone ventricular function and filling-pressure support.</p>
-      </div>
+    </section> 
+ <section id="function" class="panel">
+  <div class="card">
+    <h2>Systolic / Diastolic Function</h2>
+    <p class="sub">
+      Practical ventricular function and filling-pressure assessment for standard echo machines without strain.
+    </p>
+  </div>
 
-      <div class="grid-2">
-        <div class="card">
-          <label>LVEF (%)</label><input id="fn_ef" type="number" step="1">
-          <label>GLS (%)</label><input id="fn_gls" type="number" step="0.1">
-          <label>E/e′</label><input id="fn_eovere" type="number" step="0.1">
-          <label>e′ septal (cm/s)</label><input id="fn_eprime" type="number" step="0.1">
-          <label>LAVI (mL/m²)</label><input id="fn_lavi" type="number" step="1">
-          <label>TR velocity (m/s)</label><input id="fn_trv" type="number" step="0.1">
-          <div class="actions">
-            <button class="primary" onclick="calculateFunction()">Calculate Function</button>
-            <button class="secondary" onclick="resetFunction()">Reset</button>
-          </div>
-        </div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Body size & Left atrium</h3>
 
-        <div class="card">
-          <h3>Results</h3>
-          <div id="fn_results" class="result-grid"></div>
-          <div id="fn_status" class="status-box neutral">Awaiting data...</div>
-          <div id="fn_alerts" class="alerts"></div>
-          <div id="fn_conclusion" class="summary-box" style="margin-top:12px;">Fill the fields and calculate.</div>
-        </div>
+      <label>Height (cm)</label>
+      <input id="fn_height" type="number" step="1" placeholder="e.g. 170">
+
+      <label>Weight (kg)</label>
+      <input id="fn_weight" type="number" step="1" placeholder="e.g. 70">
+
+      <label>LA length / Longitudinal diameter (cm)</label>
+      <input id="fn_la_length" type="number" step="0.1" placeholder="e.g. 5.2">
+
+      <label>LA width / Transverse diameter (cm)</label>
+      <input id="fn_la_width" type="number" step="0.1" placeholder="e.g. 4.0">
+
+      <label>LA depth / Antero-posterior diameter (cm)</label>
+      <input id="fn_la_depth" type="number" step="0.1" placeholder="e.g. 3.8">
+    </div>
+
+    <div class="card">
+      <h3>Systolic function</h3>
+
+      <label>LVEF (%)</label>
+      <input id="fn_ef" type="number" step="1" placeholder="e.g. 55">
+
+      <label>Fractional shortening FS (%) - optional</label>
+      <input id="fn_fs" type="number" step="1" placeholder="e.g. 30">
+
+      <label>MAPSE (mm) - optional</label>
+      <input id="fn_mapse" type="number" step="0.1" placeholder="e.g. 12">
+
+      <label>Mitral annular S′ lateral (cm/s) - optional</label>
+      <input id="fn_sprime_mitral" type="number" step="0.1" placeholder="e.g. 8.5">
+    </div>
+
+    <div class="card">
+      <h3>Diastolic function</h3>
+
+      <label>E/A ratio</label>
+      <input id="fn_ea" type="number" step="0.1" placeholder="e.g. 1.1">
+
+      <label>E/e′ average</label>
+      <input id="fn_eovere" type="number" step="0.1" placeholder="e.g. 10">
+
+      <label>e′ septal (cm/s)</label>
+      <input id="fn_eprime_septal" type="number" step="0.1" placeholder="e.g. 7">
+
+      <label>e′ lateral (cm/s)</label>
+      <input id="fn_eprime_lateral" type="number" step="0.1" placeholder="e.g. 10">
+
+      <label>TR velocity (m/s)</label>
+      <input id="fn_trv" type="number" step="0.1" placeholder="e.g. 2.6">
+
+      <div class="actions">
+        <button class="primary" onclick="calculateFunction()">Calculate Function</button>
+        <button class="secondary" onclick="resetFunction()">Reset</button>
       </div>
-    </section>
+    </div>
+
+    <div class="card">
+      <h3>Results</h3>
+      <div id="fn_results" class="result-grid"></div>
+      <div id="fn_status" class="status-box neutral">Awaiting data...</div>
+      <div id="fn_alerts" class="alerts"></div>
+      <div id="fn_conclusion" class="summary-box" style="margin-top:12px;">Fill the fields and calculate.</div>
+    </div>
+  </div>
+</section>
+    
   <section id="pe" class="panel">
   <h2>Embolie pulmonaire - Echo RV Strain</h2>
   <p class="sub">
@@ -1361,58 +1411,160 @@ metric('Estimated RAP', fmt(rap, 0), 'mmHg') +
       s('tr_conclusion', 'Fill the fields and calculate.');
     }
 
-    function calculateFunction() {
-      const ef = g('fn_ef');
-      const gls = g('fn_gls');
-      const eovere = g('fn_eovere');
-      const eprime = g('fn_eprime');
-      const lavi = g('fn_lavi');
-      const trv = g('fn_trv');
+   function calculateFunction() {
+  const height = g('fn_height');
+  const weight = g('fn_weight');
 
-      if ([ef, eovere, eprime, lavi, trv].some(v => v === null)) {
-        status('fn_status', 'warning', 'Please fill required function fields.');
-        return;
-      }
+  const laLength = g('fn_la_length');
+  const laWidth = g('fn_la_width');
+  const laDepth = g('fn_la_depth');
 
-      const { score, statusText } = diastolicAssessment(eovere, eprime, lavi, trv);
-      const glsText = glsAssessment(gls);
-      const systolicText = ef >= 50 ? 'Preserved LVEF' : 'Reduced LVEF';
+  const ef = g('fn_ef');
+  const fs = g('fn_fs');
+  const mapse = g('fn_mapse');
+  const sprimeMitral = g('fn_sprime_mitral');
 
-      let main = 'Function profile without major abnormality.';
-      let klass = 'success';
+  const ea = g('fn_ea');
+  const eovere = g('fn_eovere');
+  const eprimeSeptal = g('fn_eprime_septal');
+  const eprimeLateral = g('fn_eprime_lateral');
+  const trv = g('fn_trv');
 
-      if (ef < 50 || statusText !== 'Normal or indeterminate' || glsText !== 'Normal GLS') {
-        main = 'Abnormal ventricular / filling-pressure profile likely.';
-        klass = 'warning';
-      }
+  if ([height, weight, laLength, laWidth, laDepth, ef, eovere, eprimeSeptal, eprimeLateral, trv].some(v => v === null)) {
+    status('fn_status', 'warning', 'Veuillez remplir les champs obligatoires.');
+    s('fn_results', '');
+    s('fn_alerts', '');
+    s('fn_conclusion', 'Le calcul ne peut pas être effectué tant que les champs obligatoires ne sont pas complétés.');
+    return;
+  }
 
-      s('fn_results',
-        metric('LVEF', fmt(ef, 0), '%') +
-        metric('GLS', gls === null ? '—' : fmt(gls, 1), '%') +
-        metric('Systolic Status', systolicText, '') +
-        metric('Diastolic Score', fmt(score, 0), '') +
-        metric('Diastolic Function', statusText, '') +
-        metric('GLS Interpretation', glsText, '')
-      );
+  const alerts = [];
 
-      s('fn_alerts',
-        [
-          statusText !== 'Normal or indeterminate' ? alertBox('warning', statusText) : '',
-          glsText !== 'Normal GLS' && glsText !== 'Not entered' ? alertBox('warning', glsText) : ''
-        ].join('')
-      );
+  const bsa = Math.sqrt((height * weight) / 3600);
+  const laVolume = 0.523 * laLength * laWidth * laDepth;
+  const lavi = laVolume / bsa;
 
-      status('fn_status', klass, main);
-      s('fn_conclusion', `Function assessment:\n${systolicText.toLowerCase()}, ${statusText.toLowerCase()}, GLS interpretation: ${glsText.toLowerCase()}.`);
+  const eprimeAverage = (eprimeSeptal + eprimeLateral) / 2;
+
+  let systolicScore = 0;
+  if (ef < 50) systolicScore++;
+  if (fs !== null && fs < 25) systolicScore++;
+  if (mapse !== null && mapse < 10) systolicScore++;
+  if (sprimeMitral !== null && sprimeMitral < 7) systolicScore++;
+
+  let systolicText = 'Fonction systolique préservée';
+  if (ef < 40) {
+    systolicText = 'Fonction systolique réduite';
+  } else if (ef >= 40 && ef < 50) {
+    systolicText = 'Fonction systolique légèrement réduite';
+  }
+
+  if (systolicScore >= 2) {
+    systolicText = 'Dysfonction systolique probable';
+  }
+
+  let diastolicScore = 0;
+  if (eovere > 14) diastolicScore++;
+  if (eprimeSeptal < 7 || eprimeLateral < 10) diastolicScore++;
+  if (lavi > 34) diastolicScore++;
+  if (trv > 2.8) diastolicScore++;
+
+  let diastolicText = 'Pressions de remplissage normales ou indéterminées';
+  if (diastolicScore >= 3) {
+    diastolicText = 'Pressions de remplissage VG probablement élevées';
+  } else if (diastolicScore === 2) {
+    diastolicText = 'Dysfonction diastolique possible / pressions limites';
+  }
+
+  let eaText = 'Rapport E/A non interprété';
+  if (ea !== null) {
+    if (ea < 0.8 && eovere <= 14) {
+      eaText = 'Profil de relaxation altérée possible';
+    } else if (ea >= 0.8 && ea <= 2) {
+      eaText = 'Profil E/A intermédiaire';
+    } else if (ea > 2) {
+      eaText = 'Profil restrictif possible';
+      alerts.push(alertBox('warning', 'E/A > 2 peut suggérer un profil restrictif, surtout si associé à E/e′ élevé, OG dilatée ou vitesse IT élevée.'));
     }
+  }
 
-    function resetFunction() {
-      resetFields(['fn_ef', 'fn_gls', 'fn_eovere', 'fn_eprime', 'fn_lavi', 'fn_trv']);
-      s('fn_results', '');
-      s('fn_alerts', '');
-      status('fn_status', 'neutral', 'Awaiting data...');
-      s('fn_conclusion', 'Fill the fields and calculate.');
-    }
+  if (lavi > 34) {
+    alerts.push(alertBox('warning', `LAVI calculé augmenté (${fmt(lavi, 0)} mL/m²).`));
+  }
+
+  if (eovere > 14) {
+    alerts.push(alertBox('warning', 'E/e′ > 14 en faveur de pressions de remplissage VG élevées.'));
+  }
+
+  if (trv > 2.8) {
+    alerts.push(alertBox('warning', 'Vitesse IT > 2,8 m/s en faveur de pressions pulmonaires / pressions de remplissage élevées.'));
+  }
+
+  if (ef < 50) {
+    alerts.push(alertBox('warning', 'FEVG < 50 % suggère une fonction systolique anormale.'));
+  }
+
+  if (mapse !== null && mapse < 10) {
+    alerts.push(alertBox('warning', 'MAPSE < 10 mm en faveur d’une altération de la fonction longitudinale VG.'));
+  }
+
+  if (sprimeMitral !== null && sprimeMitral < 7) {
+    alerts.push(alertBox('warning', 'Onde S′ mitrale < 7 cm/s en faveur d’une altération de la fonction systolique longitudinale.'));
+  }
+
+  let main = 'Profil fonctionnel sans anomalie majeure.';
+  let klass = 'success';
+
+  if (systolicScore >= 2 || ef < 50 || diastolicScore >= 2) {
+    main = 'Profil ventriculaire / pressions de remplissage probablement anormal.';
+    klass = 'warning';
+  }
+
+  if (ef < 35 || diastolicScore >= 3) {
+    klass = 'danger';
+  }
+
+  s('fn_results',
+    metric('Surface corporelle calculée', fmt(bsa), 'm²') +
+    metric('Volume OG estimé', fmt(laVolume, 0), 'mL') +
+    metric('LAVI calculé', fmt(lavi, 0), 'mL/m²') +
+    metric('FEVG', fmt(ef, 0), '%') +
+    metric('Fraction de raccourcissement', fs === null ? '—' : fmt(fs, 0), '%') +
+    metric('MAPSE', mapse === null ? '—' : fmt(mapse, 1), 'mm') +
+    metric('Onde S′ mitrale latérale', sprimeMitral === null ? '—' : fmt(sprimeMitral, 1), 'cm/s') +
+    metric('e′ moyen', fmt(eprimeAverage, 1), 'cm/s') +
+    metric('Score diastolique', fmt(diastolicScore, 0), '/4') +
+    metric('Fonction systolique', systolicText, '') +
+    metric('Interprétation E/A', eaText, '') +
+    metric('Pressions de remplissage', diastolicText, '')
+  );
+
+  s('fn_alerts', alerts.join(''));
+
+  status('fn_status', klass, main);
+
+  s('fn_conclusion',
+    `Évaluation fonctionnelle :\n` +
+    `${systolicText}. ${diastolicText}.\n` +
+    `Volume OG calculé : ${fmt(laVolume, 0)} mL, LAVI calculé : ${fmt(lavi, 0)} mL/m², surface corporelle : ${fmt(bsa)} m².\n` +
+    `Score diastolique : ${fmt(diastolicScore, 0)}/4 basé sur E/e′, vitesses e′, LAVI calculé et vitesse IT.`
+  );
+}
+
+function resetFunction() {
+  resetFields([
+    'fn_height', 'fn_weight',
+    'fn_la_length', 'fn_la_width', 'fn_la_depth',
+    'fn_ef', 'fn_fs', 'fn_mapse', 'fn_sprime_mitral',
+    'fn_ea', 'fn_eovere', 'fn_eprime_septal', 'fn_eprime_lateral', 'fn_trv'
+  ]);
+
+  s('fn_results', '');
+  s('fn_alerts', '');
+  status('fn_status', 'neutral', 'En attente des données...');
+  s('fn_conclusion', 'Remplissez les champs puis lancez le calcul.');
+}
+  
   function calculatePE() {
   const age = g('pe_age');
   const sbp = g('pe_sbp');
