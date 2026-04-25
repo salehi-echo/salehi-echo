@@ -633,13 +633,100 @@
   </p>
 
   <div class="card">
-    <h3>Contenu à développer</h3>
-    <p>
-      Cette page sera dédiée à l’analyse échocardiographique de l’embolie pulmonaire :
-      dilatation du VD, septum paradoxal, signe de McConnell, TAPSE, S’, VCI, PAPS
-      et profil de choc obstructif.
-    </p>
+  <h3>Clinical status</h3>
+
+  <label>Age</label>
+  <input id="pe_age" type="number" placeholder="e.g. 65">
+
+  <label>SBP / PAS (mmHg)</label>
+  <input id="pe_sbp" type="number" placeholder="e.g. 110">
+
+  <label>Heart rate / FC (bpm)</label>
+  <input id="pe_hr" type="number" placeholder="e.g. 115">
+
+  <label>SpO₂ (%)</label>
+  <input id="pe_spo2" type="number" placeholder="e.g. 92">
+
+  <label>Shock, vasopressors, or cardiac arrest?</label>
+  <select id="pe_shock">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+</div>
+
+<div class="card">
+  <h3>Echo RV strain</h3>
+
+  <label>RV/LV ratio</label>
+  <input id="pe_rvlv" type="number" step="0.1" placeholder="e.g. 1.1">
+
+  <label>TAPSE (mm)</label>
+  <input id="pe_tapse" type="number" placeholder="e.g. 15">
+
+  <label>RV S′ (cm/s)</label>
+  <input id="pe_sprime" type="number" step="0.1" placeholder="e.g. 8.5">
+
+  <label>D-shape LV in PSAX</label>
+  <select id="pe_dshape">
+    <option value="none">Absent</option>
+    <option value="systolic">Systolic D-shape</option>
+    <option value="both">Systolic + diastolic D-shape</option>
+  </select>
+
+  <label>McConnell sign</label>
+  <select id="pe_mcconnell">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>TR velocity (m/s)</label>
+  <input id="pe_trv" type="number" step="0.1" placeholder="e.g. 3.2">
+
+  <label>IVC diameter / VCI (mm)</label>
+  <input id="pe_ivc" type="number" placeholder="e.g. 22">
+
+  <label>IVC collapsibility / collapsibilité VCI (%)</label>
+  <input id="pe_ivc_collapse" type="number" placeholder="e.g. 35">
+</div>
+
+<div class="card">
+  <h3>Biomarkers</h3>
+
+  <label>Troponin</label>
+  <select id="pe_troponin">
+    <option value="negative">Negative</option>
+    <option value="positive">Positive</option>
+  </select>
+
+  <label>BNP / NT-proBNP</label>
+  <select id="pe_bnp">
+    <option value="unknown">Unknown</option>
+    <option value="negative">Negative</option>
+    <option value="positive">Positive</option>
+  </select>
+
+  <div class="actions">
+    <button class="primary" onclick="calculatePE()">Calculate PE risk</button>
   </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <h3>Results</h3>
+    <div id="pe_results" class="result-grid"></div>
+  </div>
+
+  <div class="card">
+    <h3>Interpretation</h3>
+    <div id="pe_status" class="status-box neutral">Awaiting data...</div>
+    <div id="pe_alerts" class="alerts"></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Conduite à tenir</h3>
+  <div id="pe_conclusion" class="summary-box">Fill the fields and calculate.</div>
+</div>
 </section>
 
 <section id="tamponade" class="panel">
@@ -1160,145 +1247,120 @@ metric('Estimated RAP', fmt(rap, 0), 'mmHg') +
       status('fn_status', 'neutral', 'Awaiting data...');
       s('fn_conclusion', 'Fill the fields and calculate.');
     }
-  function calculateSD() {
-  const ef = g('sd_ef');
-  const mapse = g('sd_mapse');
-  const sprime = g('sd_sprime');
-  const tapse = g('sd_tapse');
-  const ee = g('sd_ee');
-  const eprime = g('sd_eprime');
-  const height = g('sd_height');
-const weight = g('sd_weight');
-const laA4C = g('sd_la_a4c');
-const laA2C = g('sd_la_a2c');
-const laLength = g('sd_la_length');
+  function calculatePE() {
+  const age = g('pe_age');
+  const sbp = g('pe_sbp');
+  const hr = g('pe_hr');
+  const spo2 = g('pe_spo2');
+  const shock = document.getElementById('pe_shock').value;
 
-let bsa = null;
-let lav = null;
-let lavi = null;
+  const rvlv = g('pe_rvlv');
+  const tapse = g('pe_tapse');
+  const sprime = g('pe_sprime');
+  const dshape = document.getElementById('pe_dshape').value;
+  const mcconnell = document.getElementById('pe_mcconnell').value;
+  const trv = g('pe_trv');
+  const ivc = g('pe_ivc');
+  const ivcCollapse = g('pe_ivc_collapse');
 
-if (height !== null && weight !== null) {
-  bsa = Math.sqrt((height * weight) / 3600);
-}
+  const troponin = document.getElementById('pe_troponin').value;
+  const bnp = document.getElementById('pe_bnp').value;
 
-if (laA4C !== null && laA2C !== null && laLength !== null && laLength > 0) {
-  lav = (8 / (3 * Math.PI)) * ((laA4C * laA2C) / laLength);
-}
+  let alerts = [];
 
-if (lav !== null && bsa !== null && bsa > 0) {
-  lavi = lav / bsa;
-}
-  const trv = g('sd_trv');
+  let spesi = 0;
+  if (age !== null && age > 80) spesi++;
+  if (hr !== null && hr >= 110) spesi++;
+  if (sbp !== null && sbp < 100) spesi++;
+  if (spo2 !== null && spo2 < 90) spesi++;
 
-  let result = '';
-  let interp = '';
-
-  let lv = 'Normal';
-  if (ef !== null && ef < 50) lv = 'Reduced';
-  if (ef !== null && ef >= 40 && ef < 50) lv = 'Mildly reduced';
-
-  let longitudinal = 'Normal';
-  if ((mapse !== null && mapse < 10) || (sprime !== null && sprime < 7)) {
-    longitudinal = 'Reduced longitudinal function';
+  let rap = null;
+  if (ivc !== null && ivcCollapse !== null) {
+    if (ivc <= 21 && ivcCollapse > 50) {
+      rap = 3;
+    } else if (ivc > 21 && ivcCollapse < 50) {
+      rap = 15;
+    } else {
+      rap = 8;
+    }
   }
 
-  let rv = 'Normal';
-  if (tapse !== null && tapse < 17) {
-    rv = 'RV systolic dysfunction';
+  let spap = null;
+  if (trv !== null && rap !== null) {
+    spap = 4 * Math.pow(trv, 2) + rap;
   }
 
-  let diastolicScore = 0;
-  if (ee !== null && ee > 14) diastolicScore++;
-  if (eprime !== null && eprime < 7) diastolicScore++;
-  if (lavi !== null && lavi > 34) diastolicScore++;
-  if (trv !== null && trv > 2.8) diastolicScore++;
+  let rvScore = 0;
+  if (rvlv !== null && rvlv > 1) rvScore++;
+  if (tapse !== null && tapse < 17) rvScore++;
+  if (sprime !== null && sprime < 9.5) rvScore++;
+  if (mcconnell === 'yes') rvScore++;
+  if (dshape === 'systolic') rvScore += 2;
+  if (dshape === 'both') rvScore += 3;
 
-  let diastolic = 'Normal filling pressure likely';
-  if (diastolicScore === 1) diastolic = 'Indeterminate';
-  if (diastolicScore >= 2) diastolic = 'Elevated filling pressure likely';
+  const rvDysfunction = rvScore >= 2 || dshape === 'systolic' || dshape === 'both';
 
-  result =
-    metric('LVEF', ef === null ? '—' : fmt(ef, 0), '%') +
-    metric('MAPSE', mapse === null ? '—' : fmt(mapse, 1), 'mm') +
-    metric('S′ mitral', sprime === null ? '—' : fmt(sprime, 1), 'cm/s') +
-    metric('TAPSE', tapse === null ? '—' : fmt(tapse, 1), 'mm') +
-    metric('E/e′', ee === null ? '—' : fmt(ee, 1), '') +
-    metric('BSA', bsa === null ? '—' : fmt(bsa, 2), 'm²') +
-metric('LAV', lav === null ? '—' : fmt(lav, 0), 'mL') +
-metric('LAVI', lavi === null ? '—' : fmt(lavi, 0), 'mL/m²') +
-metric('LA Interpretation', lavi === null ? 'Not calculated' : (lavi > 34 ? 'Enlarged LA' : 'Normal LA'), '') +
-    metric('TR velocity', trv === null ? '—' : fmt(trv, 1), 'm/s') +
-    metric('Diastolic score', fmt(diastolicScore, 0), '');
+  let risk = 'Low-risk PE profile';
+  let klass = 'success';
 
-  interp =
-    `<div class="status-box warning">
-      <b>LV systolic function:</b> ${lv}<br>
-      <b>Longitudinal LV function:</b> ${longitudinal}<br>
-      <b>RV systolic function:</b> ${rv}<br>
-      <b>Diastolic function:</b> ${diastolic}
-    </div>`;
+  if (shock === 'yes' || (sbp !== null && sbp < 90)) {
+    risk = 'High-risk PE / obstructive shock profile';
+    klass = 'danger';
+  } else if (rvDysfunction && troponin === 'positive') {
+    risk = 'Intermediate-high risk PE profile';
+    klass = 'danger';
+  } else if (rvDysfunction || troponin === 'positive' || spesi >= 1) {
+    risk = 'Intermediate-low risk PE profile';
+    klass = 'warning';
+  }
 
-  document.getElementById('sd_results').innerHTML = result;
-  document.getElementById('sd_interpretation').innerHTML = interp;
-}
-    function calculatePEScore() {
-  const checkedItems = document.querySelectorAll('.pe-score:checked');
-  let score = 0;
-  let hasRightHeartThrombus = false;
-  let hasDShape = false;
+  if (dshape === 'systolic') {
+    alerts.push(alertBox('warning', 'Systolic D-shape: significant RV pressure overload.'));
+  }
 
-  checkedItems.forEach(item => {
-    score += Number(item.value);
+  if (dshape === 'both') {
+    alerts.push(alertBox('danger', 'Systolic + diastolic D-shape: severe RV overload pattern.'));
+  }
 
-    const labelText = item.parentElement.textContent.toLowerCase();
+  if (rvDysfunction) {
+    alerts.push(alertBox('warning', 'Echo signs suggest RV dysfunction / RV strain.'));
+  }
 
-    if (labelText.includes('thrombus')) {
-      hasRightHeartThrombus = true;
-    }
+  if (bnp === 'positive') {
+    alerts.push(alertBox('warning', 'Positive BNP/NT-proBNP supports RV myocardial stress.'));
+  }
 
-    if (labelText.includes('d-shaped')) {
-      hasDShape = true;
-    }
-  });
+  let conclusion = '';
 
-  let interpretation = '';
-  let recommendation = '';
-
-  if (hasRightHeartThrombus) {
-    interpretation = 'Risque très élevé : thrombus droit mobile détecté.';
-    recommendation = 'Urgence majeure. Discuter reperfusion urgente selon stabilité hémodynamique, risque hémorragique et contexte clinique.';
-  } else if (score >= 6) {
-    interpretation = 'Forte suspicion de retentissement VD compatible avec une EP significative.';
-    recommendation = 'Corréler à la clinique, ECG, troponine/BNP, état hémodynamique et angio-TDM si disponible.';
-  } else if (score >= 3) {
-    interpretation = 'Suspicion modérée de surcharge VD.';
-    recommendation = 'Surveillance rapprochée et complément par probabilité clinique, D-dimères si indiqué, biomarqueurs et imagerie.';
+  if (klass === 'danger' && risk.includes('High-risk')) {
+    conclusion =
+      'High-risk pulmonary embolism profile: shock, vasopressors, cardiac arrest or severe hypotension. ' +
+      'Urgent senior/ICU discussion is required. Reperfusion strategy should be considered according to local protocol and contraindications.';
+  } else if (risk.includes('Intermediate-high')) {
+    conclusion =
+      'Intermediate-high risk PE profile: normotensive patient with RV dysfunction and positive troponin. ' +
+      'Close monitored setting is recommended. Escalation/reperfusion should be discussed if clinical deterioration occurs.';
+  } else if (risk.includes('Intermediate-low')) {
+    conclusion =
+      'Intermediate-low risk PE profile: no shock, but at least one risk marker is present. ' +
+      'Anticoagulation and in-hospital monitoring are generally appropriate depending on bleeding risk and clinical context.';
   } else {
-    interpretation = 'Faible support échographique pour une EP avec retentissement VD.';
-    recommendation = 'Ne pas exclure l’EP uniquement sur l’échographie. Interpréter avec la probabilité clinique et l’imagerie.';
+    conclusion =
+      'Low-risk PE profile from entered data. If diagnosis is confirmed and no exclusion criteria exist, outpatient pathway may be considered according to local protocol.';
   }
 
-  let dShapeComment = '';
+  s('pe_results',
+    metric('sPESI partial', fmt(spesi, 0), 'points') +
+    metric('RV strain score', fmt(rvScore, 0), '') +
+    metric('RV dysfunction', rvDysfunction ? 'Yes' : 'No', '') +
+    metric('Estimated RAP', rap === null ? '—' : fmt(rap, 0), 'mmHg') +
+    metric('Estimated sPAP', spap === null ? '—' : fmt(spap, 0), 'mmHg') +
+    metric('Troponin', troponin, '')
+  );
 
-  if (hasDShape) {
-    dShapeComment = `
-      <br><br>
-      <strong>Note D-shaped LV :</strong>
-      le VG en forme de D en petit axe parasternal suggère une surcharge de pression du VD avec aplatissement septal.
-      En contexte aigu, ce signe renforce la suspicion d’embolie pulmonaire avec retentissement VD.
-    `;
-  }
-
-  const resultBox = document.getElementById('peResult');
-
-  if (resultBox) {
-    resultBox.innerHTML = `
-      <strong>Score EP échographique : ${score} points</strong><br>
-      <strong>Interprétation :</strong> ${interpretation}<br>
-      <strong>Conduite proposée :</strong> ${recommendation}
-      ${dShapeComment}
-    `;
-  }
+  status('pe_status', klass, risk);
+  s('pe_alerts', alerts.join(''));
+  s('pe_conclusion', conclusion);
 }
   </script>
 </body>
