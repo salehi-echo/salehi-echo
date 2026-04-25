@@ -735,14 +735,87 @@
     Module d’aide à l’évaluation échocardiographique d’une tamponnade.
   </p>
 
-  <div class="card">
-    <h3>Contenu à développer</h3>
-    <p>
-      Cette page sera dédiée à l’analyse de l’épanchement péricardique,
-      collapsus OD/VD, VCI pléthorique, variations respiratoires Doppler
-      et signes de choc obstructif.
-    </p>
+ <div class="card">
+  <h3>Clinical status</h3>
+
+  <label>Hypotension / shock?</label>
+  <select id="tam_shock">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>Tachycardia?</label>
+  <select id="tam_tachy">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>Pulsus paradoxus?</label>
+  <select id="tam_pulsus">
+    <option value="unknown">Unknown</option>
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+</div>
+
+<div class="card">
+  <h3>Echo signs</h3>
+
+  <label>Pericardial effusion size</label>
+  <select id="tam_size">
+    <option value="none">None</option>
+    <option value="small">Small</option>
+    <option value="moderate">Moderate</option>
+    <option value="large">Large</option>
+  </select>
+
+  <label>Right atrial collapse</label>
+  <select id="tam_ra_collapse">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>Right ventricular diastolic collapse</label>
+  <select id="tam_rv_collapse">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>IVC dilated and poorly collapsible</label>
+  <select id="tam_ivc">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>Respiratory variation on Doppler inflow</label>
+  <select id="tam_doppler">
+    <option value="unknown">Unknown</option>
+    <option value="no">No significant variation</option>
+    <option value="yes">Significant variation</option>
+  </select>
+
+  <div class="actions">
+    <button class="primary" onclick="calculateTamponade()">Calculate Tamponade</button>
   </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <h3>Results</h3>
+    <div id="tam_results" class="result-grid"></div>
+  </div>
+
+  <div class="card">
+    <h3>Interpretation</h3>
+    <div id="tam_status" class="status-box neutral">Awaiting data...</div>
+    <div id="tam_alerts" class="alerts"></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Conduite à tenir</h3>
+  <div id="tam_conclusion" class="summary-box">Fill the fields and calculate.</div>
+</div>
 </section>
 
 <section id="shock" class="panel">
@@ -1361,6 +1434,69 @@ metric('Estimated RAP', fmt(rap, 0), 'mmHg') +
   status('pe_status', klass, risk);
   s('pe_alerts', alerts.join(''));
   s('pe_conclusion', conclusion);
+}
+  function calculateTamponade() {
+
+  let score = 0;
+  let alerts = [];
+
+  const shock = document.getElementById('tam_shock').value;
+  const tachy = document.getElementById('tam_tachy').value;
+  const pulsus = document.getElementById('tam_pulsus').value;
+
+  const size = document.getElementById('tam_size').value;
+  const raCollapse = document.getElementById('tam_ra_collapse').value;
+  const rvCollapse = document.getElementById('tam_rv_collapse').value;
+  const ivc = document.getElementById('tam_ivc').value;
+  const doppler = document.getElementById('tam_doppler').value;
+
+  // Clinical
+  if (shock === 'yes') score += 3;
+  if (tachy === 'yes') score += 1;
+  if (pulsus === 'yes') score += 1;
+
+  // Echo
+  if (size === 'large') score += 2;
+  if (size === 'moderate') score += 1;
+
+  if (raCollapse === 'yes') score += 2;
+  if (rvCollapse === 'yes') score += 3;
+  if (ivc === 'yes') score += 2;
+  if (doppler === 'yes') score += 2;
+
+  let interpretation = '';
+  let recommendation = '';
+  let statusClass = 'neutral';
+
+  if (score >= 7) {
+    interpretation = 'High probability tamponade';
+    recommendation = 'URGENT pericardiocentesis. Do not delay.';
+    statusClass = 'danger';
+    alerts.push('⚠️ Hemodynamic tamponade likely');
+  } 
+  else if (score >= 4) {
+    interpretation = 'Possible tamponade';
+    recommendation = 'Urgent expert echo and close monitoring.';
+    statusClass = 'warning';
+  } 
+  else {
+    interpretation = 'Low probability tamponade';
+    recommendation = 'Clinical and echo follow-up.';
+    statusClass = 'success';
+  }
+
+  // OUTPUT
+  document.getElementById('tam_results').innerHTML =
+    '<strong>Score :</strong> ' + score;
+
+  document.getElementById('tam_status').className = 'status-box ' + statusClass;
+  document.getElementById('tam_status').innerHTML = interpretation;
+
+  document.getElementById('tam_alerts').innerHTML = alerts.join('<br>');
+
+  document.getElementById('tam_conclusion').innerHTML =
+    '<strong>Interpretation :</strong> ' + interpretation + '<br>' +
+    '<strong>Conduite :</strong> ' + recommendation;
 }
   </script>
 </body>
