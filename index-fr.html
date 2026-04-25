@@ -1,11 +1,1622 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <title>Version Française</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salehi EchoHemodynamics</title>
+  <style>
+    :root {
+      --bg: #f3f6fb;
+      --card: #ffffff;
+      --primary: #173a8a;
+      --primary-dark: #10295f;
+      --text: #162033;
+      --muted: #5f6b7a;
+      --border: #d9e1ec;
+      --success: #0f9f6e;
+      --warning: #d48a00;
+      --danger: #dc3d3d;
+      --neutral: #64748b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .topbar {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 24px 20px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.12);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .topbar h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+    }
+
+    .topbar p, .topbar small {
+      margin: 0;
+      opacity: .95;
+    }
+
+    .app {
+      max-width: 1400px;
+      margin: 20px auto 40px;
+      padding: 0 16px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(15,23,42,.05);
+      margin-bottom: 16px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    h2, h3 {
+      margin-top: 0;
+    }
+
+    p.sub {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: 700;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font-size: 15px;
+      background: #fbfdff;
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .secondary {
+      background: #e7edf7;
+      color: var(--text);
+    }
+
+    .danger-btn {
+      background: var(--danger);
+      color: white;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .metric {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      background: #fbfdff;
+    }
+
+    .metric .label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .metric .value {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .metric .unit {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .status-box {
+      border-radius: 14px;
+      padding: 16px;
+      font-weight: 700;
+      line-height: 1.5;
+      border-left: 6px solid var(--neutral);
+      background: #f8fafc;
+    }
+
+    .status-box.success {
+      border-left-color: var(--success);
+      background: rgba(15,159,110,.08);
+      color: #0b6d4b;
+    }
+
+    .status-box.warning {
+      border-left-color: var(--warning);
+      background: rgba(212,138,0,.08);
+      color: #8a5d00;
+    }
+
+    .status-box.danger {
+      border-left-color: var(--danger);
+      background: rgba(220,61,61,.08);
+      color: #9f2121;
+    }
+
+    .status-box.neutral {
+      border-left-color: var(--neutral);
+      color: #475569;
+    }
+
+    .alerts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .alert-item {
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .alert-item.warning {
+      background: rgba(212,138,0,.1);
+      color: #7a5300;
+      border: 1px solid rgba(212,138,0,.2);
+    }
+
+    .alert-item.danger {
+      background: rgba(220,61,61,.1);
+      color: #8d2424;
+      border: 1px solid rgba(220,61,61,.2);
+    }
+
+    .alert-item.success {
+      background: rgba(15,159,110,.1);
+      color: #0b6d4b;
+      border: 1px solid rgba(15,159,110,.2);
+    }
+
+    .summary-box {
+      border: 1px solid var(--border);
+      background: #fbfdff;
+      border-radius: 12px;
+      padding: 16px;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    @media (max-width: 1100px) {
+      .tabs, .grid-3, .result-grid {
+        grid-template-columns: repeat(2,1fr);
+      }
+    }
+
+    @media (max-width: 800px) {
+      .tabs, .grid-2, .grid-3, .result-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0 10px 0;
+  padding: 14px 22px;
+  border: none;
+  border-radius: 18px;
+  background: #173d8f;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(23, 61, 143, 0.22);
+}
+
+.back-btn:hover {
+  background: #0f2d6b;
+}
+ .panel {
+  display: none;
+}
+.panel.active {
+  display: block;
+}  
+  </style>
 </head>
 <body>
+  <header class="topbar">
+    <h1>Salehi EchoHemodynamics</h1>
+    <p>Assistant clinique d’échocardiographie</p>
+    <small>Développé par Dr Salehi · Résident en cardiologie</small>
+  </header>
 
-<h1>Version française en cours...</h1>
+<button id="backBtn" class="back-btn" style="display:none;">← Retour</button>
+     <section id="dashboard" class="panel active">
+  <div class="grid-2">
+    <div class="card">
+      <h2>Mesures échocardiographiques</h2>
+      <p class="sub">
+        Module de mesures échocardiographiques : valvulopathies, PAPs, fonction VD/VG,
+        fonction diastolique et génération de compte rendu.
+      </p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="echo-menu">Ouvrir les mesures échocardiographiques</button>
+      </div>
+    </div>
 
+    <div class="card">
+      <h2>Moteur diagnostique</h2>
+      <p class="sub">
+        Module d’aide à l’orientation diagnostique en urgence : embolie pulmonaire,
+        tamponnade, choc et situations critiques.
+      </p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="diagnostic">Ouvrir le moteur diagnostique</button>
+      </div>
+    </div>
+  </div>
+    </section>
+<section id="echo-menu" class="panel">
+  <div class="card">
+    <h2>Mesures échocardiographiques</h2>
+    <p class="sub">
+      Choisissez le module d’échocardiographie que vous souhaitez utiliser.
+    </p>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <h3>Rétrécissement aortique</h3>
+      <p class="sub">AVA, gradient moyen, Vmax, DVI, AVA indexée.</p>
+      <button class="primary module-btn" data-tab="as">Ouvrir</button>
+    </div>
+
+    <div class="card">
+      <h3>Insuffisance mitrale</h3>
+      <p class="sub">SOR/EROA, volume régurgitant, vena contracta, flux veineux pulmonaire.</p>
+      <button class="primary module-btn" data-tab="mr">Ouvrir</button>
+    </div>
+
+    <div class="card">
+      <h3>Rétrécissement mitral</h3>
+      <p class="sub">Surface mitrale par PHT, gradient moyen, PAPs, rythme et logique de sévérité.</p>
+      <button class="primary module-btn" data-tab="ms">Ouvrir</button>
+    </div>
+
+    <div class="card">
+      <h3>Insuffisance aortique</h3>
+      <p class="sub">Vena contracta, PHT, flux holodiastolique rétrograde, retentissement VG.</p>
+      <button class="primary module-btn" data-tab="ar">Ouvrir</button>
+    </div>
+
+    <div class="card">
+      <h3>IT / PAPs</h3>
+      <p class="sub">Vmax IT, POD estimée, PAPs et aide à l’évaluation de la sévérité de l’IT.</p>
+      <button class="primary module-btn" data-tab="tr">Ouvrir</button>
+    </div>
+
+    <div class="card">
+      <h3>Systolique / Diastolique</h3>
+      <p class="sub">FEVG, TAPSE, S’, E/e’, e’, vitesse IT et profil diastolique.</p>
+      <button class="primary module-btn" data-tab="function">Ouvrir</button>
+    </div>
+  </div>
+</section>
+   <section id="diagnostic" class="panel">
+  <div class="card">
+    <h2>Moteur diagnostique</h2>
+    <p class="sub">
+      Module d’aide à l’orientation diagnostique en urgence : embolie pulmonaire,
+      tamponnade, choc et situations critiques.
+    </p>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <h3>Embolie pulmonaire – Retentissement droit à l’écho</h3>
+      <p class="sub">
+        Évaluation rapide du retentissement droit en cas de suspicion d’embolie pulmonaire aiguë.
+      </p>
+      <button class="primary module-btn" data-tab="pe">Ouvrir</button>
+    </div>
+
+    <div class="card">
+      <h3>Tamponnade cardiaque</h3>
+      <p class="sub">
+        Épanchement péricardique, collapsus OD/VD, VCI pléthorique,
+        variations respiratoires Doppler et profil de choc obstructif.
+      </p>
+      <button class="primary module-btn" data-tab="tamponade">Ouvrir</button>
+    </div>
+
+    <div class="card">
+      <h3>Choc</h3>
+      <p class="sub">
+        Orientation échographique rapide : choc cardiogénique, obstructif,
+        hypovolémique ou distributif.
+      </p>
+      <button class="primary module-btn" data-tab="shock">Ouvrir</button>
+    </div>
+  </div>
+</section>
+    <section id="as" class="panel">
+      <div class="card">
+        <h2>Rétrécissement aortique</h2>
+        <p class="sub">Quantification valvulaire intégrée, débit indexé, FEVG et contexte diastolique de base.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Mesures valvulaires</h3>
+          <label>Diamètre de la CCVG / LVOT (cm)</label><input id="as_lvot" type="number" step="0.01">
+          <label>ITV sous-aortique / LVOT (cm)</label><input id="as_vti_lvot" type="number" step="0.1">
+          <label>ITV valve aortique (cm)</label><input id="as_vti_ao" type="number" step="0.1">
+          <label>Vmax valve aortique (m/s)</label><input id="as_vmax" type="number" step="0.1">
+          <label>Gradient moyen (mmHg)</label><input id="as_gradient" type="number" step="1">
+        </div>
+
+        <div class="card">
+          <h3>Contexte hémodynamique</h3>
+          <label>Taille (cm)</label><input id="as_height" type="number" step="1">
+          <label>Poids (kg)</label><input id="as_weight" type="number" step="0.1">
+          <label>FEVG (%)</label><input id="as_ef" type="number" step="1">
+          <label>E/e′ moyen (optionnel)</label><input id="as_eovere" type="number" step="0.1">
+          <label>Volume OG indexé / LAVI mL/m² (optionnel)</label><input id="as_lavi" type="number" step="1">
+          <label>GLS (%) (optionnel)</label><input id="as_gls" type="number" step="0.1">
+          <label>e′ septal (cm/s) (optionnel)</label><input id="as_eprime" type="number" step="0.1">
+          <label>Vitesse IT (m/s) (optionnel)</label><input id="as_trv" type="number" step="0.1">
+          <div class="actions">
+            <button class="primary" onclick="calculateAS()">Calculer le RA</button>
+            <button class="secondary" onclick="resetAS()">Réinitialiser</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Résultats clés</h3>
+          <div id="as_results" class="result-grid"></div>
+        </div>
+        <div class="card">
+          <h3>Interprétation intégrée</h3>
+          <div id="as_status" class="status-box neutral">En attente des données...</div>
+          <div id="as_alerts" class="alerts"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Conclusion automatisée</h3>
+        <div id="as_conclusion" class="summary-box">Remplissez les champs puis lancez le calcul.</div>
+      </div>
+    </section>
+
+    <section id="mr" class="panel">
+      <div class="card">
+        <h2>Insuffisance mitrale</h2>
+        <p class="sub">Quantification basée sur la PISA avec support multiparamétrique.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <label>Rayon PISA (cm)</label><input id="mr_r" type="number" step="0.01">
+          <label>Vitesse d’aliasing Va (cm/s)</label><input id="mr_va" type="number" step="1">
+          <label>Vitesse maximale de l’IM (cm/s)</label><input id="mr_vmax" type="number" step="1">
+          <label>ITV de l’IM (cm)</label><input id="mr_vti" type="number" step="1">
+          <label>Vena contracta (mm) (optionnel)</label><input id="mr_vc" type="number" step="0.1">
+          <label>Mécanisme</label>
+          <select id="mr_mech">
+            <option value="primary">Primaire</option>
+            <option value="secondary">Secondaire</option>
+          </select>
+          <div class="actions">
+            <button class="primary" onclick="calculateMR()">Calculer l’IM</button>
+            <button class="secondary" onclick="resetMR()">Réinitialiser</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Résultats</h3>
+          <div id="mr_results" class="result-grid"></div>
+          <div id="mr_status" class="status-box neutral">En attente des données...</div>
+          <div id="mr_alerts" class="alerts"></div>
+          <div id="mr_conclusion" class="summary-box" style="margin-top:12px;">Remplissez les champs puis lancez le calcul.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ms" class="panel">
+      <div class="card">
+        <h2>Rétrécissement mitral</h2>
+        <p class="sub">Surface par PHT, gradient et gradation pratique.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <label>PHT (ms)</label><input id="ms_pht" type="number" step="1">
+          <label>Gradient moyen (mmHg)</label><input id="ms_grad" type="number" step="1">
+          <label>Fréquence cardiaque (bpm)</label><input id="ms_hr" type="number" step="1">
+          <label>Rythme</label>
+          <select id="ms_rhythm">
+            <option value="sinus">Sinusal</option>
+            <option value="af">FA</option>
+          </select>
+          <div class="actions">
+            <button class="primary" onclick="calculateMS()">Calculer le RM</button>
+            <button class="secondary" onclick="resetMS()">Réinitialiser</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Résultats</h3>
+          <div id="ms_results" class="result-grid"></div>
+          <div id="ms_status" class="status-box neutral">En attente des données...</div>
+          <div id="ms_alerts" class="alerts"></div>
+          <div id="ms_conclusion" class="summary-box" style="margin-top:12px;">Remplissez les champs puis lancez le calcul.</div>
+        </div>
+      </div>
+    </section>
+        <section id="ar" class="panel">
+      <div class="card">
+        <h2>Insuffisance aortique</h2>
+        <p class="sub">Aide simplifiée multiparamétrique pour l’IA.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <label>Pressure half-time / PHT (ms)</label><input id="ar_pht" type="number" step="1">
+          <label>Vena contracta (mm)</label><input id="ar_vc" type="number" step="0.1">
+          <label>Flux holodiastolique rétrograde dans l’aorte descendante</label>
+          <select id="ar_flowrev">
+            <option value="no">Non</option>
+            <option value="yes">Oui</option>
+          </select>
+          <div class="actions">
+            <button class="primary" onclick="calculateAR()">Calculer l’IA</button>
+            <button class="secondary" onclick="resetAR()">Réinitialiser</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Résultats</h3>
+          <div id="ar_results" class="result-grid"></div>
+          <div id="ar_status" class="status-box neutral">En attente des données...</div>
+          <div id="ar_alerts" class="alerts"></div>
+          <div id="ar_conclusion" class="summary-box" style="margin-top:12px;">Remplissez les champs puis lancez le calcul.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tr" class="panel">
+      <div class="card">
+        <h2>IT / PAPs</h2>
+        <p class="sub">Vitesse IT, estimation de la POD, PAPs et aide simple à l’évaluation de la sévérité de l’IT.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <label>Vitesse IT (m/s)</label><input id="tr_vmax" type="number" step="0.1">
+          <label>Diamètre de la VCI (mm)</label>
+<input id="tr_ivc" type="number" step="1" placeholder="ex. 18">
+
+<label>Collapsibilité de la VCI (%)</label>
+<input id="tr_ivc_collapse" type="number" step="1" placeholder="ex. 50">
+          <label>Vena contracta de l’IT (mm) (optionnel)</label><input id="tr_vc" type="number" step="0.1">
+          <div class="actions">
+            <button class="primary" onclick="calculateTR()">Calculer IT/PAPs</button>
+            <button class="secondary" onclick="resetTR()">Réinitialiser</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Résultats</h3>
+          <div id="tr_results" class="result-grid"></div>
+          <div id="tr_status" class="status-box neutral">En attente des données...</div>
+          <div id="tr_alerts" class="alerts"></div>
+          <div id="tr_conclusion" class="summary-box" style="margin-top:12px;">Remplissez les champs puis lancez le calcul.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="function" class="panel">
+      <div class="card">
+        <h2>Fonction systolique / diastolique</h2>
+        <p class="sub">Aide autonome à l’évaluation de la fonction ventriculaire et des pressions de remplissage.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <label>FEVG (%)</label><input id="fn_ef" type="number" step="1">
+          <label>GLS (%)</label><input id="fn_gls" type="number" step="0.1">
+          <label>E/e′</label><input id="fn_eovere" type="number" step="0.1">
+          <label>e′ septal (cm/s)</label><input id="fn_eprime" type="number" step="0.1">
+          <label>Volume OG indexé / LAVI (mL/m²)</label><input id="fn_lavi" type="number" step="1">
+          <label>Vitesse IT (m/s)</label><input id="fn_trv" type="number" step="0.1">
+          <div class="actions">
+            <button class="primary" onclick="calculateFunction()">Calculer la fonction</button>
+            <button class="secondary" onclick="resetFunction()">Réinitialiser</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Résultats</h3>
+          <div id="fn_results" class="result-grid"></div>
+          <div id="fn_status" class="status-box neutral">En attente des données...</div>
+          <div id="fn_alerts" class="alerts"></div>
+          <div id="fn_conclusion" class="summary-box" style="margin-top:12px;">Remplissez les champs puis lancez le calcul.</div>
+        </div>
+      </div>
+    </section>
+  <section id="pe" class="panel">
+  <h2>Embolie pulmonaire - Retentissement droit à l’écho</h2>
+  <p class="sub">
+    Module d’évaluation rapide du retentissement droit en cas de suspicion d’embolie pulmonaire.
+  </p>
+
+  <div class="card">
+  <h3>État clinique</h3>
+
+  <label>Âge</label>
+  <input id="pe_age" type="number" placeholder="ex. 65">
+
+  <label>PAS (mmHg)</label>
+  <input id="pe_sbp" type="number" placeholder="ex. 110">
+
+  <label>Fréquence cardiaque / FC (bpm)</label>
+  <input id="pe_hr" type="number" placeholder="ex. 115">
+
+  <label>SpO₂ (%)</label>
+  <input id="pe_spo2" type="number" placeholder="ex. 92">
+
+  <label>Choc, vasopresseurs ou arrêt cardiaque ?</label>
+  <select id="pe_shock">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+</div>
+
+<div class="card">
+  <h3>Retentissement droit à l’écho</h3>
+
+  <label>Rapport VD/VG</label>
+  <input id="pe_rvlv" type="number" step="0.1" placeholder="ex. 1.1">
+
+  <label>TAPSE (mm)</label>
+  <input id="pe_tapse" type="number" placeholder="ex. 15">
+
+  <label>S′ VD (cm/s)</label>
+  <input id="pe_sprime" type="number" step="0.1" placeholder="ex. 8.5">
+
+  <label>Aspect en D du VG en PSAX</label>
+  <select id="pe_dshape">
+    <option value="none">Absent</option>
+    <option value="systolic">Aspect en D systolique</option>
+    <option value="both">Aspect en D systolique + diastolique</option>
+  </select>
+
+  <label>Signe de McConnell</label>
+  <select id="pe_mcconnell">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>Vitesse IT (m/s)</label>
+  <input id="pe_trv" type="number" step="0.1" placeholder="ex. 3.2">
+
+  <label>Diamètre de la VCI (mm)</label>
+  <input id="pe_ivc" type="number" placeholder="ex. 22">
+
+  <label>Collapsibilité de la VCI (%)</label>
+  <input id="pe_ivc_collapse" type="number" placeholder="ex. 35">
+</div>
+
+<div class="card">
+  <h3>Biomarqueurs</h3>
+
+  <label>Troponine</label>
+  <select id="pe_troponin">
+    <option value="negative">Négative</option>
+    <option value="positive">Positive</option>
+  </select>
+
+  <label>BNP / NT-proBNP</label>
+  <select id="pe_bnp">
+    <option value="unknown">Inconnu</option>
+    <option value="negative">Négatif</option>
+    <option value="positive">Positif</option>
+  </select>
+
+  <div class="actions">
+    <button class="primary" onclick="calculatePE()">Calculer le risque EP</button>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <h3>Résultats</h3>
+    <div id="pe_results" class="result-grid"></div>
+  </div>
+
+  <div class="card">
+    <h3>Interprétation</h3>
+    <div id="pe_status" class="status-box neutral">En attente des données...</div>
+    <div id="pe_alerts" class="alerts"></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Conduite à tenir</h3>
+  <div id="pe_conclusion" class="summary-box">Remplissez les champs puis lancez le calcul.</div>
+</div>
+</section>
+
+<section id="tamponade" class="panel">
+  <h2>Tamponnade cardiaque</h2>
+  <p class="sub">
+    Module d’aide à l’évaluation échocardiographique d’une tamponnade.
+  </p>
+
+ <div class="card">
+  <h3>État clinique</h3>
+
+  <label>Hypotension / choc ?</label>
+  <select id="tam_shock">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>Tachycardie ?</label>
+  <select id="tam_tachy">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>Pouls paradoxal ?</label>
+  <select id="tam_pulsus">
+    <option value="unknown">Inconnu</option>
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+</div>
+
+<div class="card">
+  <h3>Signes échocardiographiques</h3>
+
+  <label>Importance de l’épanchement péricardique</label>
+  <select id="tam_size">
+    <option value="none">Aucun</option>
+    <option value="small">Faible</option>
+    <option value="moderate">Modéré</option>
+    <option value="large">Abondant</option>
+  </select>
+
+  <label>Collapsus de l’oreillette droite</label>
+  <select id="tam_ra_collapse">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>Collapsus diastolique du ventricule droit</label>
+  <select id="tam_rv_collapse">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>VCI dilatée et peu collapsible</label>
+  <select id="tam_ivc">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>Variations respiratoires des flux Doppler d’entrée</label>
+  <select id="tam_doppler">
+    <option value="unknown">Inconnu</option>
+    <option value="no">Pas de variation significative</option>
+    <option value="yes">Variation significative</option>
+  </select>
+
+  <div class="actions">
+    <button class="primary" onclick="calculateTamponade()">Calculer la tamponnade</button>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <h3>Résultats</h3>
+    <div id="tam_results" class="result-grid"></div>
+  </div>
+
+  <div class="card">
+    <h3>Interprétation</h3>
+    <div id="tam_status" class="status-box neutral">En attente des données...</div>
+    <div id="tam_alerts" class="alerts"></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Conduite à tenir</h3>
+  <div id="tam_conclusion" class="summary-box">Remplissez les champs puis lancez le calcul.</div>
+</div>
+</section>
+
+<section id="shock" class="panel">
+  <h2>Choc - Orientation échographique</h2>
+  <p class="sub">
+    Module d’orientation rapide devant un état de choc.
+  </p>
+
+ <div class="card">
+  <h3>État clinique</h3>
+
+  <label>Hypotension (PAS &lt; 90 mmHg)</label>
+  <select id="shock_hypotension">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>Signes de congestion ?</label>
+  <select id="shock_congestion">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>Signes d’hypovolémie ?</label>
+  <select id="shock_hypovolemia">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+</div>
+
+<div class="card">
+  <h3>Données échocardiographiques</h3>
+
+  <label>Fonction VG</label>
+  <select id="shock_lv">
+    <option value="normal">Normale</option>
+    <option value="reduced">Altérée</option>
+  </select>
+
+  <label>Dilatation du VD</label>
+  <select id="shock_rv">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>Épanchement péricardique</label>
+  <select id="shock_effusion">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>État de la VCI</label>
+  <select id="shock_ivc">
+    <option value="normal">Normale</option>
+    <option value="collapsed">Collabée</option>
+    <option value="dilated">Dilatée</option>
+  </select>
+
+  <div class="actions">
+    <button class="primary" onclick="calculateShock()">Calculer le type de choc</button>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <h3>Résultats</h3>
+    <div id="shock_results" class="result-grid"></div>
+  </div>
+
+  <div class="card">
+    <h3>Interprétation</h3>
+    <div id="shock_status" class="status-box neutral">En attente des données...</div>
+    <div id="shock_alerts" class="alerts"></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Conduite à tenir</h3>
+  <div id="shock_conclusion" class="summary-box">Remplissez les champs puis lancez le calcul.</div>
+</div>
+</section>
+  </main>
+<script>
+  const backBtn = document.getElementById("backBtn");
+let historyStack = ["dashboard"];
+
+function showPanel(panelId) {
+  document.querySelectorAll(".panel").forEach(panel => {
+    panel.classList.remove("active");
+  });
+
+  const targetPanel = document.getElementById(panelId);
+  if (targetPanel) {
+    targetPanel.classList.add("active");
+  }
+
+  if (backBtn) {
+    backBtn.style.display = panelId === "dashboard" ? "none" : "inline-flex";
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+document.querySelectorAll("[data-tab]").forEach(button => {
+  button.addEventListener("click", () => {
+    const target = button.getAttribute("data-tab");
+
+    const currentActive = document.querySelector(".panel.active");
+    if (currentActive && currentActive.id !== target) {
+      historyStack.push(currentActive.id);
+    }
+
+    showPanel(target);
+  });
+});
+
+if (backBtn) {
+  backBtn.addEventListener("click", () => {
+    if (historyStack.length > 0) {
+      const previous = historyStack.pop();
+      showPanel(previous);
+    } else {
+      showPanel("dashboard");
+    }
+  });
+}
+
+   
+    function g(id) {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const v = parseFloat(el.value);
+      return Number.isNaN(v) ? null : v;
+    }
+
+    function s(id, html) {
+      document.getElementById(id).innerHTML = html;
+    }
+
+    function fmt(v, d = 2) {
+      return isFinite(v) ? Number(v).toFixed(d) : '—';
+    }
+
+    function metric(label, value, unit = '') {
+      return `<div class="metric"><div class="label">${label}</div><div class="value">${value}</div><div class="unit">${unit}</div></div>`;
+    }
+
+    function alertBox(type, text) {
+      return `<div class="alert-item ${type}">${text}</div>`;
+    }
+
+    function status(id, klass, text) {
+      const el = document.getElementById(id);
+      el.className = `status-box ${klass}`;
+      el.innerHTML = text;
+    }
+
+    function resetFields(ids) {
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+    }
+
+    function diastolicAssessment(eovere, eprime, lavi, trv) {
+      let score = 0;
+      if (eovere !== null && eovere > 14) score++;
+      if (eprime !== null && eprime < 7) score++;
+      if (lavi !== null && lavi > 34) score++;
+      if (trv !== null && trv > 2.8) score++;
+
+      let statusText = 'Normale ou indéterminée';
+      if (score >= 2) statusText = 'Dysfonction diastolique probable';
+
+      return { score, statusText };
+    }
+
+    function glsAssessment(gls) {
+      if (gls === null) return 'Non renseigné';
+      if (gls > -16) return 'Fonction longitudinale altérée';
+      return 'GLS normal';
+    }    
+   function calculateAS() {
+      const lvot = g('as_lvot');
+      const vtiLVOT = g('as_vti_lvot');
+      const vtiAo = g('as_vti_ao');
+      const vmax = g('as_vmax');
+      const gradient = g('as_gradient');
+      const height = g('as_height');
+      const weight = g('as_weight');
+      const ef = g('as_ef');
+      const eovere = g('as_eovere');
+      const lavi = g('as_lavi');
+      const gls = g('as_gls');
+      const eprime = g('as_eprime');
+      const trv = g('as_trv');
+
+      if ([lvot, vtiLVOT, vtiAo, vmax, gradient, height, weight, ef].some(v => v === null)) {
+        status('as_status', 'warning', 'Veuillez remplir tous les champs obligatoires.');
+        s('as_results', '');
+        s('as_alerts', '');
+        s('as_conclusion', 'Le calcul ne peut pas être effectué tant que les champs obligatoires ne sont pas complétés.');
+        return;
+      }
+
+      const alerts = [];
+      const bsa = Math.sqrt((height * weight) / 3600);
+      const lvotArea = Math.PI * Math.pow(lvot / 2, 2);
+      const sv = lvotArea * vtiLVOT;
+      const svi = sv / bsa;
+      const ava = sv / vtiAo;
+      const avai = ava / bsa;
+      const di = vtiLVOT / vtiAo;
+      const flowState = svi < 35 ? 'Bas débit' : 'Débit normal';
+
+      let asProfile = '';
+      if (flowState === 'Débit normal' && gradient >= 40) {
+        asProfile = 'RA serré à haut gradient';
+      } else if (flowState === 'Bas débit' && gradient < 40 && ava <= 1) {
+        asProfile = 'RA bas débit - bas gradient (à confirmer par échographie de stress à la dobutamine)';
+      } else if (flowState === 'Débit normal' && gradient < 40 && ava <= 1) {
+        asProfile = 'RA discordant (vérifier les mesures)';
+      } else {
+        asProfile = 'RA non serré';
+      }
+
+      const severeByValve = ava <= 1 || avai <= 0.6 || di < 0.25;
+      const severeByHemo = vmax >= 4 || gradient >= 40;
+      const { statusText: diastolicText } = diastolicAssessment(eovere, eprime, lavi, trv);
+      const glsText = glsAssessment(gls);
+
+      if (ava <= 1 && gradient < 40 && vmax < 4) {
+        alerts.push(alertBox('warning', 'Gradation discordante : vérifier la mesure de la CCVG/LVOT et l’alignement Doppler.'));
+      }
+
+      if (svi < 35) {
+        alerts.push(alertBox('warning', 'État de bas débit détecté (VESi < 35 mL/m²).'));
+      }
+
+      let main = 'Profil probablement non serré ou sans sévérité hémodynamique évidente.';
+      let klass = 'success';
+      let conclusion =
+        `Les données actuelles ne soutiennent pas un profil de RA serré concordant à haut gradient.\n` +
+        `AVA ${fmt(ava)} cm², AVAi ${fmt(avai)} cm²/m², DI ${fmt(di)}, ` +
+        `Vmax ${fmt(vmax, 1)} m/s, gradient moyen ${fmt(gradient, 0)} mmHg, ` +
+        `VESi ${fmt(svi, 1)} mL/m².\n` +
+        `Profil du RA : ${asProfile}.`;
+
+      if (severeByValve && severeByHemo) {
+        main = 'Rétrécissement aortique serré - profil à haut gradient.';
+        klass = 'danger';
+        conclusion =
+          `Les données sont compatibles avec un rétrécissement aortique serré avec hémodynamique concordante à haut gradient.\n` +
+          `AVA ${fmt(ava)} cm², AVAi ${fmt(avai)} cm²/m², DI ${fmt(di)}, ` +
+          `Vmax ${fmt(vmax, 1)} m/s, gradient moyen ${fmt(gradient, 0)} mmHg, ` +
+          `VESi ${fmt(svi, 1)} mL/m².\n` +
+          `Profil du RA : ${asProfile}.`;
+        alerts.push(alertBox('danger', 'Profil de RA serré. Intégrer les symptômes, la morphologie valvulaire et l’indication thérapeutique.'));
+      } else if (ava <= 1 && svi < 35 && ef < 50 && gradient < 40) {
+        main = 'RA serré bas débit - bas gradient classique possible.';
+        klass = 'warning';
+        conclusion =
+          `Le profil suggère un RA serré bas débit - bas gradient classique possible.\n` +
+          `AVA ${fmt(ava)} cm², VESi ${fmt(svi, 1)} mL/m², FEVG ${fmt(ef, 0)} %, gradient moyen ${fmt(gradient, 0)} mmHg.\n` +
+          `Profil du RA : ${asProfile}.`;
+        alerts.push(alertBox('warning', 'Profil bas débit - bas gradient avec FEVG réduite.'));
+      } else if (ava <= 1 && svi < 35 && ef >= 50 && gradient < 40) {
+        main = 'RA serré paradoxal bas débit - bas gradient possible.';
+        klass = 'warning';
+        conclusion =
+          `Le profil suggère un RA serré paradoxal bas débit - bas gradient possible.\n` +
+          `AVA ${fmt(ava)} cm², FEVG préservée ${fmt(ef, 0)} %, VESi bas ${fmt(svi, 1)} mL/m², gradient bas ${fmt(gradient, 0)} mmHg.\n` +
+          `Profil du RA : ${asProfile}.`;
+        alerts.push(alertBox('warning', 'Profil discordant de RA serré avec FEVG préservée.'));
+      }
+
+      if (lavi !== null && lavi > 34) {
+        alerts.push(alertBox('warning', `Volume OG indexé augmenté (LAVI ${fmt(lavi, 0)} mL/m²).`));
+      }
+      if (diastolicText !== 'Normale ou indéterminée') {
+        alerts.push(alertBox('warning', diastolicText));
+      }
+      if (glsText !== 'Non renseigné' && glsText !== 'GLS normal') {
+        alerts.push(alertBox('warning', glsText));
+      }
+
+      s('as_results',
+        metric('Surface corporelle calculée', fmt(bsa), 'm²') +
+        metric('Surface LVOT / CCVG', fmt(lvotArea), 'cm²') +
+        metric('Volume d’éjection systolique', fmt(sv), 'mL') +
+        metric('VESi', fmt(svi, 1), 'mL/m²') +
+        metric('AVA', fmt(ava), 'cm²') +
+        metric('AVAi', fmt(avai), 'cm²/m²') +
+        metric('Index de perméabilité', fmt(di), '') +
+        metric('État du débit', flowState, '') +
+        metric('Profil du RA', asProfile, '') +
+        metric('FEVG', fmt(ef, 0), '%') +
+        metric('Fonction diastolique', diastolicText, '') +
+        metric('Interprétation du GLS', glsText, '')
+      );
+
+      status('as_status', klass, main);
+      s('as_alerts', alerts.join(''));
+      s('as_conclusion', conclusion);
+    }
+        function resetAS() {
+      resetFields([
+        'as_lvot', 'as_vti_lvot', 'as_vti_ao', 'as_vmax', 'as_gradient',
+        'as_height', 'as_weight', 'as_ef', 'as_eovere', 'as_lavi',
+        'as_gls', 'as_eprime', 'as_trv'
+      ]);
+      s('as_results', '');
+      s('as_alerts', '');
+      status('as_status', 'neutral', 'En attente des données...');
+      s('as_conclusion', 'Remplissez les champs puis lancez le calcul.');
+    }
+
+    function calculateMR() {
+      const r = g('mr_r');
+      const va = g('mr_va');
+      const vmax = g('mr_vmax');
+      const vti = g('mr_vti');
+      const vc = g('mr_vc');
+      const mech = document.getElementById('mr_mech').value;
+
+      if ([r, va, vmax, vti].some(v => v === null)) {
+        status('mr_status', 'warning', 'Veuillez remplir les champs obligatoires.');
+        return;
+      }
+
+      const flow = 2 * Math.PI * Math.pow(r, 2) * va;
+      const eroa = flow / vmax;
+      const rvol = eroa * vti;
+
+      let main = 'IM probablement non sévère.';
+      let klass = 'success';
+
+      if ((mech === 'primary' && eroa >= 0.4) || (mech === 'secondary' && eroa >= 0.2) || rvol >= 60 || (vc !== null && vc >= 7)) {
+        main = 'IM significative / sévère probable.';
+        klass = 'danger';
+      }
+
+      s('mr_results',
+        metric('Débit PISA', fmt(flow), 'mL/s') +
+        metric('SOR / EROA', fmt(eroa), 'cm²') +
+        metric('Volume régurgitant', fmt(rvol), 'mL/battement') +
+        metric('Vena contracta', vc === null ? '—' : fmt(vc, 1), 'mm')
+      );
+
+      status('mr_status', klass, main);
+      s('mr_alerts',
+        klass === 'danger'
+          ? alertBox('danger', 'Interpréter avec une évaluation multiparamétrique et le mécanisme de l’IM.')
+          : alertBox('success', 'Pas d’argument clair pour une IM sévère selon les données saisies.')
+      );
+      s('mr_conclusion', `La quantification de l’IM suggère : ${main.toLowerCase()}\nSOR/EROA ${fmt(eroa)} cm² et volume régurgitant ${fmt(rvol)} mL/battement.`);
+    }
+
+    function resetMR() {
+      resetFields(['mr_r', 'mr_va', 'mr_vmax', 'mr_vti', 'mr_vc']);
+      document.getElementById('mr_mech').value = 'primary';
+      s('mr_results', '');
+      s('mr_alerts', '');
+      status('mr_status', 'neutral', 'En attente des données...');
+      s('mr_conclusion', 'Remplissez les champs puis lancez le calcul.');
+    }
+
+    function calculateMS() {
+      const pht = g('ms_pht');
+      const grad = g('ms_grad');
+      const hr = g('ms_hr');
+      const rhythm = document.getElementById('ms_rhythm').value;
+
+      if ([pht, grad, hr].some(v => v === null)) {
+        status('ms_status', 'warning', 'Veuillez remplir les champs obligatoires.');
+        return;
+      }
+
+      const mva = 220 / pht;
+      let main = 'RM léger probable.';
+      let klass = 'success';
+
+      if (mva <= 1.5) {
+        main = 'RM cliniquement significatif probable.';
+        klass = 'warning';
+      }
+      if (mva <= 1.0) {
+        main = 'RM serré probable.';
+        klass = 'danger';
+      }
+
+      const alerts = [];
+      if (rhythm === 'af') alerts.push(alertBox('warning', 'La FA peut réduire la fiabilité de l’interprétation du gradient.'));
+      if (hr > 100) alerts.push(alertBox('warning', 'La tachycardie peut augmenter le gradient transmitral.'));
+
+      s('ms_results',
+        metric('Surface mitrale', fmt(mva), 'cm²') +
+        metric('Gradient moyen', fmt(grad, 0), 'mmHg') +
+        metric('Fréquence cardiaque', fmt(hr, 0), 'bpm')
+      );
+
+      status('ms_status', klass, main);
+      s('ms_alerts', alerts.join(''));
+      s('ms_conclusion', `L’évaluation du RM suggère : ${main.toLowerCase()}\nSurface mitrale calculée ${fmt(mva)} cm² avec gradient moyen ${fmt(grad, 0)} mmHg.`);
+    }
+
+    function resetMS() {
+      resetFields(['ms_pht', 'ms_grad', 'ms_hr']);
+      document.getElementById('ms_rhythm').value = 'sinus';
+      s('ms_results', '');
+      s('ms_alerts', '');
+      status('ms_status', 'neutral', 'En attente des données...');
+      s('ms_conclusion', 'Remplissez les champs puis lancez le calcul.');
+    }
+
+    function calculateAR() {
+      const pht = g('ar_pht');
+      const vc = g('ar_vc');
+      const flowrev = document.getElementById('ar_flowrev').value;
+
+      if (pht === null && vc === null) {
+        status('ar_status', 'warning', 'Saisir au moins le PHT ou la vena contracta.');
+        return;
+      }
+
+      let main = 'Sévérité de l’IA indéterminée / non sévère.';
+      let klass = 'success';
+
+      if ((pht !== null && pht < 200) || (vc !== null && vc >= 6) || flowrev === 'yes') {
+        main = 'IA significative / sévère probable.';
+        klass = 'danger';
+      }
+
+      s('ar_results',
+        metric('PHT de l’IA', pht === null ? '—' : fmt(pht, 0), 'ms') +
+        metric('Vena contracta', vc === null ? '—' : fmt(vc, 1), 'mm') +
+        metric('Flux holodiastolique rétrograde', flowrev === 'yes' ? 'Oui' : 'Non', '')
+      );
+
+      status('ar_status', klass, main);
+      s('ar_alerts', klass === 'danger' ? alertBox('danger', 'Interpréter avec une évaluation complète multiparamétrique de l’IA.') : '');
+      s('ar_conclusion',
+        `L’évaluation de l’IA suggère : ${main.toLowerCase()}${pht !== null ? `\nPHT ${fmt(pht, 0)} ms.` : ''}${vc !== null ? `\nVC ${fmt(vc, 1)} mm.` : ''}`
+      );
+    }
+
+    function resetAR() {
+      resetFields(['ar_pht', 'ar_vc']);
+      document.getElementById('ar_flowrev').value = 'no';
+      s('ar_results', '');
+      s('ar_alerts', '');
+      status('ar_status', 'neutral', 'En attente des données...');
+      s('ar_conclusion', 'Remplissez les champs puis lancez le calcul.');
+    }
+
+    function calculateTR() {
+      const vmax = g('tr_vmax');
+      const ivc = g('tr_ivc');
+const ivcCollapse = g('tr_ivc_collapse');
+
+let rap = null;
+
+if (ivc !== null && ivcCollapse !== null) {
+  if (ivc <= 21 && ivcCollapse > 50) {
+    rap = 3;
+  } else if (ivc > 21 && ivcCollapse < 50) {
+    rap = 15;
+  } else {
+    rap = 8;
+  }
+}
+      const vc = g('tr_vc');
+
+     if (vmax === null || rap === null) {
+  status('tr_status','warning','Veuillez saisir la vitesse IT, le diamètre de la VCI et la collapsibilité de la VCI.');
+  return;
+}
+
+      const grad = 4 * Math.pow(vmax, 2);
+      const paps = grad + rap;
+
+      let main = 'Pas d’élévation marquée des pressions pulmonaires suggérée.';
+      let klass = 'success';
+
+      if (paps > 40) {
+        main = 'PAPs probablement élevées.';
+        klass = 'warning';
+      }
+      if (paps > 60) {
+        main = 'Élévation marquée des PAPs probable.';
+        klass = 'danger';
+      }
+
+      s('tr_results',
+        metric('Gradient IT', fmt(grad, 0), 'mmHg') +
+        metric('Diamètre VCI', ivc === null ? '—' : fmt(ivc, 0), 'mm') +
+metric('Collapsibilité VCI', ivcCollapse === null ? '—' : fmt(ivcCollapse, 0), '%') +
+metric('POD estimée', fmt(rap, 0), 'mmHg') +
+        metric('PAPs estimée', fmt(paps, 0), 'mmHg') +
+        metric('Vena contracta IT', vc === null ? '—' : fmt(vc, 1), 'mm')
+      );
+
+      status('tr_status', klass, main);
+      s('tr_alerts', vc !== null && vc >= 7 ? alertBox('warning', 'Une grande vena contracta de l’IT soutient une IT significative.') : '');
+      s('tr_conclusion', `L’évaluation IT/PAPs suggère : ${main.toLowerCase()}\nPAPs estimée ${fmt(paps, 0)} mmHg à partir de la vitesse IT ${fmt(vmax, 1)} m/s et d’une POD ${fmt(rap, 0)} mmHg.`);
+    }
+
+    function resetTR() {
+     resetFields(['tr_vmax', 'tr_vc', 'tr_ivc', 'tr_ivc_collapse']);
+      s('tr_results', '');
+      s('tr_alerts', '');
+      status('tr_status', 'neutral', 'En attente des données...');
+      s('tr_conclusion', 'Remplissez les champs puis lancez le calcul.');
+    }
+
+    function calculateFunction() {
+      const ef = g('fn_ef');
+      const gls = g('fn_gls');
+      const eovere = g('fn_eovere');
+      const eprime = g('fn_eprime');
+      const lavi = g('fn_lavi');
+      const trv = g('fn_trv');
+
+      if ([ef, eovere, eprime, lavi, trv].some(v => v === null)) {
+        status('fn_status', 'warning', 'Veuillez remplir les champs fonctionnels obligatoires.');
+        return;
+      }
+
+      const { score, statusText } = diastolicAssessment(eovere, eprime, lavi, trv);
+      const glsText = glsAssessment(gls);
+      const systolicText = ef >= 50 ? 'FEVG préservée' : 'FEVG altérée';
+
+      let main = 'Profil fonctionnel sans anomalie majeure.';
+      let klass = 'success';
+
+      if (ef < 50 || statusText !== 'Normale ou indéterminée' || glsText !== 'GLS normal') {
+        main = 'Profil ventriculaire / pressions de remplissage probablement anormal.';
+        klass = 'warning';
+      }
+
+      s('fn_results',
+        metric('FEVG', fmt(ef, 0), '%') +
+        metric('GLS', gls === null ? '—' : fmt(gls, 1), '%') +
+        metric('Statut systolique', systolicText, '') +
+        metric('Score diastolique', fmt(score, 0), '') +
+        metric('Fonction diastolique', statusText, '') +
+        metric('Interprétation du GLS', glsText, '')
+      );
+
+      s('fn_alerts',
+        [
+          statusText !== 'Normale ou indéterminée' ? alertBox('warning', statusText) : '',
+          glsText !== 'GLS normal' && glsText !== 'Non renseigné' ? alertBox('warning', glsText) : ''
+        ].join('')
+      );
+
+      status('fn_status', klass, main);
+      s('fn_conclusion', `Évaluation fonctionnelle :\n${systolicText.toLowerCase()}, ${statusText.toLowerCase()}, interprétation du GLS : ${glsText.toLowerCase()}.`);
+    }
+
+    function resetFunction() {
+      resetFields(['fn_ef', 'fn_gls', 'fn_eovere', 'fn_eprime', 'fn_lavi', 'fn_trv']);
+      s('fn_results', '');
+      s('fn_alerts', '');
+      status('fn_status', 'neutral', 'En attente des données...');
+      s('fn_conclusion', 'Remplissez les champs puis lancez le calcul.');
+    }
+  function calculatePE() {
+  const age = g('pe_age');
+  const sbp = g('pe_sbp');
+  const hr = g('pe_hr');
+  const spo2 = g('pe_spo2');
+  const shock = document.getElementById('pe_shock').value;
+
+  const rvlv = g('pe_rvlv');
+  const tapse = g('pe_tapse');
+  const sprime = g('pe_sprime');
+  const dshape = document.getElementById('pe_dshape').value;
+  const mcconnell = document.getElementById('pe_mcconnell').value;
+  const trv = g('pe_trv');
+  const ivc = g('pe_ivc');
+  const ivcCollapse = g('pe_ivc_collapse');
+
+  const troponin = document.getElementById('pe_troponin').value;
+  const bnp = document.getElementById('pe_bnp').value;
+
+  let alerts = [];
+
+  let spesi = 0;
+  if (age !== null && age > 80) spesi++;
+  if (hr !== null && hr >= 110) spesi++;
+  if (sbp !== null && sbp < 100) spesi++;
+  if (spo2 !== null && spo2 < 90) spesi++;
+
+  let rap = null;
+  if (ivc !== null && ivcCollapse !== null) {
+    if (ivc <= 21 && ivcCollapse > 50) {
+      rap = 3;
+    } else if (ivc > 21 && ivcCollapse < 50) {
+      rap = 15;
+    } else {
+      rap = 8;
+    }
+  }
+
+  let spap = null;
+  if (trv !== null && rap !== null) {
+    spap = 4 * Math.pow(trv, 2) + rap;
+  }
+
+  let rvScore = 0;
+  if (rvlv !== null && rvlv > 1) rvScore++;
+  if (tapse !== null && tapse < 17) rvScore++;
+  if (sprime !== null && sprime < 9.5) rvScore++;
+  if (mcconnell === 'yes') rvScore++;
+  if (dshape === 'systolic') rvScore += 2;
+  if (dshape === 'both') rvScore += 3;
+
+  const rvDysfunction = rvScore >= 2 || dshape === 'systolic' || dshape === 'both';
+
+  let risk = 'Profil d’EP à faible risque';
+  let klass = 'success';
+
+  if (shock === 'yes' || (sbp !== null && sbp < 90)) {
+    risk = 'EP à haut risque / profil de choc obstructif';
+    klass = 'danger';
+  } else if (rvDysfunction && troponin === 'positive') {
+    risk = 'Profil d’EP à risque intermédiaire-haut';
+    klass = 'danger';
+  } else if (rvDysfunction || troponin === 'positive' || spesi >= 1) {
+    risk = 'Profil d’EP à risque intermédiaire-bas';
+    klass = 'warning';
+  }
+
+  if (dshape === 'systolic') {
+    alerts.push(alertBox('warning', 'Aspect en D systolique : surcharge de pression VD significative.'));
+  }
+
+  if (dshape === 'both') {
+    alerts.push(alertBox('danger', 'Aspect en D systolique + diastolique : profil de surcharge VD sévère.'));
+  }
+
+  if (rvDysfunction) {
+    alerts.push(alertBox('warning', 'Les signes échographiques suggèrent une dysfonction VD / un retentissement droit.'));
+  }
+
+  if (bnp === 'positive') {
+    alerts.push(alertBox('warning', 'BNP/NT-proBNP positif : en faveur d’un stress myocardique du VD.'));
+  }
+
+  let conclusion = '';
+
+  if (klass === 'danger' && risk.includes('haut risque')) {
+    conclusion =
+      'Profil d’embolie pulmonaire à haut risque : choc, vasopresseurs, arrêt cardiaque ou hypotension sévère. ' +
+      'Une discussion urgente avec un senior/réanimation est nécessaire. Une stratégie de reperfusion doit être envisagée selon le protocole local et les contre-indications.';
+  } else if (risk.includes('intermédiaire-haut')) {
+    conclusion =
+      'Profil d’EP à risque intermédiaire-haut : patient normotendu avec dysfonction VD et troponine positive. ' +
+      'Une surveillance rapprochée en milieu monitoré est recommandée. Une escalade/reperfusion doit être discutée en cas de détérioration clinique.';
+  } else if (risk.includes('intermédiaire-bas')) {
+    conclusion =
+      'Profil d’EP à risque intermédiaire-bas : absence de choc, mais présence d’au moins un marqueur de risque. ' +
+      'Une anticoagulation et une surveillance hospitalière sont généralement appropriées selon le risque hémorragique et le contexte clinique.';
+  } else {
+    conclusion =
+      'Profil d’EP à faible risque selon les données saisies. Si le diagnostic est confirmé et en l’absence de critères d’exclusion, une prise en charge ambulatoire peut être envisagée selon le protocole local.';
+  }
+
+  s('pe_results',
+    metric('sPESI partiel', fmt(spesi, 0), 'points') +
+    metric('Score de retentissement VD', fmt(rvScore, 0), '') +
+    metric('Dysfonction VD', rvDysfunction ? 'Oui' : 'Non', '') +
+    metric('POD estimée', rap === null ? '—' : fmt(rap, 0), 'mmHg') +
+    metric('PAPs estimée', spap === null ? '—' : fmt(spap, 0), 'mmHg') +
+    metric('Troponine', troponin === 'positive' ? 'Positive' : 'Négative', '')
+  );
+
+  status('pe_status', klass, risk);
+  s('pe_alerts', alerts.join(''));
+  s('pe_conclusion', conclusion);
+}
+  function calculateTamponade() {
+  const shock = document.getElementById('tam_shock').value;
+  const tachy = document.getElementById('tam_tachy').value;
+  const pulsus = document.getElementById('tam_pulsus').value;
+  const size = document.getElementById('tam_size').value;
+  const raCollapse = document.getElementById('tam_ra_collapse').value;
+  const rvCollapse = document.getElementById('tam_rv_collapse').value;
+  const ivc = document.getElementById('tam_ivc').value;
+  const doppler = document.getElementById('tam_doppler').value;
+
+  let score = 0;
+  if (shock === 'yes') score += 3;
+  if (tachy === 'yes') score += 1;
+  if (pulsus === 'yes') score += 1;
+  if (size === 'moderate') score += 1;
+  if (size === 'large') score += 2;
+  if (raCollapse === 'yes') score += 2;
+  if (rvCollapse === 'yes') score += 3;
+  if (ivc === 'yes') score += 2;
+  if (doppler === 'yes') score += 2;
+
+  const tamponadeLikely = ((raCollapse === 'yes' || rvCollapse === 'yes') && ivc === 'yes');
+  const clinicalShock = (shock === 'yes');
+
+  let interpretation = 'Faible probabilité de tamponnade';
+  let recommendation = 'Suivi clinique et échocardiographique.';
+  let statusClass = 'success';
+
+  if (tamponadeLikely && clinicalShock) {
+    interpretation = 'Tamponnade hémodynamique (HAUT RISQUE)';
+    recommendation = 'Discussion immédiate avec senior/réanimation et drainage péricardique urgent selon le protocole local.';
+    statusClass = 'danger';
+  } else if (tamponadeLikely) {
+    interpretation = 'Physiologie de tamponnade probable';
+    recommendation = 'Échocardiographie experte urgente, surveillance rapprochée et préparation au drainage en cas de détérioration clinique.';
+    statusClass = 'warning';
+  } else if (size === 'large') {
+    interpretation = 'Épanchement abondant sans signe clair de tamponnade';
+    recommendation = 'Surveillance rapprochée et contrôle échocardiographique.';
+    statusClass = 'neutral';
+  }
+
+  document.getElementById('tam_results').innerHTML =
+    metric('Score de tamponnade', fmt(score, 0), 'points') +
+    metric('Importance de l’épanchement', size === 'none' ? 'Aucun' : size === 'small' ? 'Faible' : size === 'moderate' ? 'Modéré' : 'Abondant', '') +
+    metric('Collapsus OD', raCollapse === 'yes' ? 'Oui' : 'Non', '') +
+    metric('Collapsus VD', rvCollapse === 'yes' ? 'Oui' : 'Non', '') +
+    metric('VCI pléthorique', ivc === 'yes' ? 'Oui' : 'Non', '');
+
+  document.getElementById('tam_status').className = 'status-box ' + statusClass;
+  document.getElementById('tam_status').innerHTML = interpretation;
+
+  document.getElementById('tam_alerts').innerHTML =
+    tamponadeLikely ? alertBox(statusClass, 'Les signes échographiques suggèrent une physiologie de tamponnade.') : '';
+
+  document.getElementById('tam_conclusion').innerHTML =
+    '<strong>Interprétation :</strong> ' + interpretation + '<br>' +
+    '<strong>Conduite :</strong> ' + recommendation;
+ 
+}
+  function calculateShock() {
+  const hypotension = document.getElementById('shock_hypotension').value;
+  const congestion = document.getElementById('shock_congestion').value;
+  const hypovolemia = document.getElementById('shock_hypovolemia').value;
+
+  const lv = document.getElementById('shock_lv').value;
+  const rv = document.getElementById('shock_rv').value;
+  const effusion = document.getElementById('shock_effusion').value;
+  const ivc = document.getElementById('shock_ivc').value;
+
+  let diagnosis = 'Profil de choc indifférencié';
+  let recommendation = 'Répéter l’échographie ciblée, évaluer l’ECG, le lactate, le contexte infectieux/hémorragique et réévaluer dynamiquement.';
+  let statusClass = 'neutral';
+  let alerts = [];
+
+  if (hypotension === 'no') {
+    diagnosis = 'Pas de choc clair selon les données cliniques saisies';
+    recommendation = 'Interpréter les données échographiques dans le contexte clinique ; poursuivre la surveillance si la suspicion persiste.';
+    statusClass = 'success';
+  } else if (lv === 'reduced' && congestion === 'yes') {
+    diagnosis = 'Profil de choc cardiogénique';
+    recommendation = 'Discussion urgente avec senior/réanimation. Envisager inotropes/vasopresseurs et traiter la cause.';
+    statusClass = 'danger';
+    alerts.push(alertBox('danger', 'Fonction VG altérée avec congestion : en faveur d’un choc cardiogénique.'));
+  } else if (rv === 'yes' && ivc === 'dilated') {
+    diagnosis = 'Profil de choc obstructif - EP probable';
+    recommendation = 'Évaluer la probabilité d’EP, le retentissement VD, les biomarqueurs et envisager une stratégie de reperfusion urgente si instabilité.';
+    statusClass = 'danger';
+    alerts.push(alertBox('danger', 'Dilatation VD avec VCI dilatée : en faveur d’un choc obstructif, notamment EP.'));
+  } else if (effusion === 'yes' && ivc === 'dilated') {
+    diagnosis = 'Profil de choc obstructif - tamponnade possible';
+    recommendation = 'Rechercher un collapsus OD/VD et des variations respiratoires Doppler ; drainage urgent si physiologie de tamponnade.';
+    statusClass = 'danger';
+    alerts.push(alertBox('danger', 'Épanchement péricardique avec VCI dilatée : peut suggérer une physiologie de tamponnade.'));
+  } else if (ivc === 'collapsed' || hypovolemia === 'yes') {
+    diagnosis = 'Profil de choc hypovolémique';
+    recommendation = 'Envisager un remplissage prudent et rechercher une cause hémorragique/déshydratation.';
+    statusClass = 'warning';
+    alerts.push(alertBox('warning', 'VCI collabée ou hypovolémie clinique : en faveur d’une faible précharge.'));
+  } else if (lv === 'normal' && ivc !== 'collapsed' && congestion === 'no') {
+    diagnosis = 'Choc distributif / septique possible';
+    recommendation = 'Rechercher une cause infectieuse/distributive ; vasopresseurs et remplissage selon l’évaluation dynamique.';
+    statusClass = 'warning';
+  }
+
+  document.getElementById('shock_results').innerHTML =
+    metric('Hypotension', hypotension === 'yes' ? 'Oui' : 'Non', '') +
+    metric('Fonction VG', lv === 'reduced' ? 'Altérée' : 'Normale', '') +
+    metric('Dilatation VD', rv === 'yes' ? 'Oui' : 'Non', '') +
+    metric('VCI', ivc === 'collapsed' ? 'Collabée' : ivc === 'dilated' ? 'Dilatée' : 'Normale', '') +
+    metric('Congestion', congestion === 'yes' ? 'Oui' : 'Non', '');
+
+  document.getElementById('shock_status').className = 'status-box ' + statusClass;
+  document.getElementById('shock_status').innerHTML = diagnosis;
+
+  document.getElementById('shock_alerts').innerHTML = alerts.join('');
+
+  document.getElementById('shock_conclusion').innerHTML =
+    '<strong>Conduite :</strong> ' + recommendation;
+}
+  </script>
 </body>
 </html>
