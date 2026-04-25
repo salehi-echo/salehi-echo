@@ -56,7 +56,7 @@
 
     .tabs {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 10px;
       margin-bottom: 16px;
     }
@@ -293,17 +293,8 @@
       <button class="tab-btn" data-tab="ar">Aortic Regurgitation</button>
       <button class="tab-btn" data-tab="tr">TR / PAPs</button>
       <button class="tab-btn" data-tab="function">Systolic / Diastolic</button>
+      <button class="tab-btn" data-tab="diagnostic">Diagnostic Engine</button>
     </div>
-
-    <section id="dashboard" class="panel active">
-      <div class="card">
-        <h2>Integrated Echo Dashboard</h2>
-        <p class="sub">
-          This version gives you one structured app for major valvulopathies,
-          ventricular function, diastolic assessment, PAPs estimation,
-          and automated report text.
-        </p>
-      </div>
 
       <div class="grid-3">
         <div class="card">
@@ -390,6 +381,78 @@
     <div id="sd_interpretation"></div>
   </div>
 
+</section>
+    <section id="diagnostic" class="panel">
+  <div class="card">
+    <h2>Diagnostic Engine</h2>
+    <p class="sub">
+      Module d’aide à l’orientation diagnostique basé sur les signes cliniques et échocardiographiques.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>Embolie pulmonaire — Echo RV Strain</h3>
+    <p class="sub">
+      Évaluation rapide du retentissement droit en cas de suspicion d’embolie pulmonaire aiguë.
+    </p>
+
+    <label>
+      <input type="checkbox" class="pe-score" value="2">
+      D-shaped LV en petit axe parasternal / aplatissement septal
+    </label>
+
+    <label>
+      <input type="checkbox" class="pe-score" value="2">
+      Dilatation VD avec rapport VD/VG &gt; 1
+    </label>
+
+    <label>
+      <input type="checkbox" class="pe-score" value="2">
+      TAPSE &lt; 16 mm ou S’ VD &lt; 9,5 cm/s
+    </label>
+
+    <label>
+      <input type="checkbox" class="pe-score" value="2">
+      Signe de McConnell
+    </label>
+
+    <label>
+      <input type="checkbox" class="pe-score" value="2">
+      Signe 60/60
+    </label>
+
+    <label>
+      <input type="checkbox" class="pe-score" value="3">
+      Thrombus droit mobile OD/VD/AP
+    </label>
+
+    <label>
+      <input type="checkbox" class="pe-score" value="1">
+      VCI dilatée avec faible collapsibilité
+    </label>
+
+    <label>
+      <input type="checkbox" class="pe-score" value="1">
+      PAPs élevée / TR Vmax augmentée
+    </label>
+
+    <button onclick="calculatePEScore()">Calculer le score EP</button>
+
+    <div id="peResult" class="result"></div>
+  </div>
+
+  <div class="card">
+    <h3>Focus : D-shaped LV</h3>
+    <p>
+      Le VG en forme de D en petit axe parasternal traduit un aplatissement du septum interventriculaire
+      par surcharge de pression du VD. En contexte aigu, ce signe renforce fortement la suspicion
+      d’embolie pulmonaire avec retentissement VD.
+    </p>
+    <p class="sub">
+      Attention : ce signe n’est pas spécifique. Il peut aussi être observé dans l’HTAP chronique,
+      l’insuffisance tricuspide sévère, les shunts droits ou d’autres causes de surcharge VD.
+    </p>
+  </div>
 </section>
 
     <section id="as" class="panel">
@@ -1131,6 +1194,65 @@ metric('LA Interpretation', lavi === null ? 'Not calculated' : (lavi > 34 ? 'Enl
 
   document.getElementById('sd_results').innerHTML = result;
   document.getElementById('sd_interpretation').innerHTML = interp;
+}
+    function calculatePEScore() {
+  const checkedItems = document.querySelectorAll('.pe-score:checked');
+  let score = 0;
+  let hasRightHeartThrombus = false;
+  let hasDShape = false;
+
+  checkedItems.forEach(item => {
+    score += Number(item.value);
+
+    const labelText = item.parentElement.textContent.toLowerCase();
+
+    if (labelText.includes('thrombus')) {
+      hasRightHeartThrombus = true;
+    }
+
+    if (labelText.includes('d-shaped')) {
+      hasDShape = true;
+    }
+  });
+
+  let interpretation = '';
+  let recommendation = '';
+
+  if (hasRightHeartThrombus) {
+    interpretation = 'Risque très élevé : thrombus droit mobile détecté.';
+    recommendation = 'Urgence majeure. Discuter reperfusion urgente selon stabilité hémodynamique, risque hémorragique et contexte clinique.';
+  } else if (score >= 6) {
+    interpretation = 'Forte suspicion de retentissement VD compatible avec une EP significative.';
+    recommendation = 'Corréler à la clinique, ECG, troponine/BNP, état hémodynamique et angio-TDM si disponible.';
+  } else if (score >= 3) {
+    interpretation = 'Suspicion modérée de surcharge VD.';
+    recommendation = 'Surveillance rapprochée et complément par probabilité clinique, D-dimères si indiqué, biomarqueurs et imagerie.';
+  } else {
+    interpretation = 'Faible support échographique pour une EP avec retentissement VD.';
+    recommendation = 'Ne pas exclure l’EP uniquement sur l’échographie. Interpréter avec la probabilité clinique et l’imagerie.';
+  }
+
+  let dShapeComment = '';
+
+  if (hasDShape) {
+    dShapeComment = `
+      <br><br>
+      <strong>Note D-shaped LV :</strong>
+      le VG en forme de D en petit axe parasternal suggère une surcharge de pression du VD avec aplatissement septal.
+      En contexte aigu, ce signe renforce la suspicion d’embolie pulmonaire avec retentissement VD.
+    `;
+  }
+
+  const resultBox = document.getElementById('peResult');
+
+  if (resultBox) {
+    resultBox.innerHTML = `
+      <strong>Score EP échographique : ${score} points</strong><br>
+      <strong>Interprétation :</strong> ${interpretation}<br>
+      <strong>Conduite proposée :</strong> ${recommendation}
+      ${dShapeComment}
+    `;
+  }
 }
   </script>
 </body>
