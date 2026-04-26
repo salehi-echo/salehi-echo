@@ -446,6 +446,14 @@
       </p>
       <button class="primary module-btn" data-tab="shock">Open</button>
     </div>
+    <div class="card">
+  <h3>Pulmonary Edema</h3>
+  <p class="sub">
+    Clinical and echocardiographic orientation between cardiogenic pulmonary edema
+    and non-cardiogenic / pulmonary origin.
+  </p>
+  <button class="primary module-btn" data-tab="pulmonary-edema">Open</button>
+</div>
   </div>
 </section>
     <section id="as" class="panel">
@@ -976,11 +984,252 @@
   <div id="shock_conclusion" class="summary-box">Fill the fields and calculate.</div>
 </div>
 </section>
+  <section id="pulmonary-edema" class="panel">
+  <div class="card">
+    <h2>Pulmonary Edema — Cardiac vs Pulmonary Origin</h2>
+    <p class="sub">
+      Clinical and echocardiographic support to distinguish cardiogenic pulmonary edema from pulmonary/non-cardiac causes.
+    </p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Clinical data</h3>
+
+      <label>Blood pressure / hypertension</label>
+      <select id="peo_bp">
+        <option value="">Select</option>
+        <option value="cardiac">High BP or hypertensive crisis</option>
+        <option value="neutral">Normal BP</option>
+        <option value="pulmonary">Low BP / shock / sepsis context</option>
+      </select>
+
+      <label>History of heart disease</label>
+      <select id="peo_history">
+        <option value="">Select</option>
+        <option value="cardiac">HF / ischemic heart disease / valve disease / AF</option>
+        <option value="pulmonary">No known cardiac disease</option>
+        <option value="neutral">Unknown</option>
+      </select>
+
+      <label>Fever / infection / COPD-asthma context</label>
+      <select id="peo_infection">
+        <option value="">Select</option>
+        <option value="pulmonary">Present</option>
+        <option value="neutral">Absent or unclear</option>
+      </select>
+
+      <label>Orthopnea / paroxysmal nocturnal dyspnea</label>
+      <select id="peo_orthopnea">
+        <option value="">Select</option>
+        <option value="cardiac">Present</option>
+        <option value="pulmonary">Absent</option>
+        <option value="neutral">Unclear</option>
+      </select>
+
+      <label>Peripheral edema / raised JVP</label>
+      <select id="peo_congestion">
+        <option value="">Select</option>
+        <option value="cardiac">Present</option>
+        <option value="pulmonary">Absent</option>
+        <option value="neutral">Unclear</option>
+      </select>
+    </div>
+
+    <div class="card">
+      <h3>Echocardiographic data</h3>
+
+      <label>LVEF</label>
+      <select id="peo_lvef">
+        <option value="">Select</option>
+        <option value="cardiac">Reduced LVEF</option>
+        <option value="neutral">Preserved LVEF</option>
+        <option value="neutral">Not assessed</option>
+      </select>
+
+      <label>LV filling pressures</label>
+      <select id="peo_filling">
+        <option value="">Select</option>
+        <option value="cardiac">High: E/e’ elevated / restrictive pattern</option>
+        <option value="pulmonary">Normal or low filling pressures</option>
+        <option value="neutral">Indeterminate</option>
+      </select>
+
+      <label>Left atrium</label>
+      <select id="peo_la">
+        <option value="">Select</option>
+        <option value="cardiac">Dilated LA</option>
+        <option value="pulmonary">Normal LA</option>
+        <option value="neutral">Not assessed</option>
+      </select>
+
+      <label>Significant valve disease</label>
+      <select id="peo_valve">
+        <option value="">Select</option>
+        <option value="cardiac">Severe MR / MS / AS / AR</option>
+        <option value="pulmonary">No significant valve disease</option>
+        <option value="neutral">Indeterminate</option>
+      </select>
+
+      <label>Right ventricle / pulmonary hypertension pattern</label>
+      <select id="peo_rv">
+        <option value="">Select</option>
+        <option value="pulmonary">RV dilatation / D-shape / acute RV strain</option>
+        <option value="cardiac">Post-capillary PH pattern with left heart disease</option>
+        <option value="neutral">Normal or unclear</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Lung ultrasound / bedside signs</h3>
+
+    <label>B-lines distribution</label>
+    <select id="peo_blines">
+      <option value="">Select</option>
+      <option value="cardiac">Diffuse bilateral symmetric B-lines</option>
+      <option value="pulmonary">Focal/asymmetric B-lines or spared areas</option>
+      <option value="neutral">Not assessed</option>
+    </select>
+
+    <label>Pleural line</label>
+    <select id="peo_pleura">
+      <option value="">Select</option>
+      <option value="cardiac">Regular pleural line</option>
+      <option value="pulmonary">Irregular/thickened pleural line</option>
+      <option value="neutral">Not assessed</option>
+    </select>
+
+    <label>Consolidation / air bronchogram</label>
+    <select id="peo_consolidation">
+      <option value="">Select</option>
+      <option value="pulmonary">Present</option>
+      <option value="cardiac">Absent</option>
+      <option value="neutral">Not assessed</option>
+    </select>
+
+    <div class="actions">
+      <button class="primary" onclick="calculatePulmonaryEdema()">Calculate</button>
+      <button class="secondary" onclick="resetPulmonaryEdema()">Reset</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Results</h3>
+    <div id="peo_results" class="result-grid"></div>
+    <div id="peo_status" class="status-box neutral">Awaiting data...</div>
+    <div id="peo_alerts" class="alerts"></div>
+    <div id="peo_conclusion" class="summary-box" style="margin-top:12px;">Fill the fields and calculate.</div>
+  </div>
+</section>
   </main>
 <script>
   const backBtn = document.getElementById("backBtn");
 let historyStack = ["dashboard"];
+function calculatePulmonaryEdema() {
+  const age = g('peo_age');
+  const sbp = g('peo_sbp');
+  const spo2 = g('peo_spo2');
 
+  const fever = document.getElementById('peo_fever').value;
+  const crackles = document.getElementById('peo_crackles').value;
+  const jvp = document.getElementById('peo_jvp').value;
+  const edema = document.getElementById('peo_edema').value;
+  const chestPain = document.getElementById('peo_chest_pain').value;
+
+  const lvef = g('peo_lvef');
+  const la = g('peo_la');
+  const ee = g('peo_ee');
+  const ivc = g('peo_ivc');
+  const ivcCollapse = g('peo_ivc_collapse');
+  const bLines = g('peo_blines');
+  const pleural = document.getElementById('peo_pleural').value;
+  const rv = document.getElementById('peo_rv').value;
+  const valve = document.getElementById('peo_valve').value;
+
+  let cardiacScore = 0;
+  let pulmonaryScore = 0;
+  let alerts = [];
+
+  if (sbp !== null && sbp > 160) cardiacScore += 1;
+  if (jvp === 'yes') cardiacScore += 2;
+  if (edema === 'yes') cardiacScore += 1;
+  if (chestPain === 'yes') cardiacScore += 1;
+
+  if (lvef !== null && lvef < 50) cardiacScore += 2;
+  if (la !== null && la > 40) cardiacScore += 1;
+  if (ee !== null && ee > 14) cardiacScore += 2;
+  if (ivc !== null && ivc > 21) cardiacScore += 1;
+  if (ivcCollapse !== null && ivcCollapse < 50) cardiacScore += 1;
+  if (pleural === 'bilateral') cardiacScore += 1;
+  if (valve === 'significant') cardiacScore += 2;
+
+  if (fever === 'yes') pulmonaryScore += 2;
+  if (crackles === 'focal') pulmonaryScore += 2;
+  if (bLines !== null && bLines < 3) pulmonaryScore += 1;
+  if (pleural === 'unilateral') pulmonaryScore += 1;
+  if (rv === 'dilated') {
+    pulmonaryScore += 2;
+    alerts.push(alertBox('warning', 'Dilated RV: consider pulmonary embolism, pulmonary hypertension, or acute cor pulmonale.'));
+  }
+
+  if (spo2 !== null && spo2 < 90) {
+    alerts.push(alertBox('danger', 'Severe hypoxemia: urgent oxygenation / ventilatory support assessment is required.'));
+  }
+
+  let diagnosis = 'Indeterminate profile';
+  let klass = 'neutral';
+  let interpretation = 'Mixed or incomplete data. Correlate clinically and reassess with lung ultrasound, focused echo and chest imaging.';
+
+  if (cardiacScore >= pulmonaryScore + 2) {
+    diagnosis = 'Predominantly cardiogenic pulmonary edema';
+    klass = 'warning';
+    interpretation = 'Profile favors elevated left-sided filling pressures: consider acute heart failure, hypertensive pulmonary edema, ACS-related LV dysfunction, or significant valvular disease.';
+  } else if (pulmonaryScore >= cardiacScore + 2) {
+    diagnosis = 'Predominantly pulmonary / non-cardiogenic origin';
+    klass = 'warning';
+    interpretation = 'Profile favors pulmonary cause: consider pneumonia, ARDS, COPD/asthma exacerbation, pulmonary embolism, or other primary lung pathology.';
+  } else {
+    diagnosis = 'Mixed or uncertain origin';
+    klass = 'neutral';
+    interpretation = 'No clear dominance. Cardiogenic and pulmonary causes may coexist; repeat echo/lung ultrasound and use BNP, ECG, troponin, ABG and chest imaging.';
+  }
+
+  s('peo_results',
+    metric('Cardiac score', cardiacScore, '') +
+    metric('Pulmonary score', pulmonaryScore, '') +
+    metric('Likely profile', diagnosis, '') +
+    metric('LVEF', lvef === null ? '—' : fmt(lvef, 0), '%') +
+    metric('E/e’', ee === null ? '—' : fmt(ee, 1), '') +
+    metric('B-lines / zone', bLines === null ? '—' : fmt(bLines, 0), '')
+  );
+
+  s('peo_alerts', alerts.join(''));
+
+  status('peo_status', klass, diagnosis);
+
+  s('peo_conclusion',
+    `Pulmonary edema assessment:\n${diagnosis}.\n${interpretation}\nCardiac score: ${cardiacScore}. Pulmonary score: ${pulmonaryScore}.`
+  );
+}
+
+function resetPulmonaryEdema() {
+  resetFields([
+    'peo_age', 'peo_sbp', 'peo_spo2',
+    'peo_lvef', 'peo_la', 'peo_ee',
+    'peo_ivc', 'peo_ivc_collapse', 'peo_blines'
+  ]);
+
+  ['peo_fever', 'peo_crackles', 'peo_jvp', 'peo_edema', 'peo_chest_pain', 'peo_pleural', 'peo_rv', 'peo_valve'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  s('peo_results', '');
+  s('peo_alerts', '');
+  status('peo_status', 'neutral', 'Awaiting data...');
+  s('peo_conclusion', 'Fill the fields and calculate.');
+}
 function showPanel(panelId) {
   document.querySelectorAll(".panel").forEach(panel => {
     panel.classList.remove("active");
