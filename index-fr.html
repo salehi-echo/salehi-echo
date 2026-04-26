@@ -445,59 +445,146 @@
       </p>
       <button class="primary module-btn" data-tab="shock">Ouvrir</button>
     </div>
+    <div class="card">
+  <h3>Œdème pulmonaire</h3>
+  <p class="sub">
+    Orientation clinique et échographique entre œdème pulmonaire cardiogénique
+    et origine pulmonaire / non cardiogénique.
+  </p>
+  <button class="primary module-btn" data-tab="oedeme-pulmonaire">Ouvrir</button>
+</div>
   </div>
 </section>
-    <section id="as" class="panel">
-      <div class="card">
-        <h2>Rétrécissement aortique</h2>
-        <p class="sub">Quantification valvulaire intégrée, débit indexé, FEVG et contexte diastolique de base.</p>
-      </div>
+   <section id="oedeme-pulmonaire" class="panel">
+  <div class="card">
+    <h2>Œdème pulmonaire : origine cardiaque ou pulmonaire ?</h2>
+    <p class="sub">
+      Orientation clinique et échocardiographique pour différencier un œdème pulmonaire cardiogénique
+      d’une origine pulmonaire / non cardiogénique.
+    </p>
+  </div>
 
-      <div class="grid-2">
-        <div class="card">
-          <h3>Mesures valvulaires</h3>
-          <label>Diamètre de la CCVG / LVOT (cm)</label><input id="as_lvot" type="number" step="0.01">
-          <label>ITV sous-aortique / LVOT (cm)</label><input id="as_vti_lvot" type="number" step="0.1">
-          <label>ITV valve aortique (cm)</label><input id="as_vti_ao" type="number" step="0.1">
-          <label>Vmax valve aortique (m/s)</label><input id="as_vmax" type="number" step="0.1">
-          <label>Gradient moyen (mmHg)</label><input id="as_gradient" type="number" step="1">
-        </div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Données cliniques</h3>
 
-        <div class="card">
-          <h3>Contexte hémodynamique</h3>
-          <label>Taille (cm)</label><input id="as_height" type="number" step="1">
-          <label>Poids (kg)</label><input id="as_weight" type="number" step="0.1">
-          <label>FEVG (%)</label><input id="as_ef" type="number" step="1">
-          <label>E/e′ moyen (optionnel)</label><input id="as_eovere" type="number" step="0.1">
-          <label>Volume OG indexé / LAVI mL/m² (optionnel)</label><input id="as_lavi" type="number" step="1">
-          <label>GLS (%) (optionnel)</label><input id="as_gls" type="number" step="0.1">
-          <label>e′ septal (cm/s) (optionnel)</label><input id="as_eprime" type="number" step="0.1">
-          <label>Vitesse IT (m/s) (optionnel)</label><input id="as_trv" type="number" step="0.1">
-          <div class="actions">
-            <button class="primary" onclick="calculateAS()">Calculer le RA</button>
-            <button class="secondary" onclick="resetAS()">Réinitialiser</button>
-          </div>
-        </div>
-      </div>
+      <label>Âge</label>
+      <input id="ope_age" type="number" step="1">
 
-      <div class="grid-2">
-        <div class="card">
-          <h3>Résultats clés</h3>
-          <div id="as_results" class="result-grid"></div>
-        </div>
-        <div class="card">
-          <h3>Interprétation intégrée</h3>
-          <div id="as_status" class="status-box neutral">En attente des données...</div>
-          <div id="as_alerts" class="alerts"></div>
-        </div>
-      </div>
+      <label>Pression artérielle systolique PAS (mmHg)</label>
+      <input id="ope_pas" type="number" step="1">
 
-      <div class="card">
-        <h3>Conclusion automatisée</h3>
-        <div id="as_conclusion" class="summary-box">Remplissez les champs puis lancez le calcul.</div>
-      </div>
-    </section>
+      <label>SpO₂ (%)</label>
+      <input id="ope_spo2" type="number" step="1">
 
+      <label>Fièvre ?</label>
+      <select id="ope_fievre">
+        <option value="unknown">Inconnu</option>
+        <option value="no">Non</option>
+        <option value="yes">Oui</option>
+      </select>
+
+      <label>Douleur thoracique / contexte coronarien ?</label>
+      <select id="ope_douleur">
+        <option value="unknown">Inconnu</option>
+        <option value="no">Non</option>
+        <option value="yes">Oui</option>
+      </select>
+
+      <label>Turgescence jugulaire ?</label>
+      <select id="ope_tj">
+        <option value="unknown">Inconnu</option>
+        <option value="no">Non</option>
+        <option value="yes">Oui</option>
+      </select>
+
+      <label>Œdèmes des membres inférieurs ?</label>
+      <select id="ope_oedemes">
+        <option value="unknown">Inconnu</option>
+        <option value="no">Non</option>
+        <option value="yes">Oui</option>
+      </select>
+    </div>
+
+    <div class="card">
+      <h3>Échocardiographie</h3>
+
+      <label>FEVG (%)</label>
+      <input id="ope_fevg" type="number" step="1">
+
+      <label>Oreillette gauche dilatée ?</label>
+      <select id="ope_og">
+        <option value="unknown">Inconnu</option>
+        <option value="no">Non</option>
+        <option value="yes">Oui</option>
+      </select>
+
+      <label>E/e’ moyen</label>
+      <input id="ope_ee" type="number" step="0.1">
+
+      <label>VCI dilatée ?</label>
+      <select id="ope_vci">
+        <option value="unknown">Inconnu</option>
+        <option value="no">Non</option>
+        <option value="yes">Oui</option>
+      </select>
+
+      <label>Collapsus inspiratoire de la VCI</label>
+      <select id="ope_vci_collapsus">
+        <option value="unknown">Inconnu</option>
+        <option value="normal">Normal / conservé</option>
+        <option value="reduced">Diminué</option>
+      </select>
+
+      <label>Profil d’HTP</label>
+      <select id="ope_htp">
+        <option value="unknown">Inconnu</option>
+        <option value="none">Pas d’HTP évidente</option>
+        <option value="postcapillary">Profil post-capillaire avec cardiopathie gauche</option>
+        <option value="precapillary">Profil plutôt pré-capillaire / pulmonaire</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Échographie pulmonaire / signes au lit du malade</h3>
+
+    <label>Distribution des lignes B</label>
+    <select id="ope_blines">
+      <option value="unknown">Inconnu</option>
+      <option value="diffuse">Lignes B diffuses bilatérales symétriques</option>
+      <option value="focal">Lignes B focales ou asymétriques</option>
+      <option value="absent">Absentes ou rares</option>
+    </select>
+
+    <label>Ligne pleurale</label>
+    <select id="ope_plevre">
+      <option value="unknown">Inconnu</option>
+      <option value="regular">Ligne pleurale régulière</option>
+      <option value="irregular">Ligne pleurale irrégulière / épaissie</option>
+    </select>
+
+    <label>Condensation / bronchogramme aérien</label>
+    <select id="ope_condensation">
+      <option value="unknown">Inconnu</option>
+      <option value="no">Absente</option>
+      <option value="yes">Présente</option>
+    </select>
+
+    <div class="actions">
+      <button class="primary" onclick="calculerOedemePulmonaire()">Calculer</button>
+      <button class="secondary" onclick="reinitialiserOedemePulmonaire()">Réinitialiser</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Résultats</h3>
+    <div id="ope_resultats" class="result-grid"></div>
+    <div id="ope_statut" class="status-box neutral">En attente des données...</div>
+    <div id="ope_alertes" class="alerts"></div>
+    <div id="ope_conclusion" class="summary-box" style="margin-top:12px;">Remplissez les champs puis calculez.</div>
+  </div>
+     </section>
     <section id="mr" class="panel">
       <div class="card">
         <h2>Insuffisance mitrale</h2>
@@ -980,7 +1067,109 @@
 <script>
   const backBtn = document.getElementById("backBtn");
 let historyStack = ["dashboard"];
+function calculerOedemePulmonaire() {
+  let scoreCardiaque = 0;
+  let scorePulmonaire = 0;
+  let alertes = [];
 
+  const age = g('ope_age');
+  const pas = g('ope_pas');
+  const spo2 = g('ope_spo2');
+
+  const fievre = document.getElementById('ope_fievre').value;
+  const douleur = document.getElementById('ope_douleur').value;
+  const tj = document.getElementById('ope_tj').value;
+  const oedemes = document.getElementById('ope_oedemes').value;
+
+  const fevg = g('ope_fevg');
+  const og = document.getElementById('ope_og').value;
+  const ee = g('ope_ee');
+  const vci = document.getElementById('ope_vci').value;
+  const vciCollapsus = document.getElementById('ope_vci_collapsus').value;
+  const htp = document.getElementById('ope_htp').value;
+
+  const blines = document.getElementById('ope_blines').value;
+  const plevre = document.getElementById('ope_plevre').value;
+  const condensation = document.getElementById('ope_condensation').value;
+
+  if (pas >= 160) scoreCardiaque += 1;
+  if (spo2 && spo2 < 90) alertes.push("SpO₂ basse : évaluer la gravité respiratoire et l'indication d'une prise en charge urgente.");
+
+  if (douleur === 'yes') scoreCardiaque += 1;
+  if (tj === 'yes') scoreCardiaque += 1;
+  if (oedemes === 'yes') scoreCardiaque += 1;
+  if (fievre === 'yes') scorePulmonaire += 2;
+
+  if (fevg && fevg < 50) scoreCardiaque += 2;
+  if (og === 'yes') scoreCardiaque += 1;
+  if (ee && ee >= 14) scoreCardiaque += 2;
+  if (vci === 'yes') scoreCardiaque += 1;
+  if (vciCollapsus === 'reduced') scoreCardiaque += 1;
+
+  if (htp === 'postcapillary') scoreCardiaque += 2;
+  if (htp === 'precapillary') scorePulmonaire += 2;
+
+  if (blines === 'diffuse') scoreCardiaque += 2;
+  if (blines === 'focal') scorePulmonaire += 2;
+  if (blines === 'absent') scorePulmonaire += 1;
+
+  if (plevre === 'regular') scoreCardiaque += 1;
+  if (plevre === 'irregular') scorePulmonaire += 2;
+
+  if (condensation === 'yes') scorePulmonaire += 3;
+
+  let diagnostic = "";
+  let interpretation = "";
+  let classe = "neutral";
+
+  if (scoreCardiaque >= scorePulmonaire + 3) {
+    diagnostic = "Profil plutôt cardiogénique";
+    interpretation = "Les données orientent vers un œdème pulmonaire cardiogénique, surtout si FEVG altérée, E/e’ élevé, OG dilatée, VCI dilatée et lignes B diffuses bilatérales.";
+    classe = "bad";
+  } else if (scorePulmonaire >= scoreCardiaque + 3) {
+    diagnostic = "Profil plutôt pulmonaire / non cardiogénique";
+    interpretation = "Les données orientent vers une origine pulmonaire ou non cardiogénique, surtout en présence de fièvre, ligne pleurale irrégulière, condensation ou lignes B focales/asymétriques.";
+    classe = "warn";
+  } else {
+    diagnostic = "Profil mixte ou indéterminé";
+    interpretation = "Les éléments ne permettent pas de trancher clairement. Il faut intégrer clinique, ECG, biologie, radiographie/échographie pulmonaire, échocardiographie complète et évolution sous traitement.";
+    classe = "neutral";
+  }
+
+  s('ope_resultats',
+    `<div><b>Score cardiaque</b><br>${scoreCardiaque}</div>
+     <div><b>Score pulmonaire</b><br>${scorePulmonaire}</div>`
+  );
+
+  status('ope_statut', classe, diagnostic);
+
+  s('ope_alertes', alertes.length ? alertes.map(a => `<div>⚠️ ${a}</div>`).join('') : '');
+
+  s('ope_conclusion',
+    `Conclusion : ${diagnostic}.\n${interpretation}\nScore cardiaque : ${scoreCardiaque} / Score pulmonaire : ${scorePulmonaire}.`
+  );
+}
+
+function reinitialiserOedemePulmonaire() {
+  resetFields([
+    'ope_age', 'ope_pas', 'ope_spo2',
+    'ope_fevg', 'ope_ee'
+  ]);
+
+  [
+    'ope_fievre', 'ope_douleur', 'ope_tj', 'ope_oedemes',
+    'ope_og', 'ope_vci', 'ope_vci_collapsus', 'ope_htp',
+    'ope_blines', 'ope_plevre', 'ope_condensation'
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = 'unknown';
+  });
+
+  s('ope_resultats', '');
+  s('ope_alertes', '');
+  status('ope_statut', 'neutral', 'En attente des données...');
+  s('ope_conclusion', 'Remplissez les champs puis calculez.');
+}
 function showPanel(panelId) {
   document.querySelectorAll(".panel").forEach(panel => {
     panel.classList.remove("active");
@@ -1797,6 +1986,110 @@ function resetFunction() {
 
   document.getElementById('shock_conclusion').innerHTML =
     '<strong>Conduite :</strong> ' + recommendation;
+}
+  function calculerOedemePulmonaire() {
+  const age = g('ope_age');
+  const pas = g('ope_pas');
+  const spo2 = g('ope_spo2');
+  const fevg = g('ope_fevg');
+  const ee = g('ope_ee');
+
+  const fievre = document.getElementById('ope_fievre').value;
+  const douleur = document.getElementById('ope_douleur').value;
+  const tj = document.getElementById('ope_tj').value;
+  const oedemes = document.getElementById('ope_oedemes').value;
+  const og = document.getElementById('ope_og').value;
+  const vci = document.getElementById('ope_vci').value;
+  const vciCollapsus = document.getElementById('ope_vci_collapsus').value;
+  const htp = document.getElementById('ope_htp').value;
+  const blines = document.getElementById('ope_blines').value;
+  const plevre = document.getElementById('ope_plevre').value;
+  const condensation = document.getElementById('ope_condensation').value;
+
+  let scoreCardiaque = 0;
+  let scorePulmonaire = 0;
+  let alertes = [];
+
+  if (pas >= 160) scoreCardiaque += 1;
+  if (spo2 && spo2 < 90) alertes.push("Hypoxémie sévère : évaluation urgente recommandée.");
+
+  if (douleur === 'yes') {
+    scoreCardiaque += 1;
+    alertes.push("Douleur thoracique / contexte coronarien : penser à un SCA compliqué d'œdème pulmonaire.");
+  }
+
+  if (tj === 'yes') scoreCardiaque += 1;
+  if (oedemes === 'yes') scoreCardiaque += 1;
+
+  if (fevg && fevg < 50) scoreCardiaque += 2;
+  if (og === 'yes') scoreCardiaque += 1;
+  if (ee && ee >= 14) scoreCardiaque += 2;
+  if (vci === 'yes') scoreCardiaque += 1;
+  if (vciCollapsus === 'reduced') scoreCardiaque += 1;
+  if (htp === 'postcapillary') scoreCardiaque += 2;
+  if (htp === 'precapillary') scorePulmonaire += 2;
+
+  if (blines === 'diffuse') scoreCardiaque += 2;
+  if (blines === 'focal') scorePulmonaire += 2;
+  if (blines === 'absent') scorePulmonaire += 1;
+
+  if (plevre === 'regular') scoreCardiaque += 1;
+  if (plevre === 'irregular') scorePulmonaire += 2;
+
+  if (condensation === 'yes') scorePulmonaire += 2;
+  if (fievre === 'yes') scorePulmonaire += 1;
+
+  let diagnostic = "";
+  let interpretation = "";
+  let klass = "neutral";
+
+  if (scoreCardiaque >= scorePulmonaire + 3) {
+    diagnostic = "Profil en faveur d’un œdème pulmonaire cardiogénique";
+    interpretation = "Les données orientent vers une élévation des pressions de remplissage gauches ou une cardiopathie gauche responsable.";
+    klass = "bad";
+  } else if (scorePulmonaire >= scoreCardiaque + 3) {
+    diagnostic = "Profil en faveur d’une origine pulmonaire / non cardiogénique";
+    interpretation = "Les données orientent davantage vers une atteinte pulmonaire primitive : pneumopathie, SDRA, atélectasie, embolie pulmonaire selon le contexte.";
+    klass = "warn";
+  } else {
+    diagnostic = "Profil mixte ou indéterminé";
+    interpretation = "Les éléments sont discordants ou insuffisants. Il faut intégrer la clinique, l’ECG, la biologie, la radiographie/TDM et répéter l’évaluation échographique si nécessaire.";
+    klass = "neutral";
+  }
+
+  s('ope_resultats', `
+    <div><b>Score cardiaque</b><br>${scoreCardiaque}</div>
+    <div><b>Score pulmonaire</b><br>${scorePulmonaire}</div>
+  `);
+
+  status('ope_statut', klass, diagnostic);
+
+  s('ope_alertes', alertes.length ? alertes.map(a => `<div class="alert">${a}</div>`).join('') : '');
+
+  s('ope_conclusion',
+    `Évaluation de l’œdème pulmonaire :\n${diagnostic}.\n${interpretation}\nScore cardiaque : ${scoreCardiaque} | Score pulmonaire : ${scorePulmonaire}`
+  );
+}
+
+function reinitialiserOedemePulmonaire() {
+  resetFields([
+    'ope_age', 'ope_pas', 'ope_spo2',
+    'ope_fevg', 'ope_ee'
+  ]);
+
+  [
+    'ope_fievre', 'ope_douleur', 'ope_tj', 'ope_oedemes',
+    'ope_og', 'ope_vci', 'ope_vci_collapsus', 'ope_htp',
+    'ope_blines', 'ope_plevre', 'ope_condensation'
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = 'unknown';
+  });
+
+  s('ope_resultats', '');
+  s('ope_alertes', '');
+  status('ope_statut', 'neutral', 'En attente des données...');
+  s('ope_conclusion', 'Remplissez les champs puis calculez.');
 }
   </script>
 </body>
