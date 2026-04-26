@@ -1126,86 +1126,81 @@
 <script>
   const backBtn = document.getElementById("backBtn");
 let historyStack = ["dashboard"];
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : '';
+}
+
 function calculatePulmonaryEdema() {
-  const age = g('peo_age');
-  const sbp = g('peo_sbp');
-  const spo2 = g('peo_spo2');
+  const bp = val('peo_bp');
+  const history = val('peo_history');
+  const infection = val('peo_infection');
+  const orthopnea = val('peo_orthopnea');
+  const congestion = val('peo_congestion');
 
-  const fever = document.getElementById('peo_fever').value;
-  const crackles = document.getElementById('peo_crackles').value;
-  const jvp = document.getElementById('peo_jvp').value;
-  const edema = document.getElementById('peo_edema').value;
-  const chestPain = document.getElementById('peo_chest_pain').value;
+  const lvef = val('peo_lvef');
+  const filling = val('peo_filling');
+  const la = val('peo_la');
+  const valve = val('peo_valve');
 
-  const lvef = g('peo_lvef');
-  const la = g('peo_la');
-  const ee = g('peo_ee');
-  const ivc = g('peo_ivc');
-  const ivcCollapse = g('peo_ivc_collapse');
-  const bLines = g('peo_blines');
-  const pleural = document.getElementById('peo_pleural').value;
-  const rv = document.getElementById('peo_rv').value;
-  const valve = document.getElementById('peo_valve').value;
+  const bLines = val('peo_blines');
+  const pleura = val('peo_pleura');
+  const consolidation = val('peo_consolidation');
 
   let cardiacScore = 0;
   let pulmonaryScore = 0;
   let alerts = [];
 
-  if (sbp !== null && sbp > 160) cardiacScore += 1;
-  if (jvp === 'yes') cardiacScore += 2;
-  if (edema === 'yes') cardiacScore += 1;
-  if (chestPain === 'yes') cardiacScore += 1;
+  [bp, history, orthopnea, congestion, lvef, filling, la, valve, bLines, pleura, consolidation].forEach(v => {
+    if (v === 'cardiac') cardiacScore += 1;
+    if (v === 'pulmonary') pulmonaryScore += 1;
+  });
 
-  if (lvef !== null && lvef < 50) cardiacScore += 2;
-  if (la !== null && la > 40) cardiacScore += 1;
-  if (ee !== null && ee > 14) cardiacScore += 2;
-  if (ivc !== null && ivc > 21) cardiacScore += 1;
-  if (ivcCollapse !== null && ivcCollapse < 50) cardiacScore += 1;
-  if (pleural === 'bilateral') cardiacScore += 1;
-  if (valve === 'significant') cardiacScore += 2;
+  if (infection === 'pulmonary') pulmonaryScore += 2;
+  if (filling === 'cardiac') cardiacScore += 2;
+  if (lvef === 'cardiac') cardiacScore += 2;
+  if (valve === 'cardiac') cardiacScore += 2;
+  if (congestion === 'cardiac') cardiacScore += 1;
+  if (orthopnea === 'cardiac') cardiacScore += 1;
 
-  if (fever === 'yes') pulmonaryScore += 2;
-  if (crackles === 'focal') pulmonaryScore += 2;
-  if (bLines !== null && bLines < 3) pulmonaryScore += 1;
-  if (pleural === 'unilateral') pulmonaryScore += 1;
-  if (rv === 'dilated') {
-    pulmonaryScore += 2;
-    alerts.push(alertBox('warning', 'Dilated RV: consider pulmonary embolism, pulmonary hypertension, or acute cor pulmonale.'));
+  if (bLines === 'cardiac') cardiacScore += 2;
+  if (bLines === 'pulmonary') pulmonaryScore += 2;
+  if (pleura === 'pulmonary') pulmonaryScore += 2;
+  if (consolidation === 'pulmonary') pulmonaryScore += 2;
+
+  if (infection === 'pulmonary') {
+    alerts.push(alertBox('warning', 'Infection / COPD-asthma context: pulmonary or mixed origin should be considered.'));
   }
 
-  if (spo2 !== null && spo2 < 90) {
-    alerts.push(alertBox('danger', 'Severe hypoxemia: urgent oxygenation / ventilatory support assessment is required.'));
+  if (valve === 'cardiac') {
+    alerts.push(alertBox('warning', 'Significant valve disease may strongly favor cardiogenic pulmonary edema.'));
   }
 
-  let diagnosis = 'Indeterminate profile';
+  if (consolidation === 'pulmonary') {
+    alerts.push(alertBox('warning', 'Consolidation or air bronchogram favors pneumonia or non-cardiogenic pulmonary pathology.'));
+  }
+
+  let diagnosis = 'Mixed or uncertain origin';
   let klass = 'neutral';
-  let interpretation = 'Mixed or incomplete data. Correlate clinically and reassess with lung ultrasound, focused echo and chest imaging.';
+  let interpretation = 'No clear dominance. Cardiogenic and pulmonary mechanisms may coexist. Correlate with BNP/NT-proBNP, ECG, troponin, ABG, chest imaging, and repeat focused echo/lung ultrasound.';
 
   if (cardiacScore >= pulmonaryScore + 2) {
     diagnosis = 'Predominantly cardiogenic pulmonary edema';
     klass = 'warning';
-    interpretation = 'Profile favors elevated left-sided filling pressures: consider acute heart failure, hypertensive pulmonary edema, ACS-related LV dysfunction, or significant valvular disease.';
+    interpretation = 'Profile favors elevated left-sided filling pressures: acute heart failure, hypertensive pulmonary edema, ACS-related LV dysfunction, or significant valvular disease.';
   } else if (pulmonaryScore >= cardiacScore + 2) {
     diagnosis = 'Predominantly pulmonary / non-cardiogenic origin';
     klass = 'warning';
-    interpretation = 'Profile favors pulmonary cause: consider pneumonia, ARDS, COPD/asthma exacerbation, pulmonary embolism, or other primary lung pathology.';
-  } else {
-    diagnosis = 'Mixed or uncertain origin';
-    klass = 'neutral';
-    interpretation = 'No clear dominance. Cardiogenic and pulmonary causes may coexist; repeat echo/lung ultrasound and use BNP, ECG, troponin, ABG and chest imaging.';
+    interpretation = 'Profile favors pulmonary origin: pneumonia, ARDS, COPD/asthma exacerbation, pulmonary embolism, or other primary lung pathology.';
   }
 
   s('peo_results',
     metric('Cardiac score', cardiacScore, '') +
     metric('Pulmonary score', pulmonaryScore, '') +
-    metric('Likely profile', diagnosis, '') +
-    metric('LVEF', lvef === null ? '—' : fmt(lvef, 0), '%') +
-    metric('E/e’', ee === null ? '—' : fmt(ee, 1), '') +
-    metric('B-lines / zone', bLines === null ? '—' : fmt(bLines, 0), '')
+    metric('Likely profile', diagnosis, '')
   );
 
   s('peo_alerts', alerts.join(''));
-
   status('peo_status', klass, diagnosis);
 
   s('peo_conclusion',
@@ -1214,25 +1209,18 @@ function calculatePulmonaryEdema() {
 }
 
 function resetPulmonaryEdema() {
-  resetFields([
-    'peo_age',
-    'peo_sbp',
-    'peo_spo2',
-    'peo_lvef',
-    'peo_la',
-    'peo_ee',
-    'peo_ivc',
-    'peo_ivc_collapse',
-    'peo_blines'
-  ]);
-
   [
-    'peo_fever',
-    'peo_crackles',
-    'peo_jvp',
-    'peo_edema',
-    'peo_chest_pain',
-    'peo_pleural',
+    'peo_bp',
+    'peo_history',
+    'peo_infection',
+    'peo_orthopnea',
+    'peo_congestion',
+    'peo_lvef',
+    'peo_filling',
+    'peo_la',
+    'peo_valve',
+    'peo_blines',
+    'peo_pleura',
     'peo_consolidation'
   ].forEach(id => {
     const el = document.getElementById(id);
