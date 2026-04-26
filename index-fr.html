@@ -455,6 +455,55 @@
 </div>
   </div>
 </section>
+   <section id="as" class="panel">
+  <div class="card">
+    <h2>Rétrécissement aortique</h2>
+    <p class="sub">Quantification intégrée : AVA, gradient moyen, Vmax, DVI, AVA indexée et contexte hémodynamique.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Mesures valvulaires</h3>
+      <label>Diamètre LVOT (cm)</label><input id="as_lvot" type="number" step="0.01">
+      <label>VTI LVOT (cm)</label><input id="as_lvotvti" type="number" step="0.1">
+      <label>VTI valve aortique (cm)</label><input id="as_avvti" type="number" step="0.1">
+      <label>Vmax valve aortique (m/s)</label><input id="as_vmax" type="number" step="0.1">
+      <label>Gradient moyen (mmHg)</label><input id="as_mg" type="number" step="1">
+    </div>
+
+    <div class="card">
+      <h3>Contexte hémodynamique</h3>
+      <label>Surface corporelle / BSA (m²)</label><input id="as_bsa" type="number" step="0.01">
+      <label>FEVG (%)</label><input id="as_ef" type="number" step="1">
+      <label>E/e′ moyen (optionnel)</label><input id="as_eovere" type="number" step="0.1">
+      <label>LAVI mL/m² (optionnel)</label><input id="as_lavi" type="number" step="1">
+      <label>GLS (%) (optionnel)</label><input id="as_gls" type="number" step="0.1">
+      <label>e′ septal (cm/s) (optionnel)</label><input id="as_eprime" type="number" step="0.1">
+      <label>Vitesse IT (m/s) (optionnel)</label><input id="as_trv" type="number" step="0.1">
+      <div class="actions">
+        <button class="primary" onclick="calculateAS()">Calculer le RAo</button>
+        <button class="secondary" onclick="resetAS()">Réinitialiser</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Résultats clés</h3>
+      <div id="as_results" class="result-grid"></div>
+    </div>
+    <div class="card">
+      <h3>Interprétation intégrée</h3>
+      <div id="as_status" class="status-box neutral">En attente des données...</div>
+      <div id="as_alerts" class="alerts"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Conclusion automatisée</h3>
+    <div id="as_conclusion" class="summary-box">Remplissez les champs puis lancez le calcul.</div>
+  </div>
+</section>
    <section id="oedeme-pulmonaire" class="panel">
   <div class="card">
     <h2>Œdème pulmonaire — origine cardiaque ou pulmonaire</h2>
@@ -565,7 +614,7 @@
     </select>
 
     <label>Ligne pleurale</label>
-    <select id="peo_pleural">
+    <select id="peo_pleura">
       <option value="">Sélectionner</option>
       <option value="cardiac">Ligne pleurale régulière</option>
       <option value="pulmonary">Ligne pleurale irrégulière / épaissie</option>
@@ -1078,141 +1127,31 @@
 <script>
   const backBtn = document.getElementById("backBtn");
 let historyStack = ["dashboard"];
-function calculerOedemePulmonaire() {
-  const fields = [
-    'peo_bp',
-    'peo_history',
-    'peo_infection',
-    'peo_orthopnea',
-    'peo_congestion',
-    'peo_lvef',
-    'peo_filling',
-    'peo_la',
-    'peo_valve',
-    'peo_rv',
-    'peo_blines',
-    'peo_pleura',
-    'peo_consolidation'
-  ];
-
-  let cardiacScore = 0;
-  let pulmonaryScore = 0;
-  let neutralScore = 0;
-  let alerts = [];
-
-  fields.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    if (el.value === 'cardiac') cardiacScore += 1;
-    if (el.value === 'pulmonary') pulmonaryScore += 1;
-    if (el.value === 'neutral') neutralScore += 1;
-  });
-
-  const rv = document.getElementById('peo_rv')?.value;
-  const consolidation = document.getElementById('peo_consolidation')?.value;
-  const infection = document.getElementById('peo_infection')?.value;
-  const filling = document.getElementById('peo_filling')?.value;
-  const valve = document.getElementById('peo_valve')?.value;
-
-  if (rv === 'pulmonary') {
-    pulmonaryScore += 1;
-    alerts.push(alertBox('warning', 'Dilatation VD / D-shape : penser à embolie pulmonaire, HTP ou cœur pulmonaire aigu.'));
-  }
-
-  if (consolidation === 'pulmonary') {
-    pulmonaryScore += 1;
-    alerts.push(alertBox('warning', 'Condensation ou bronchogramme aérien : argument en faveur d’une pneumonie ou atteinte pulmonaire focale.'));
-  }
-
-  if (infection === 'pulmonary') {
-    pulmonaryScore += 1;
-  }
-
-  if (filling === 'cardiac') {
-    cardiacScore += 1;
-  }
-
-  if (valve === 'cardiac') {
-    cardiacScore += 1;
-    alerts.push(alertBox('warning', 'Valvulopathie significative : peut expliquer ou aggraver un œdème pulmonaire cardiogénique.'));
-  }
-
-  let diagnosis = 'Profil indéterminé';
-  let klass = 'neutral';
-  let interpretation = 'Données mixtes ou insuffisantes. Corréler avec clinique, ECG, BNP/NT-proBNP, troponine, gaz du sang, radiographie/TDM thoracique et échographie répétée.';
-
-  if (cardiacScore >= pulmonaryScore + 2) {
-    diagnosis = 'Œdème pulmonaire probablement cardiogénique';
-    klass = 'warning';
-    interpretation = 'Le profil oriente vers une élévation des pressions de remplissage gauches : insuffisance cardiaque aiguë, OAP hypertensif, dysfonction VG ischémique ou valvulopathie significative.';
-  } else if (pulmonaryScore >= cardiacScore + 2) {
-    diagnosis = 'Origine probablement pulmonaire / non cardiogénique';
-    klass = 'warning';
-    interpretation = 'Le profil oriente vers une cause pulmonaire : pneumonie, SDRA, exacerbation BPCO/asthme, embolie pulmonaire ou atteinte pulmonaire primitive.';
-  } else {
-    diagnosis = 'Origine mixte ou incertaine';
-    klass = 'neutral';
-    interpretation = 'Aucune dominance nette. Les causes cardiaques et pulmonaires peuvent coexister ; réévaluer par échographie cardiaque et pulmonaire, biologie et imagerie thoracique.';
-  }
-
-  s('peo_results',
-    metric('Score cardiaque', cardiacScore, '') +
-    metric('Score pulmonaire', pulmonaryScore, '') +
-    metric('Éléments neutres', neutralScore, '') +
-    metric('Profil probable', diagnosis, '')
-  );
-
-  s('peo_alerts', alerts.join(''));
-  status('peo_status', klass, diagnosis);
-
-  s('peo_conclusion',
-    `Évaluation de l’œdème pulmonaire :\n${diagnosis}.\n${interpretation}\nScore cardiaque : ${cardiacScore}. Score pulmonaire : ${pulmonaryScore}.`
-  );
-}
-
-function reinitialiserOedemePulmonaire() {
-  resetFields([
-    'peo_age',
-    'peo_sbp',
-    'peo_spo2',
-    'peo_lvef',
-    'peo_la',
-    'peo_ee',
-    'peo_ivc',
-    'peo_ivc_collapse',
-    'peo_blines'
-  ]);
-
-  [
-    'peo_fever',
-    'peo_crackles',
-    'peo_jvp',
-    'peo_edema',
-    'peo_chest_pain',
-    'peo_pleural',
-    'peo_consolidation',
-    'peo_rv',
-    'peo_valve'
-  ].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-
-  s('peo_results', '');
-  s('peo_alerts', '');
-  status('peo_status', 'neutral', 'En attente des données...');
-  s('peo_conclusion', 'Remplissez les champs puis lancez le calcul.');
-}
 function showPanel(panelId) {
+  const targetPanel = document.getElementById(panelId);
+  if (!targetPanel) {
+    const dashboard = document.getElementById("dashboard");
+    if (dashboard) {
+      document.querySelectorAll(".panel").forEach(panel => {
+        panel.classList.remove("active");
+      });
+      dashboard.classList.add("active");
+      const dashboardStatus = dashboard.querySelector(".status-box");
+      if (dashboardStatus) {
+        dashboardStatus.textContent = "Module demandé indisponible.";
+      }
+    }
+    if (backBtn) {
+      backBtn.style.display = "none";
+    }
+    return;
+  }
+
   document.querySelectorAll(".panel").forEach(panel => {
     panel.classList.remove("active");
   });
 
-  const targetPanel = document.getElementById(panelId);
-  if (targetPanel) {
-    targetPanel.classList.add("active");
-  }
+  targetPanel.classList.add("active");
 
   if (backBtn) {
     backBtn.style.display = panelId === "dashboard" ? "none" : "inline-flex";
@@ -1302,12 +1241,11 @@ if (backBtn) {
     }    
    function calculateAS() {
       const lvot = g('as_lvot');
-      const vtiLVOT = g('as_vti_lvot');
-      const vtiAo = g('as_vti_ao');
+      const vtiLVOT = g('as_lvotvti');
+      const vtiAo = g('as_avvti');
       const vmax = g('as_vmax');
-      const gradient = g('as_gradient');
-      const height = g('as_height');
-      const weight = g('as_weight');
+      const gradient = g('as_mg');
+      const bsa = g('as_bsa');
       const ef = g('as_ef');
       const eovere = g('as_eovere');
       const lavi = g('as_lavi');
@@ -1315,7 +1253,7 @@ if (backBtn) {
       const eprime = g('as_eprime');
       const trv = g('as_trv');
 
-      if ([lvot, vtiLVOT, vtiAo, vmax, gradient, height, weight, ef].some(v => v === null)) {
+      if ([lvot, vtiLVOT, vtiAo, vmax, gradient, bsa, ef].some(v => v === null)) {
         status('as_status', 'warning', 'Veuillez remplir tous les champs obligatoires.');
         s('as_results', '');
         s('as_alerts', '');
@@ -1324,7 +1262,6 @@ if (backBtn) {
       }
 
       const alerts = [];
-      const bsa = Math.sqrt((height * weight) / 3600);
       const lvotArea = Math.PI * Math.pow(lvot / 2, 2);
       const sv = lvotArea * vtiLVOT;
       const svi = sv / bsa;
@@ -1405,7 +1342,7 @@ if (backBtn) {
       }
 
       s('as_results',
-        metric('Surface corporelle calculée', fmt(bsa), 'm²') +
+        metric('Surface corporelle', fmt(bsa), 'm²') +
         metric('Surface LVOT / CCVG', fmt(lvotArea), 'cm²') +
         metric('Volume d’éjection systolique', fmt(sv), 'mL') +
         metric('VESi', fmt(svi, 1), 'mL/m²') +
@@ -1425,8 +1362,8 @@ if (backBtn) {
     }
         function resetAS() {
       resetFields([
-        'as_lvot', 'as_vti_lvot', 'as_vti_ao', 'as_vmax', 'as_gradient',
-        'as_height', 'as_weight', 'as_ef', 'as_eovere', 'as_lavi',
+        'as_lvot', 'as_lvotvti', 'as_avvti', 'as_vmax', 'as_mg',
+        'as_bsa', 'as_ef', 'as_eovere', 'as_lavi',
         'as_gls', 'as_eprime', 'as_trv'
       ]);
       s('as_results', '');

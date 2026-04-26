@@ -634,7 +634,6 @@
       </div>
     </section>
 
-    </section> 
  <section id="function" class="panel">
   <div class="card">
     <h2>Systolic / Diastolic Function</h2>
@@ -1233,14 +1232,30 @@ function resetPulmonaryEdema() {
   s('peo_conclusion', 'Fill the fields and calculate.');
 }
 function showPanel(panelId) {
+  const targetPanel = document.getElementById(panelId);
+  if (!targetPanel) {
+    const dashboard = document.getElementById("dashboard");
+    if (dashboard) {
+      document.querySelectorAll(".panel").forEach(panel => {
+        panel.classList.remove("active");
+      });
+      dashboard.classList.add("active");
+      const dashboardStatus = dashboard.querySelector(".status-box");
+      if (dashboardStatus) {
+        dashboardStatus.textContent = "Requested module is unavailable.";
+      }
+    }
+    if (backBtn) {
+      backBtn.style.display = "none";
+    }
+    return;
+  }
+
   document.querySelectorAll(".panel").forEach(panel => {
     panel.classList.remove("active");
   });
 
-  const targetPanel = document.getElementById(panelId);
-  if (targetPanel) {
-    targetPanel.classList.add("active");
-  }
+  targetPanel.classList.add("active");
 
   if (backBtn) {
     backBtn.style.display = panelId === "dashboard" ? "none" : "inline-flex";
