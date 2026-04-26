@@ -457,10 +457,10 @@
 </section>
    <section id="oedeme-pulmonaire" class="panel">
   <div class="card">
-    <h2>Œdème pulmonaire : origine cardiaque ou pulmonaire ?</h2>
+    <h2>Œdème pulmonaire — origine cardiaque ou pulmonaire</h2>
     <p class="sub">
-      Orientation clinique et échocardiographique pour différencier un œdème pulmonaire cardiogénique
-      d’une origine pulmonaire / non cardiogénique.
+      Aide clinique et échocardiographique pour distinguer un œdème pulmonaire cardiogénique
+      d’une origine pulmonaire ou non cardiogénique.
     </p>
   </div>
 
@@ -468,80 +468,87 @@
     <div class="card">
       <h3>Données cliniques</h3>
 
-      <label>Âge</label>
-      <input id="ope_age" type="number" step="1">
-
-      <label>Pression artérielle systolique PAS (mmHg)</label>
-      <input id="ope_pas" type="number" step="1">
-
-      <label>SpO₂ (%)</label>
-      <input id="ope_spo2" type="number" step="1">
-
-      <label>Fièvre ?</label>
-      <select id="ope_fievre">
-        <option value="unknown">Inconnu</option>
-        <option value="no">Non</option>
-        <option value="yes">Oui</option>
+      <label>Pression artérielle / hypertension</label>
+      <select id="peo_bp">
+        <option value="">Sélectionner</option>
+        <option value="cardiac">HTA sévère ou poussée hypertensive</option>
+        <option value="neutral">Pression artérielle normale</option>
+        <option value="pulmonary">Hypotension / choc / contexte septique</option>
       </select>
 
-      <label>Douleur thoracique / contexte coronarien ?</label>
-      <select id="ope_douleur">
-        <option value="unknown">Inconnu</option>
-        <option value="no">Non</option>
-        <option value="yes">Oui</option>
+      <label>Antécédents de cardiopathie</label>
+      <select id="peo_history">
+        <option value="">Sélectionner</option>
+        <option value="cardiac">Insuffisance cardiaque / cardiopathie ischémique / valvulopathie / FA</option>
+        <option value="pulmonary">Pas de cardiopathie connue</option>
+        <option value="neutral">Inconnu</option>
       </select>
 
-      <label>Turgescence jugulaire ?</label>
-      <select id="ope_tj">
-        <option value="unknown">Inconnu</option>
-        <option value="no">Non</option>
-        <option value="yes">Oui</option>
+      <label>Fièvre / infection / contexte BPCO-asthme</label>
+      <select id="peo_infection">
+        <option value="">Sélectionner</option>
+        <option value="pulmonary">Présent</option>
+        <option value="neutral">Absent ou incertain</option>
       </select>
 
-      <label>Œdèmes des membres inférieurs ?</label>
-      <select id="ope_oedemes">
-        <option value="unknown">Inconnu</option>
-        <option value="no">Non</option>
-        <option value="yes">Oui</option>
+      <label>Orthopnée / dyspnée paroxystique nocturne</label>
+      <select id="peo_orthopnea">
+        <option value="">Sélectionner</option>
+        <option value="cardiac">Présente</option>
+        <option value="pulmonary">Absente</option>
+        <option value="neutral">Incertaine</option>
+      </select>
+
+      <label>Œdèmes périphériques / turgescence jugulaire</label>
+      <select id="peo_congestion">
+        <option value="">Sélectionner</option>
+        <option value="cardiac">Présents</option>
+        <option value="pulmonary">Absents</option>
+        <option value="neutral">Incertain</option>
       </select>
     </div>
 
     <div class="card">
-      <h3>Échocardiographie</h3>
+      <h3>Données échocardiographiques</h3>
 
-      <label>FEVG (%)</label>
-      <input id="ope_fevg" type="number" step="1">
-
-      <label>Oreillette gauche dilatée ?</label>
-      <select id="ope_og">
-        <option value="unknown">Inconnu</option>
-        <option value="no">Non</option>
-        <option value="yes">Oui</option>
+      <label>FEVG</label>
+      <select id="peo_lvef">
+        <option value="">Sélectionner</option>
+        <option value="cardiac">FEVG réduite</option>
+        <option value="neutral">FEVG conservée</option>
+        <option value="neutral">Non évaluée</option>
       </select>
 
-      <label>E/e’ moyen</label>
-      <input id="ope_ee" type="number" step="0.1">
-
-      <label>VCI dilatée ?</label>
-      <select id="ope_vci">
-        <option value="unknown">Inconnu</option>
-        <option value="no">Non</option>
-        <option value="yes">Oui</option>
+      <label>Pressions de remplissage du VG</label>
+      <select id="peo_filling">
+        <option value="">Sélectionner</option>
+        <option value="cardiac">Élevées : E/e’ augmenté / profil restrictif</option>
+        <option value="pulmonary">Normales ou basses</option>
+        <option value="neutral">Indéterminées</option>
       </select>
 
-      <label>Collapsus inspiratoire de la VCI</label>
-      <select id="ope_vci_collapsus">
-        <option value="unknown">Inconnu</option>
-        <option value="normal">Normal / conservé</option>
-        <option value="reduced">Diminué</option>
+      <label>Oreillette gauche</label>
+      <select id="peo_la">
+        <option value="">Sélectionner</option>
+        <option value="cardiac">Oreillette gauche dilatée</option>
+        <option value="pulmonary">Oreillette gauche normale</option>
+        <option value="neutral">Non évaluée</option>
       </select>
 
-      <label>Profil d’HTP</label>
-      <select id="ope_htp">
-        <option value="unknown">Inconnu</option>
-        <option value="none">Pas d’HTP évidente</option>
-        <option value="postcapillary">Profil post-capillaire avec cardiopathie gauche</option>
-        <option value="precapillary">Profil plutôt pré-capillaire / pulmonaire</option>
+      <label>Valvulopathie significative</label>
+      <select id="peo_valve">
+        <option value="">Sélectionner</option>
+        <option value="cardiac">IM / RM / RAo / IAo sévère</option>
+        <option value="pulmonary">Pas de valvulopathie significative</option>
+        <option value="neutral">Indéterminée</option>
+      </select>
+
+      <label>Ventricule droit / profil d’HTP</label>
+      <select id="peo_rv">
+        <option value="">Sélectionner</option>
+        <option value="pulmonary">Dilatation VD / D-shape / strain VD aigu</option>
+        <option value="cardiac">Profil post-capillaire avec cardiopathie gauche</option>
+        <option value="neutral">Normal ou incertain</option>
       </select>
     </div>
   </div>
@@ -550,25 +557,27 @@
     <h3>Échographie pulmonaire / signes au lit du malade</h3>
 
     <label>Distribution des lignes B</label>
-    <select id="ope_blines">
-      <option value="unknown">Inconnu</option>
-      <option value="diffuse">Lignes B diffuses bilatérales symétriques</option>
-      <option value="focal">Lignes B focales ou asymétriques</option>
-      <option value="absent">Absentes ou rares</option>
+    <select id="peo_blines">
+      <option value="">Sélectionner</option>
+      <option value="cardiac">Lignes B diffuses, bilatérales et symétriques</option>
+      <option value="pulmonary">Lignes B focales/asymétriques ou zones épargnées</option>
+      <option value="neutral">Non évaluée</option>
     </select>
 
     <label>Ligne pleurale</label>
-    <select id="ope_plevre">
-      <option value="unknown">Inconnu</option>
-      <option value="regular">Ligne pleurale régulière</option>
-      <option value="irregular">Ligne pleurale irrégulière / épaissie</option>
+    <select id="peo_pleura">
+      <option value="">Sélectionner</option>
+      <option value="cardiac">Ligne pleurale régulière</option>
+      <option value="pulmonary">Ligne pleurale irrégulière / épaissie</option>
+      <option value="neutral">Non évaluée</option>
     </select>
 
     <label>Condensation / bronchogramme aérien</label>
-    <select id="ope_condensation">
-      <option value="unknown">Inconnu</option>
-      <option value="no">Absente</option>
-      <option value="yes">Présente</option>
+    <select id="peo_consolidation">
+      <option value="">Sélectionner</option>
+      <option value="pulmonary">Présent</option>
+      <option value="cardiac">Absent</option>
+      <option value="neutral">Non évalué</option>
     </select>
 
     <div class="actions">
@@ -579,12 +588,14 @@
 
   <div class="card">
     <h3>Résultats</h3>
-    <div id="ope_resultats" class="result-grid"></div>
-    <div id="ope_statut" class="status-box neutral">En attente des données...</div>
-    <div id="ope_alertes" class="alerts"></div>
-    <div id="ope_conclusion" class="summary-box" style="margin-top:12px;">Remplissez les champs puis calculez.</div>
+    <div id="peo_results" class="result-grid"></div>
+    <div id="peo_status" class="status-box neutral">En attente des données...</div>
+    <div id="peo_alerts" class="alerts"></div>
+    <div id="peo_conclusion" class="summary-box" style="margin-top:12px;">
+      Remplissez les champs puis calculez.
+    </div>
   </div>
-     </section>
+</section>
     <section id="mr" class="panel">
       <div class="card">
         <h2>Insuffisance mitrale</h2>
@@ -1068,107 +1079,122 @@
   const backBtn = document.getElementById("backBtn");
 let historyStack = ["dashboard"];
 function calculerOedemePulmonaire() {
-  let scoreCardiaque = 0;
-  let scorePulmonaire = 0;
-  let alertes = [];
+  const fields = [
+    'peo_bp',
+    'peo_history',
+    'peo_infection',
+    'peo_orthopnea',
+    'peo_congestion',
+    'peo_lvef',
+    'peo_filling',
+    'peo_la',
+    'peo_valve',
+    'peo_rv',
+    'peo_blines',
+    'peo_pleura',
+    'peo_consolidation'
+  ];
 
-  const age = g('ope_age');
-  const pas = g('ope_pas');
-  const spo2 = g('ope_spo2');
+  let cardiacScore = 0;
+  let pulmonaryScore = 0;
+  let neutralScore = 0;
+  let alerts = [];
 
-  const fievre = document.getElementById('ope_fievre').value;
-  const douleur = document.getElementById('ope_douleur').value;
-  const tj = document.getElementById('ope_tj').value;
-  const oedemes = document.getElementById('ope_oedemes').value;
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
 
-  const fevg = g('ope_fevg');
-  const og = document.getElementById('ope_og').value;
-  const ee = g('ope_ee');
-  const vci = document.getElementById('ope_vci').value;
-  const vciCollapsus = document.getElementById('ope_vci_collapsus').value;
-  const htp = document.getElementById('ope_htp').value;
+    if (el.value === 'cardiac') cardiacScore += 1;
+    if (el.value === 'pulmonary') pulmonaryScore += 1;
+    if (el.value === 'neutral') neutralScore += 1;
+  });
 
-  const blines = document.getElementById('ope_blines').value;
-  const plevre = document.getElementById('ope_plevre').value;
-  const condensation = document.getElementById('ope_condensation').value;
+  const rv = document.getElementById('peo_rv')?.value;
+  const consolidation = document.getElementById('peo_consolidation')?.value;
+  const infection = document.getElementById('peo_infection')?.value;
+  const filling = document.getElementById('peo_filling')?.value;
+  const valve = document.getElementById('peo_valve')?.value;
 
-  if (pas >= 160) scoreCardiaque += 1;
-  if (spo2 && spo2 < 90) alertes.push("SpO₂ basse : évaluer la gravité respiratoire et l'indication d'une prise en charge urgente.");
-
-  if (douleur === 'yes') scoreCardiaque += 1;
-  if (tj === 'yes') scoreCardiaque += 1;
-  if (oedemes === 'yes') scoreCardiaque += 1;
-  if (fievre === 'yes') scorePulmonaire += 2;
-
-  if (fevg && fevg < 50) scoreCardiaque += 2;
-  if (og === 'yes') scoreCardiaque += 1;
-  if (ee && ee >= 14) scoreCardiaque += 2;
-  if (vci === 'yes') scoreCardiaque += 1;
-  if (vciCollapsus === 'reduced') scoreCardiaque += 1;
-
-  if (htp === 'postcapillary') scoreCardiaque += 2;
-  if (htp === 'precapillary') scorePulmonaire += 2;
-
-  if (blines === 'diffuse') scoreCardiaque += 2;
-  if (blines === 'focal') scorePulmonaire += 2;
-  if (blines === 'absent') scorePulmonaire += 1;
-
-  if (plevre === 'regular') scoreCardiaque += 1;
-  if (plevre === 'irregular') scorePulmonaire += 2;
-
-  if (condensation === 'yes') scorePulmonaire += 3;
-
-  let diagnostic = "";
-  let interpretation = "";
-  let classe = "neutral";
-
-  if (scoreCardiaque >= scorePulmonaire + 3) {
-    diagnostic = "Profil plutôt cardiogénique";
-    interpretation = "Les données orientent vers un œdème pulmonaire cardiogénique, surtout si FEVG altérée, E/e’ élevé, OG dilatée, VCI dilatée et lignes B diffuses bilatérales.";
-    classe = "bad";
-  } else if (scorePulmonaire >= scoreCardiaque + 3) {
-    diagnostic = "Profil plutôt pulmonaire / non cardiogénique";
-    interpretation = "Les données orientent vers une origine pulmonaire ou non cardiogénique, surtout en présence de fièvre, ligne pleurale irrégulière, condensation ou lignes B focales/asymétriques.";
-    classe = "warn";
-  } else {
-    diagnostic = "Profil mixte ou indéterminé";
-    interpretation = "Les éléments ne permettent pas de trancher clairement. Il faut intégrer clinique, ECG, biologie, radiographie/échographie pulmonaire, échocardiographie complète et évolution sous traitement.";
-    classe = "neutral";
+  if (rv === 'pulmonary') {
+    pulmonaryScore += 1;
+    alerts.push(alertBox('warning', 'Dilatation VD / D-shape : penser à embolie pulmonaire, HTP ou cœur pulmonaire aigu.'));
   }
 
-  s('ope_resultats',
-    `<div><b>Score cardiaque</b><br>${scoreCardiaque}</div>
-     <div><b>Score pulmonaire</b><br>${scorePulmonaire}</div>`
+  if (consolidation === 'pulmonary') {
+    pulmonaryScore += 1;
+    alerts.push(alertBox('warning', 'Condensation ou bronchogramme aérien : argument en faveur d’une pneumonie ou atteinte pulmonaire focale.'));
+  }
+
+  if (infection === 'pulmonary') {
+    pulmonaryScore += 1;
+  }
+
+  if (filling === 'cardiac') {
+    cardiacScore += 1;
+  }
+
+  if (valve === 'cardiac') {
+    cardiacScore += 1;
+    alerts.push(alertBox('warning', 'Valvulopathie significative : peut expliquer ou aggraver un œdème pulmonaire cardiogénique.'));
+  }
+
+  let diagnosis = 'Profil indéterminé';
+  let klass = 'neutral';
+  let interpretation = 'Données mixtes ou insuffisantes. Corréler avec clinique, ECG, BNP/NT-proBNP, troponine, gaz du sang, radiographie/TDM thoracique et échographie répétée.';
+
+  if (cardiacScore >= pulmonaryScore + 2) {
+    diagnosis = 'Œdème pulmonaire probablement cardiogénique';
+    klass = 'warning';
+    interpretation = 'Le profil oriente vers une élévation des pressions de remplissage gauches : insuffisance cardiaque aiguë, OAP hypertensif, dysfonction VG ischémique ou valvulopathie significative.';
+  } else if (pulmonaryScore >= cardiacScore + 2) {
+    diagnosis = 'Origine probablement pulmonaire / non cardiogénique';
+    klass = 'warning';
+    interpretation = 'Le profil oriente vers une cause pulmonaire : pneumonie, SDRA, exacerbation BPCO/asthme, embolie pulmonaire ou atteinte pulmonaire primitive.';
+  } else {
+    diagnosis = 'Origine mixte ou incertaine';
+    klass = 'neutral';
+    interpretation = 'Aucune dominance nette. Les causes cardiaques et pulmonaires peuvent coexister ; réévaluer par échographie cardiaque et pulmonaire, biologie et imagerie thoracique.';
+  }
+
+  s('peo_results',
+    metric('Score cardiaque', cardiacScore, '') +
+    metric('Score pulmonaire', pulmonaryScore, '') +
+    metric('Éléments neutres', neutralScore, '') +
+    metric('Profil probable', diagnosis, '')
   );
 
-  status('ope_statut', classe, diagnostic);
+  s('peo_alerts', alerts.join(''));
+  status('peo_status', klass, diagnosis);
 
-  s('ope_alertes', alertes.length ? alertes.map(a => `<div>⚠️ ${a}</div>`).join('') : '');
-
-  s('ope_conclusion',
-    `Conclusion : ${diagnostic}.\n${interpretation}\nScore cardiaque : ${scoreCardiaque} / Score pulmonaire : ${scorePulmonaire}.`
+  s('peo_conclusion',
+    `Évaluation de l’œdème pulmonaire :\n${diagnosis}.\n${interpretation}\nScore cardiaque : ${cardiacScore}. Score pulmonaire : ${pulmonaryScore}.`
   );
 }
 
 function reinitialiserOedemePulmonaire() {
-  resetFields([
-    'ope_age', 'ope_pas', 'ope_spo2',
-    'ope_fevg', 'ope_ee'
-  ]);
-
   [
-    'ope_fievre', 'ope_douleur', 'ope_tj', 'ope_oedemes',
-    'ope_og', 'ope_vci', 'ope_vci_collapsus', 'ope_htp',
-    'ope_blines', 'ope_plevre', 'ope_condensation'
+    'peo_bp',
+    'peo_history',
+    'peo_infection',
+    'peo_orthopnea',
+    'peo_congestion',
+    'peo_lvef',
+    'peo_filling',
+    'peo_la',
+    'peo_valve',
+    'peo_rv',
+    'peo_blines',
+    'peo_pleura',
+    'peo_consolidation'
   ].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.value = 'unknown';
+    if (el) el.value = '';
   });
 
-  s('ope_resultats', '');
-  s('ope_alertes', '');
-  status('ope_statut', 'neutral', 'En attente des données...');
-  s('ope_conclusion', 'Remplissez les champs puis calculez.');
+  s('peo_results', '');
+  s('peo_alerts', '');
+  status('peo_status', 'neutral', 'En attente des données...');
+  s('peo_conclusion', 'Remplissez les champs puis calculez.');
 }
 function showPanel(panelId) {
   document.querySelectorAll(".panel").forEach(panel => {
