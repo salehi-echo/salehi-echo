@@ -2021,109 +2021,123 @@ function resetFunction() {
   document.getElementById('shock_conclusion').innerHTML =
     '<strong>Conduite :</strong> ' + recommendation;
 }
-  function calculerOedemePulmonaire() {
-  const age = g('ope_age');
-  const pas = g('ope_pas');
-  const spo2 = g('ope_spo2');
-  const fevg = g('ope_fevg');
-  const ee = g('ope_ee');
+ function calculerOedemePulmonaire() {
+  const fields = [
+    'peo_bp',
+    'peo_history',
+    'peo_infection',
+    'peo_orthopnea',
+    'peo_congestion',
+    'peo_lvef',
+    'peo_filling',
+    'peo_la',
+    'peo_valve',
+    'peo_rv',
+    'peo_blines',
+    'peo_pleura',
+    'peo_consolidation'
+  ];
 
-  const fievre = document.getElementById('ope_fievre').value;
-  const douleur = document.getElementById('ope_douleur').value;
-  const tj = document.getElementById('ope_tj').value;
-  const oedemes = document.getElementById('ope_oedemes').value;
-  const og = document.getElementById('ope_og').value;
-  const vci = document.getElementById('ope_vci').value;
-  const vciCollapsus = document.getElementById('ope_vci_collapsus').value;
-  const htp = document.getElementById('ope_htp').value;
-  const blines = document.getElementById('ope_blines').value;
-  const plevre = document.getElementById('ope_plevre').value;
-  const condensation = document.getElementById('ope_condensation').value;
+  let cardiacScore = 0;
+  let pulmonaryScore = 0;
+  let neutralScore = 0;
+  let alerts = [];
 
-  let scoreCardiaque = 0;
-  let scorePulmonaire = 0;
-  let alertes = [];
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
 
-  if (pas >= 160) scoreCardiaque += 1;
-  if (spo2 && spo2 < 90) alertes.push("Hypoxémie sévère : évaluation urgente recommandée.");
+    if (el.value === 'cardiac') cardiacScore += 1;
+    if (el.value === 'pulmonary') pulmonaryScore += 1;
+    if (el.value === 'neutral') neutralScore += 1;
+  });
 
-  if (douleur === 'yes') {
-    scoreCardiaque += 1;
-    alertes.push("Douleur thoracique / contexte coronarien : penser à un SCA compliqué d'œdème pulmonaire.");
+  const rv = document.getElementById('peo_rv')?.value;
+  const consolidation = document.getElementById('peo_consolidation')?.value;
+  const infection = document.getElementById('peo_infection')?.value;
+  const filling = document.getElementById('peo_filling')?.value;
+  const valve = document.getElementById('peo_valve')?.value;
+
+  if (rv === 'pulmonary') {
+    pulmonaryScore += 1;
+    alerts.push(alertBox('warning', 'Dilatation VD / D-shape : penser à embolie pulmonaire, HTP ou cœur pulmonaire aigu.'));
   }
 
-  if (tj === 'yes') scoreCardiaque += 1;
-  if (oedemes === 'yes') scoreCardiaque += 1;
+  if (consolidation === 'pulmonary') {
+    pulmonaryScore += 1;
+    alerts.push(alertBox('warning', 'Condensation ou bronchogramme aérien : argument en faveur d’une pneumonie ou atteinte pulmonaire focale.'));
+  }
 
-  if (fevg && fevg < 50) scoreCardiaque += 2;
-  if (og === 'yes') scoreCardiaque += 1;
-  if (ee && ee >= 14) scoreCardiaque += 2;
-  if (vci === 'yes') scoreCardiaque += 1;
-  if (vciCollapsus === 'reduced') scoreCardiaque += 1;
-  if (htp === 'postcapillary') scoreCardiaque += 2;
-  if (htp === 'precapillary') scorePulmonaire += 2;
+  if (infection === 'pulmonary') {
+    pulmonaryScore += 1;
+  }
 
-  if (blines === 'diffuse') scoreCardiaque += 2;
-  if (blines === 'focal') scorePulmonaire += 2;
-  if (blines === 'absent') scorePulmonaire += 1;
+  if (filling === 'cardiac') {
+    cardiacScore += 1;
+  }
 
-  if (plevre === 'regular') scoreCardiaque += 1;
-  if (plevre === 'irregular') scorePulmonaire += 2;
+  if (valve === 'cardiac') {
+    cardiacScore += 1;
+    alerts.push(alertBox('warning', 'Valvulopathie significative : peut expliquer ou aggraver un œdème pulmonaire cardiogénique.'));
+  }
 
-  if (condensation === 'yes') scorePulmonaire += 2;
-  if (fievre === 'yes') scorePulmonaire += 1;
+  let diagnosis = 'Profil indéterminé';
+  let klass = 'neutral';
+  let interpretation = 'Données mixtes ou insuffisantes. Corréler avec la clinique, ECG, BNP/NT-proBNP, troponine, gaz du sang, radiographie/TDM thoracique et échographie répétée.';
 
-  let diagnostic = "";
-  let interpretation = "";
-  let klass = "neutral";
-
-  if (scoreCardiaque >= scorePulmonaire + 3) {
-    diagnostic = "Profil en faveur d’un œdème pulmonaire cardiogénique";
-    interpretation = "Les données orientent vers une élévation des pressions de remplissage gauches ou une cardiopathie gauche responsable.";
-    klass = "bad";
-  } else if (scorePulmonaire >= scoreCardiaque + 3) {
-    diagnostic = "Profil en faveur d’une origine pulmonaire / non cardiogénique";
-    interpretation = "Les données orientent davantage vers une atteinte pulmonaire primitive : pneumopathie, SDRA, atélectasie, embolie pulmonaire selon le contexte.";
-    klass = "warn";
+  if (cardiacScore >= pulmonaryScore + 2) {
+    diagnosis = 'Œdème pulmonaire probablement cardiogénique';
+    klass = 'warning';
+    interpretation = 'Le profil oriente vers une élévation des pressions de remplissage gauches : insuffisance cardiaque aiguë, OAP hypertensif, dysfonction VG ischémique ou valvulopathie significative.';
+  } else if (pulmonaryScore >= cardiacScore + 2) {
+    diagnosis = 'Origine probablement pulmonaire / non cardiogénique';
+    klass = 'warning';
+    interpretation = 'Le profil oriente vers une cause pulmonaire : pneumonie, SDRA, exacerbation BPCO/asthme, embolie pulmonaire ou atteinte pulmonaire primitive.';
   } else {
-    diagnostic = "Profil mixte ou indéterminé";
-    interpretation = "Les éléments sont discordants ou insuffisants. Il faut intégrer la clinique, l’ECG, la biologie, la radiographie/TDM et répéter l’évaluation échographique si nécessaire.";
-    klass = "neutral";
+    diagnosis = 'Origine mixte ou incertaine';
+    klass = 'neutral';
+    interpretation = 'Aucune dominance nette. Les causes cardiaques et pulmonaires peuvent coexister ; réévaluer par échographie cardiaque et pulmonaire, biologie et imagerie thoracique.';
   }
 
-  s('ope_resultats', `
-    <div><b>Score cardiaque</b><br>${scoreCardiaque}</div>
-    <div><b>Score pulmonaire</b><br>${scorePulmonaire}</div>
-  `);
+  s('peo_results',
+    metric('Score cardiaque', cardiacScore, '') +
+    metric('Score pulmonaire', pulmonaryScore, '') +
+    metric('Éléments neutres', neutralScore, '') +
+    metric('Profil probable', diagnosis, '')
+  );
 
-  status('ope_statut', klass, diagnostic);
+  s('peo_alerts', alerts.join(''));
+  status('peo_status', klass, diagnosis);
 
-  s('ope_alertes', alertes.length ? alertes.map(a => `<div class="alert">${a}</div>`).join('') : '');
-
-  s('ope_conclusion',
-    `Évaluation de l’œdème pulmonaire :\n${diagnostic}.\n${interpretation}\nScore cardiaque : ${scoreCardiaque} | Score pulmonaire : ${scorePulmonaire}`
+  s('peo_conclusion',
+    `Évaluation de l’œdème pulmonaire :<br><strong>${diagnosis}</strong><br>${interpretation}<br><br>Score cardiaque : ${cardiacScore}. Score pulmonaire : ${pulmonaryScore}.`
   );
 }
 
 function reinitialiserOedemePulmonaire() {
-  resetFields([
-    'ope_age', 'ope_pas', 'ope_spo2',
-    'ope_fevg', 'ope_ee'
-  ]);
-
   [
-    'ope_fievre', 'ope_douleur', 'ope_tj', 'ope_oedemes',
-    'ope_og', 'ope_vci', 'ope_vci_collapsus', 'ope_htp',
-    'ope_blines', 'ope_plevre', 'ope_condensation'
+    'peo_bp',
+    'peo_history',
+    'peo_infection',
+    'peo_orthopnea',
+    'peo_congestion',
+    'peo_lvef',
+    'peo_filling',
+    'peo_la',
+    'peo_valve',
+    'peo_rv',
+    'peo_blines',
+    'peo_pleura',
+    'peo_consolidation'
   ].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.value = 'unknown';
+    if (el) el.value = '';
   });
 
-  s('ope_resultats', '');
-  s('ope_alertes', '');
-  status('ope_statut', 'neutral', 'En attente des données...');
-  s('ope_conclusion', 'Remplissez les champs puis calculez.');
+  s('peo_results', '');
+  s('peo_alerts', '');
+  status('peo_status', 'neutral', 'En attente des données...');
+  s('peo_conclusion', 'Remplissez les champs puis lancez le calcul.');
 }
   </script>
 </body>
