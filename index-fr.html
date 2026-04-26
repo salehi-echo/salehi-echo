@@ -565,7 +565,7 @@
     </select>
 
     <label>Ligne pleurale</label>
-    <select id="peo_pleura">
+    <select id="peo_pleural">
       <option value="">Sélectionner</option>
       <option value="cardiac">Ligne pleurale régulière</option>
       <option value="pulmonary">Ligne pleurale irrégulière / épaissie</option>
@@ -1172,20 +1172,28 @@ function calculerOedemePulmonaire() {
 }
 
 function reinitialiserOedemePulmonaire() {
-  [
-    'peo_bp',
-    'peo_history',
-    'peo_infection',
-    'peo_orthopnea',
-    'peo_congestion',
+  resetFields([
+    'peo_age',
+    'peo_sbp',
+    'peo_spo2',
     'peo_lvef',
-    'peo_filling',
     'peo_la',
-    'peo_valve',
+    'peo_ee',
+    'peo_ivc',
+    'peo_ivc_collapse',
+    'peo_blines'
+  ]);
+
+  [
+    'peo_fever',
+    'peo_crackles',
+    'peo_jvp',
+    'peo_edema',
+    'peo_chest_pain',
+    'peo_pleural',
+    'peo_consolidation',
     'peo_rv',
-    'peo_blines',
-    'peo_pleura',
-    'peo_consolidation'
+    'peo_valve'
   ].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
@@ -1194,7 +1202,7 @@ function reinitialiserOedemePulmonaire() {
   s('peo_results', '');
   s('peo_alerts', '');
   status('peo_status', 'neutral', 'En attente des données...');
-  s('peo_conclusion', 'Remplissez les champs puis calculez.');
+  s('peo_conclusion', 'Remplissez les champs puis lancez le calcul.');
 }
 function showPanel(panelId) {
   document.querySelectorAll(".panel").forEach(panel => {
