@@ -713,9 +713,9 @@
 </section>
     
   <section id="pe" class="panel">
-  <h2>Embolie pulmonaire - Echo RV Strain</h2>
+  <h2>Pulmonary Embolism - Echo RV Strain</h2>
   <p class="sub">
-    Module d’évaluation rapide du retentissement droit en cas de suspicion d’embolie pulmonaire.
+    Rapid assessment of right-heart impact in suspected pulmonary embolism.
   </p>
 
   <div class="card">
@@ -737,6 +737,74 @@
   <select id="pe_shock">
     <option value="no">No</option>
     <option value="yes">Yes</option>
+  </select>
+</div>
+
+<div class="card">
+  <h3>Pre-test probability: Revised Geneva Score</h3>
+
+  <label>Previous DVT or PE</label>
+  <select id="pe_geneva_prev_vte">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>Surgery or fracture within the last month</label>
+  <select id="pe_geneva_surgery">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>Active cancer</label>
+  <select id="pe_geneva_cancer">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>Unilateral lower limb pain</label>
+  <select id="pe_geneva_unilateral_pain">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>Hemoptysis</label>
+  <select id="pe_geneva_hemoptysis">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+
+  <label>Pain on lower limb deep venous palpation and unilateral edema</label>
+  <select id="pe_geneva_deep_pain_edema">
+    <option value="no">No</option>
+    <option value="yes">Yes</option>
+  </select>
+</div>
+
+<div class="card">
+  <h3>DVT / Embolic source assessment</h3>
+
+  <label>Clinical signs of lower limb DVT</label>
+  <select id="pe_dvt_symptoms">
+    <option value="none">No clear lower limb signs</option>
+    <option value="unilateral_pain">Unilateral lower limb pain</option>
+    <option value="unilateral_edema">Unilateral lower limb edema</option>
+    <option value="pain_and_edema">Pain + unilateral edema</option>
+  </select>
+
+  <label>Venous compression ultrasound</label>
+  <select id="pe_dvt_compression">
+    <option value="not_done">Not done</option>
+    <option value="compressible">Veins compressible</option>
+    <option value="noncompressible_distal">Distal non-compressible vein</option>
+    <option value="noncompressible_proximal">Proximal non-compressible vein</option>
+  </select>
+
+  <label>Side</label>
+  <select id="pe_dvt_side">
+    <option value="unknown">Unknown / not applicable</option>
+    <option value="right">Right</option>
+    <option value="left">Left</option>
+    <option value="bilateral">Bilateral</option>
   </select>
 </div>
 
@@ -810,7 +878,7 @@
 </div>
 
 <div class="card">
-  <h3>Conduite à tenir</h3>
+  <h3>Management</h3>
   <div id="pe_conclusion" class="summary-box">Fill the fields and calculate.</div>
 </div>
 </section>
@@ -1837,6 +1905,15 @@ function resetFunction() {
   const hr = g('pe_hr');
   const spo2 = g('pe_spo2');
   const shock = document.getElementById('pe_shock').value;
+  const prevVte = document.getElementById('pe_geneva_prev_vte').value;
+  const recentSurgery = document.getElementById('pe_geneva_surgery').value;
+  const activeCancer = document.getElementById('pe_geneva_cancer').value;
+  const unilateralPain = document.getElementById('pe_geneva_unilateral_pain').value;
+  const hemoptysis = document.getElementById('pe_geneva_hemoptysis').value;
+  const deepPainEdema = document.getElementById('pe_geneva_deep_pain_edema').value;
+  const dvtSymptoms = document.getElementById('pe_dvt_symptoms').value;
+  const dvtCompression = document.getElementById('pe_dvt_compression').value;
+  const dvtSide = document.getElementById('pe_dvt_side').value;
 
   const rvlv = g('pe_rvlv');
   const tapse = g('pe_tapse');
@@ -1851,6 +1928,51 @@ function resetFunction() {
   const bnp = document.getElementById('pe_bnp').value;
 
   let alerts = [];
+
+  let geneva = 0;
+  if (age !== null && age > 65) geneva += 1;
+  if (prevVte === 'yes') geneva += 3;
+  if (recentSurgery === 'yes') geneva += 2;
+  if (activeCancer === 'yes') geneva += 2;
+  if (unilateralPain === 'yes') geneva += 3;
+  if (hemoptysis === 'yes') geneva += 2;
+  if (hr !== null && hr >= 75 && hr <= 94) geneva += 3;
+  if (hr !== null && hr >= 95) geneva += 5;
+  if (deepPainEdema === 'yes') geneva += 4;
+
+  let genevaProbability = 'Low clinical probability';
+  let genevaAdvice = 'Low probability: if stable, D-dimers first; CTPA if positive or suspicion remains high.';
+  if (geneva >= 11) {
+    genevaProbability = 'High clinical probability';
+    genevaAdvice = 'High probability: CTPA is generally indicated directly if stable and transportable.';
+  } else if (geneva >= 4) {
+    genevaProbability = 'Intermediate clinical probability';
+    genevaAdvice = 'Intermediate probability: D-dimers or CTPA depending on clinical context and availability.';
+  }
+  const genevaTwoLevel = geneva <= 5 ? 'PE unlikely' : 'PE likely';
+
+  const dvtSymptomLabels = {
+    none: 'No clear lower limb signs',
+    unilateral_pain: 'Unilateral lower limb pain',
+    unilateral_edema: 'Unilateral lower limb edema',
+    pain_and_edema: 'Pain + unilateral edema'
+  };
+  const dvtCompressionLabels = {
+    not_done: 'Venous compression ultrasound not performed',
+    compressible: 'Veins compressible',
+    noncompressible_distal: 'Distal non-compressible vein',
+    noncompressible_proximal: 'Proximal non-compressible vein'
+  };
+  const dvtSideLabels = {
+    unknown: 'Unknown / not applicable',
+    right: 'Right',
+    left: 'Left',
+    bilateral: 'Bilateral'
+  };
+  let embolicSource = 'Not documented';
+  if (dvtCompression === 'noncompressible_proximal') embolicSource = `Proximal DVT confirmed (${dvtSideLabels[dvtSide]})`;
+  if (dvtCompression === 'noncompressible_distal') embolicSource = `Distal DVT detected (${dvtSideLabels[dvtSide]})`;
+  if (dvtCompression === 'compressible') embolicSource = 'No proximal DVT detected on evaluated segments';
 
   let spesi = 0;
   if (age !== null && age > 80) spesi++;
@@ -1898,6 +2020,22 @@ function resetFunction() {
     klass = 'warning';
   }
 
+  if (shock === 'yes' || (sbp !== null && sbp < 90)) {
+    alerts.push(alertBox('danger', 'Hemodynamic instability: do not delay urgent management; bedside echo may guide urgent strategy.'));
+  }
+
+  if (geneva >= 11 && shock !== 'yes' && !(sbp !== null && sbp < 90)) {
+    alerts.push(alertBox('warning', 'High pre-test probability: CTPA is generally indicated directly if stable and transportable.'));
+  }
+
+  if (dvtCompression === 'noncompressible_proximal') {
+    alerts.push(alertBox('danger', 'Proximal DVT confirmed: strong evidence for venous thromboembolism. In suspected PE, this may support treatment when CTPA is unavailable, unsafe, or delayed.'));
+  } else if (dvtCompression === 'noncompressible_distal') {
+    alerts.push(alertBox('warning', 'Distal DVT detected: interpret with clinical context and local protocol; evaluate extension risk and PE suspicion.'));
+  } else if (dvtCompression === 'compressible') {
+    alerts.push(alertBox('success', 'Compressible veins: no proximal DVT detected on the evaluated segments, but this does not exclude PE.'));
+  }
+
   if (dshape === 'systolic') {
     alerts.push(alertBox('warning', 'Systolic D-shape: significant RV pressure overload.'));
   }
@@ -1932,8 +2070,15 @@ function resetFunction() {
     conclusion =
       'Low-risk PE profile from entered data. If diagnosis is confirmed and no exclusion criteria exist, outpatient pathway may be considered according to local protocol.';
   }
+  conclusion += ' ' + genevaAdvice;
 
   s('pe_results',
+    metric('Revised Geneva Score', fmt(geneva, 0), 'points') +
+    metric('Pre-test probability', genevaProbability, '') +
+    metric('Two-level model', genevaTwoLevel, '') +
+    metric('DVT assessment', dvtSymptomLabels[dvtSymptoms], '') +
+    metric('Venous ultrasound', dvtCompressionLabels[dvtCompression], '') +
+    metric('Embolic source', embolicSource, '') +
     metric('sPESI partial', fmt(spesi, 0), 'points') +
     metric('RV strain score', fmt(rvScore, 0), '') +
     metric('RV dysfunction', rvDysfunction ? 'Yes' : 'No', '') +

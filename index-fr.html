@@ -881,6 +881,74 @@
 </div>
 
 <div class="card">
+  <h3>Probabilité pré-test : score de Genève révisé</h3>
+
+  <label>Antécédent de TVP ou d’EP</label>
+  <select id="pe_geneva_prev_vte">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>Chirurgie ou fracture dans le dernier mois</label>
+  <select id="pe_geneva_surgery">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>Cancer actif</label>
+  <select id="pe_geneva_cancer">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>Douleur unilatérale d’un membre inférieur</label>
+  <select id="pe_geneva_unilateral_pain">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>Hémoptysie</label>
+  <select id="pe_geneva_hemoptysis">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+
+  <label>Douleur à la palpation veineuse profonde + œdème unilatéral</label>
+  <select id="pe_geneva_deep_pain_edema">
+    <option value="no">Non</option>
+    <option value="yes">Oui</option>
+  </select>
+</div>
+
+<div class="card">
+  <h3>TVP / Recherche de source emboligène</h3>
+
+  <label>Signes cliniques de TVP des membres inférieurs</label>
+  <select id="pe_dvt_symptoms">
+    <option value="none">Aucun signe évident des membres inférieurs</option>
+    <option value="unilateral_pain">Douleur unilatérale d’un membre inférieur</option>
+    <option value="unilateral_edema">Œdème unilatéral d’un membre inférieur</option>
+    <option value="pain_and_edema">Douleur + œdème unilatéral</option>
+  </select>
+
+  <label>Échographie veineuse compressive</label>
+  <select id="pe_dvt_compression">
+    <option value="not_done">Non réalisée</option>
+    <option value="compressible">Veines compressibles</option>
+    <option value="noncompressible_distal">Veine distale non compressible</option>
+    <option value="noncompressible_proximal">Veine proximale non compressible</option>
+  </select>
+
+  <label>Côté</label>
+  <select id="pe_dvt_side">
+    <option value="unknown">Inconnu / non applicable</option>
+    <option value="right">Droit</option>
+    <option value="left">Gauche</option>
+    <option value="bilateral">Bilatéral</option>
+  </select>
+</div>
+
+<div class="card">
   <h3>Retentissement droit à l’écho</h3>
 
   <label>Rapport VD/VG</label>
@@ -1729,6 +1797,15 @@ function resetFunction() {
   const hr = g('pe_hr');
   const spo2 = g('pe_spo2');
   const shock = document.getElementById('pe_shock').value;
+  const prevVte = document.getElementById('pe_geneva_prev_vte').value;
+  const recentSurgery = document.getElementById('pe_geneva_surgery').value;
+  const activeCancer = document.getElementById('pe_geneva_cancer').value;
+  const unilateralPain = document.getElementById('pe_geneva_unilateral_pain').value;
+  const hemoptysis = document.getElementById('pe_geneva_hemoptysis').value;
+  const deepPainEdema = document.getElementById('pe_geneva_deep_pain_edema').value;
+  const dvtSymptoms = document.getElementById('pe_dvt_symptoms').value;
+  const dvtCompression = document.getElementById('pe_dvt_compression').value;
+  const dvtSide = document.getElementById('pe_dvt_side').value;
 
   const rvlv = g('pe_rvlv');
   const tapse = g('pe_tapse');
@@ -1743,6 +1820,51 @@ function resetFunction() {
   const bnp = document.getElementById('pe_bnp').value;
 
   let alerts = [];
+
+  let geneva = 0;
+  if (age !== null && age > 65) geneva += 1;
+  if (prevVte === 'yes') geneva += 3;
+  if (recentSurgery === 'yes') geneva += 2;
+  if (activeCancer === 'yes') geneva += 2;
+  if (unilateralPain === 'yes') geneva += 3;
+  if (hemoptysis === 'yes') geneva += 2;
+  if (hr !== null && hr >= 75 && hr <= 94) geneva += 3;
+  if (hr !== null && hr >= 95) geneva += 5;
+  if (deepPainEdema === 'yes') geneva += 4;
+
+  let genevaProbability = 'Probabilité clinique faible';
+  let genevaAdvice = 'Probabilité faible : si patient stable, D-dimères en première intention ; angio-TDM si D-dimères positifs ou suspicion clinique persistante.';
+  if (geneva >= 11) {
+    genevaProbability = 'Probabilité clinique forte';
+    genevaAdvice = 'Probabilité forte : angio-TDM thoracique généralement indiquée d’emblée si patient stable et transportable.';
+  } else if (geneva >= 4) {
+    genevaProbability = 'Probabilité clinique intermédiaire';
+    genevaAdvice = 'Probabilité intermédiaire : D-dimères ou angio-TDM selon contexte clinique, disponibilité et niveau de suspicion.';
+  }
+  const genevaTwoLevel = geneva <= 5 ? 'EP improbable' : 'EP probable';
+
+  const dvtSymptomLabels = {
+    none: 'Aucun signe évident des membres inférieurs',
+    unilateral_pain: 'Douleur unilatérale d’un membre inférieur',
+    unilateral_edema: 'Œdème unilatéral d’un membre inférieur',
+    pain_and_edema: 'Douleur + œdème unilatéral'
+  };
+  const dvtCompressionLabels = {
+    not_done: 'Échographie veineuse compressive non réalisée',
+    compressible: 'Veines compressibles',
+    noncompressible_distal: 'Veine distale non compressible',
+    noncompressible_proximal: 'Veine proximale non compressible'
+  };
+  const dvtSideLabels = {
+    unknown: 'Inconnu / non applicable',
+    right: 'Droit',
+    left: 'Gauche',
+    bilateral: 'Bilatéral'
+  };
+  let embolicSource = 'Non documentée';
+  if (dvtCompression === 'noncompressible_proximal') embolicSource = `TVP proximale confirmée (${dvtSideLabels[dvtSide]})`;
+  if (dvtCompression === 'noncompressible_distal') embolicSource = `TVP distale détectée (${dvtSideLabels[dvtSide]})`;
+  if (dvtCompression === 'compressible') embolicSource = 'Pas de TVP proximale détectée sur les segments explorés';
 
   let spesi = 0;
   if (age !== null && age > 80) spesi++;
@@ -1790,6 +1912,22 @@ function resetFunction() {
     klass = 'warning';
   }
 
+  if (shock === 'yes' || (sbp !== null && sbp < 90)) {
+    alerts.push(alertBox('danger', 'Instabilité hémodynamique : ne pas retarder la prise en charge urgente ; l’échographie au lit peut guider la stratégie.'));
+  }
+
+  if (geneva >= 11 && shock !== 'yes' && !(sbp !== null && sbp < 90)) {
+    alerts.push(alertBox('warning', 'Probabilité pré-test forte : angio-TDM thoracique généralement indiquée d’emblée si patient stable et transportable.'));
+  }
+
+  if (dvtCompression === 'noncompressible_proximal') {
+    alerts.push(alertBox('danger', 'TVP proximale confirmée : argument majeur en faveur d’une maladie thromboembolique veineuse. En cas de suspicion d’EP, cela peut appuyer la décision thérapeutique si l’angio-TDM est indisponible, non réalisable ou retardée.'));
+  } else if (dvtCompression === 'noncompressible_distal') {
+    alerts.push(alertBox('warning', 'TVP distale détectée : interprétation selon le contexte clinique et le protocole local ; évaluer le risque d’extension et la suspicion d’EP.'));
+  } else if (dvtCompression === 'compressible') {
+    alerts.push(alertBox('success', 'Veines compressibles : pas de TVP proximale détectée sur les segments explorés, mais cela n’exclut pas une EP.'));
+  }
+
   if (dshape === 'systolic') {
     alerts.push(alertBox('warning', 'Aspect en D systolique : surcharge de pression VD significative.'));
   }
@@ -1824,8 +1962,15 @@ function resetFunction() {
     conclusion =
       'Profil d’EP à faible risque selon les données saisies. Si le diagnostic est confirmé et en l’absence de critères d’exclusion, une prise en charge ambulatoire peut être envisagée selon le protocole local.';
   }
+  conclusion += ' ' + genevaAdvice;
 
   s('pe_results',
+    metric('Score de Genève révisé', fmt(geneva, 0), 'points') +
+    metric('Probabilité pré-test', genevaProbability, '') +
+    metric('Modèle à deux niveaux', genevaTwoLevel, '') +
+    metric('Évaluation TVP', dvtSymptomLabels[dvtSymptoms], '') +
+    metric('Échographie veineuse', dvtCompressionLabels[dvtCompression], '') +
+    metric('Source emboligène', embolicSource, '') +
     metric('sPESI partiel', fmt(spesi, 0), 'points') +
     metric('Score de retentissement VD', fmt(rvScore, 0), '') +
     metric('Dysfonction VD', rvDysfunction ? 'Oui' : 'Non', '') +
