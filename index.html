@@ -31,20 +31,48 @@
     .app-header {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px;
+      gap: 14px;
+      padding: 14px 18px;
+      background: rgba(255,255,255,.96);
+      border-bottom: 1px solid rgba(217,225,236,.85);
+      box-shadow: 0 10px 28px rgba(15,23,42,.06);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+    }
+
+    .app-logo-shell {
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 44px;
       background: #ffffff;
-      border-bottom: 1px solid #eee;
+      border: 1px solid rgba(217,225,236,.9);
+      border-radius: 14px;
+      box-shadow: 0 8px 18px rgba(15,41,95,.12);
     }
 
     .app-logo {
-      height: 50px;
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
     }
 
-    .app-header h1 {
-      font-size: 20px;
-      color: #0b3c5d;
+    .app-title h1 {
+      font-size: 19px;
+      color: #10295f;
       margin: 0;
+      line-height: 1.1;
+    }
+
+    .app-title p {
+      margin: 4px 0 0;
+      color: #5f6b7a;
+      font-size: 13px;
+      font-weight: 700;
     }
 
     .topbar {
@@ -106,6 +134,50 @@
       padding: 20px;
       box-shadow: 0 8px 20px rgba(15,23,42,.05);
       margin-bottom: 16px;
+    }
+
+    .home-hero {
+      margin: 18px 0 16px;
+      padding: 26px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at top right, rgba(34,211,238,.24), transparent 34%),
+        linear-gradient(135deg, #10295f 0%, #173a8a 54%, #0f766e 100%);
+      color: #ffffff;
+      box-shadow: 0 20px 48px rgba(16,41,95,.22);
+    }
+
+    .home-hero h2 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      line-height: 1.15;
+    }
+
+    .home-hero p {
+      max-width: 760px;
+      margin: 0;
+      color: rgba(255,255,255,.88);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .home-card {
+      min-height: 0;
+      border-radius: 22px;
+      padding: 22px;
+      border: 1px solid rgba(217,225,236,.9);
+      box-shadow: 0 16px 38px rgba(16,41,95,.1);
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    }
+
+    .home-card h2 {
+      color: #10295f;
+      margin-bottom: 8px;
+    }
+
+    .home-card .sub {
+      min-height: 72px;
+      margin-bottom: 10px;
     }
 
     .grid-2 {
@@ -170,9 +242,16 @@
       color: white;
     }
 
-    .secondary {
-      background: #e7edf7;
-      color: var(--text);
+    .secondary,
+    .btn.secondary {
+      background: #eef3f8;
+      color: #10295f;
+      border: 1px solid #d9e1ec;
+    }
+
+    .secondary:hover,
+    .btn.secondary:hover {
+      background: #dbeafe;
     }
 
     .danger-btn {
@@ -321,9 +400,8 @@
   display: block;
 }  
     .lang-switch {
-  position: fixed;
-  right: 18px;
-  top: 18px;
+  position: static;
+  margin-left: auto;
   z-index: 9999;
   background: white;
   color: var(--primary);
@@ -341,9 +419,31 @@
 }
 
 @media (max-width: 600px) {
+  .app-header {
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .app-title h1 {
+    font-size: 17px;
+  }
+
+  .app-title p {
+    font-size: 12px;
+  }
+
+  .home-hero {
+    padding: 22px 18px;
+    border-radius: 20px;
+  }
+
+  .home-hero h2 {
+    font-size: 24px;
+  }
+
   .lang-switch {
-    right: 12px;
-    top: 12px;
+    margin-left: auto;
     padding: 7px 12px;
     font-size: 13px;
   }
@@ -352,30 +452,39 @@
 </head>
 <body>
   <div class="app-header">
-    <img src="assets/salehi-logo.png" alt="Salehi Logo" class="app-logo">
-    <h1>Salehi Cardio Assistant</h1>
+    <span class="app-logo-shell">
+      <img src="assets/salehi-logo.png" alt="Salehi Logo" class="app-logo">
+    </span>
+    <div class="app-title">
+      <h1>Salehi Cardio Assistant</h1>
+      <p>Clinical Cardiology &amp; Echocardiography Assistant</p>
+    </div>
+    <a class="lang-switch" href="index-fr.html">FR</a>
   </div>
-  <a class="lang-switch" href="index-fr.html">FR</a>
 
 <button id="backBtn" class="back-btn" style="display:none;">← Back</button>
      <section id="dashboard" class="panel active">
+  <div class="home-hero">
+    <h2>Clinical Echo &amp; Decision Support</h2>
+    <p>Echo measurements, hemodynamics, and emergency diagnostic orientation in one fast bedside tool.</p>
+  </div>
   <div class="grid-2">
-    <div class="card">
+    <div class="card home-card">
       <h2>Echo Measurement</h2>
       <p class="sub">
-        Module de mesures échocardiographiques : valvulopathies, PAPs, fonction VD/VG,
-        fonction diastolique et génération de compte rendu.
+        Focused echocardiography calculators for valve disease, PAPs, ventricular function,
+        diastology, and structured bedside conclusions.
       </p>
       <div class="actions">
         <button class="primary module-btn" data-tab="echo-menu">Open Echo Measurement</button>
       </div>
     </div>
 
-    <div class="card">
+    <div class="card home-card">
       <h2>Diagnostic Engine</h2>
       <p class="sub">
-        Module d’aide à l’orientation diagnostique en urgence : embolie pulmonaire,
-        tamponnade, choc et situations critiques.
+        Emergency diagnostic orientation for pulmonary embolism, tamponade, shock,
+        and critical cardiopulmonary presentations.
       </p>
       <div class="actions">
         <button class="primary module-btn" data-tab="diagnostic">Open Diagnostic Engine</button>
@@ -502,7 +611,7 @@
           <label>TR velocity (m/s) (optional)</label><input id="as_trv" type="number" step="0.1">
           <div class="actions">
             <button class="primary" onclick="calculateAS()">Calculate AS</button>
-            <button class="secondary" onclick="resetAS()">Reset</button>
+            <button type="button" class="btn secondary" onclick="resetPanel('as')">Reset</button>
           </div>
         </div>
       </div>
@@ -545,7 +654,7 @@
           </select>
           <div class="actions">
             <button class="primary" onclick="calculateMR()">Calculate MR</button>
-            <button class="secondary" onclick="resetMR()">Reset</button>
+            <button type="button" class="btn secondary" onclick="resetPanel('mr')">Reset</button>
           </div>
         </div>
 
@@ -577,7 +686,7 @@
           </select>
           <div class="actions">
             <button class="primary" onclick="calculateMS()">Calculate MS</button>
-            <button class="secondary" onclick="resetMS()">Reset</button>
+            <button type="button" class="btn secondary" onclick="resetPanel('ms')">Reset</button>
           </div>
         </div>
 
@@ -607,7 +716,7 @@
           </select>
           <div class="actions">
             <button class="primary" onclick="calculateAR()">Calculate AR</button>
-            <button class="secondary" onclick="resetAR()">Reset</button>
+            <button type="button" class="btn secondary" onclick="resetPanel('ar')">Reset</button>
           </div>
         </div>
 
@@ -638,7 +747,7 @@
           <label>Vena contracta TR (mm) (optional)</label><input id="tr_vc" type="number" step="0.1">
           <div class="actions">
             <button class="primary" onclick="calculateTR()">Calculate TR/PAPs</button>
-            <button class="secondary" onclick="resetTR()">Reset</button>
+            <button type="button" class="btn secondary" onclick="resetPanel('tr')">Reset</button>
           </div>
         </div>
 
@@ -716,7 +825,7 @@
 
       <div class="actions">
         <button class="primary" onclick="calculateFunction()">Calculate Function</button>
-        <button class="secondary" onclick="resetFunction()">Reset</button>
+        <button type="button" class="btn secondary" onclick="resetPanel('function')">Reset</button>
       </div>
     </div>
 
@@ -1408,6 +1517,24 @@ if (backBtn) {
       ids.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
+      });
+    }
+
+    function resetPanel(panelId) {
+      const panel = document.getElementById(panelId);
+      if (!panel) return;
+
+      panel.querySelectorAll('input, textarea, select').forEach(el => {
+        if (el.type === 'checkbox' || el.type === 'radio') {
+          el.checked = false;
+        } else {
+          el.value = '';
+        }
+      });
+
+      panel.querySelectorAll('.result, .results, .result-grid, .alerts, .summary-box, .status-box, [id$="_result"], [id$="_results"]').forEach(el => {
+        el.innerHTML = '';
+        el.textContent = '';
       });
     }
 

@@ -10,6 +10,24 @@ function getValue(id) {
   return isNaN(val) ? null : val;
 }
 
+function resetPanel(panelId) {
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+
+  panel.querySelectorAll('input, textarea, select').forEach(el => {
+    if (el.type === 'checkbox' || el.type === 'radio') {
+      el.checked = false;
+    } else {
+      el.value = '';
+    }
+  });
+
+  panel.querySelectorAll('.result, .results, .result-grid, .alerts, .summary-box, .status-box, [id$="_result"], [id$="_results"]').forEach(el => {
+    el.innerHTML = '';
+    el.textContent = '';
+  });
+}
+
 function metricCard(label, value, unit = "") {
   return `
     <div class="metric">
