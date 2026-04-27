@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Salehi EchoHemodynamics</title>
+  <title>Salehi Cardio Assistant</title>
   <style>
     :root {
       --bg: #f3f6fb;
@@ -26,6 +26,25 @@
       font-family: Arial, Helvetica, sans-serif;
       background: var(--bg);
       color: var(--text);
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #ffffff;
+      border-bottom: 1px solid #eee;
+    }
+
+    .app-logo {
+      height: 50px;
+    }
+
+    .app-header h1 {
+      font-size: 20px;
+      color: #0b3c5d;
+      margin: 0;
     }
 
     .topbar {
@@ -331,12 +350,11 @@
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <a class="lang-switch" href="index.html">EN</a>
-    <h1>Salehi EchoHemodynamics</h1>
-    <p>Assistant clinique d’échocardiographie</p>
-    <small>Développé par Dr Salehi · Résident en cardiologie</small>
-  </header>
+  <div class="app-header">
+    <img src="assets/salehi-logo.png" alt="Salehi Logo" class="app-logo">
+    <h1>Salehi Cardio Assistant</h1>
+  </div>
+  <a class="lang-switch" href="index.html">EN</a>
 
 <button id="backBtn" class="back-btn" style="display:none;">← Retour</button>
      <section id="dashboard" class="panel active">

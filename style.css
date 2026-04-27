@@ -23,6 +23,25 @@ body {
   color: var(--text);
 }
 
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #ffffff;
+  border-bottom: 1px solid #eee;
+}
+
+.app-logo {
+  height: 50px;
+}
+
+.app-header h1 {
+  font-size: 20px;
+  color: #0b3c5d;
+  margin: 0;
+}
+
 .topbar {
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: white;
