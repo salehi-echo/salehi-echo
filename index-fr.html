@@ -466,6 +466,64 @@
   .info-btn:hover {
     background: #173a8a;
   }
+
+  .info-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(15, 23, 42, 0.45);
+    z-index: 1000;
+  }
+
+  .info-modal-backdrop.active {
+    display: flex;
+  }
+
+  .info-modal {
+    width: min(640px, 100%);
+    max-height: min(82vh, 760px);
+    overflow: auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+    padding: 22px;
+  }
+
+  .info-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .info-modal-header h3 {
+    margin: 0;
+    color: #18345f;
+    font-size: 20px;
+  }
+
+  .info-modal-close {
+    width: 34px;
+    height: 34px;
+    border: 1px solid #d8e0ec;
+    border-radius: 50%;
+    background: #f7f9fc;
+    color: #24364f;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .info-modal-body {
+    color: #24364f;
+    font-size: 14px;
+    line-height: 1.55;
+    white-space: pre-line;
+  }
   </style>
 </head>
 <body>
@@ -663,7 +721,7 @@
     <div class="card">
       <h3>Données cliniques</h3>
 
-      <label>Pression artérielle / hypertension</label>
+      <label>Pression artérielle / hypertension <button type="button" class="info-btn" onclick="showInfo('edema_bp')">?</button></label>
       <select id="peo_bp">
         <option value="">Sélectionner</option>
         <option value="cardiac">HTA sévère ou poussée hypertensive</option>
@@ -671,7 +729,7 @@
         <option value="pulmonary">Hypotension / choc / contexte septique</option>
       </select>
 
-      <label>Antécédents de cardiopathie</label>
+      <label>Antécédents de cardiopathie <button type="button" class="info-btn" onclick="showInfo('edema_cardiogenic')">?</button></label>
       <select id="peo_history">
         <option value="">Sélectionner</option>
         <option value="cardiac">Insuffisance cardiaque / cardiopathie ischémique / valvulopathie / FA</option>
@@ -679,14 +737,14 @@
         <option value="neutral">Inconnu</option>
       </select>
 
-      <label>Fièvre / infection / contexte BPCO-asthme</label>
+      <label>Fièvre / infection / contexte BPCO-asthme <button type="button" class="info-btn" onclick="showInfo('edema_noncardiogenic')">?</button></label>
       <select id="peo_infection">
         <option value="">Sélectionner</option>
         <option value="pulmonary">Présent</option>
         <option value="neutral">Absent ou incertain</option>
       </select>
 
-      <label>Orthopnée / dyspnée paroxystique nocturne</label>
+      <label>Orthopnée / dyspnée paroxystique nocturne <button type="button" class="info-btn" onclick="showInfo('edema_orthopnea')">?</button></label>
       <select id="peo_orthopnea">
         <option value="">Sélectionner</option>
         <option value="cardiac">Présente</option>
@@ -694,7 +752,7 @@
         <option value="neutral">Incertaine</option>
       </select>
 
-      <label>Œdèmes périphériques / turgescence jugulaire</label>
+      <label>Œdèmes périphériques / turgescence jugulaire <button type="button" class="info-btn" onclick="showInfo('edema_ivc_congestion')">?</button></label>
       <select id="peo_congestion">
         <option value="">Sélectionner</option>
         <option value="cardiac">Présents</option>
@@ -706,7 +764,7 @@
     <div class="card">
       <h3>Données échocardiographiques</h3>
 
-      <label>FEVG</label>
+      <label>FEVG <button type="button" class="info-btn" onclick="showInfo('edema_lv_function')">?</button></label>
       <select id="peo_lvef">
         <option value="">Sélectionner</option>
         <option value="cardiac">FEVG réduite</option>
@@ -714,7 +772,7 @@
         <option value="neutral">Non évaluée</option>
       </select>
 
-      <label>Pressions de remplissage du VG</label>
+      <label>Pressions de remplissage du VG <button type="button" class="info-btn" onclick="showInfo('edema_e_eprime')">?</button></label>
       <select id="peo_filling">
         <option value="">Sélectionner</option>
         <option value="cardiac">Élevées : E/e’ augmenté / profil restrictif</option>
@@ -722,7 +780,7 @@
         <option value="neutral">Indéterminées</option>
       </select>
 
-      <label>Oreillette gauche</label>
+      <label>Oreillette gauche <button type="button" class="info-btn" onclick="showInfo('edema_la')">?</button></label>
       <select id="peo_la">
         <option value="">Sélectionner</option>
         <option value="cardiac">Oreillette gauche dilatée</option>
@@ -730,7 +788,7 @@
         <option value="neutral">Non évaluée</option>
       </select>
 
-      <label>Valvulopathie significative</label>
+      <label>Valvulopathie significative <button type="button" class="info-btn" onclick="showInfo('edema_mr')">?</button></label>
       <select id="peo_valve">
         <option value="">Sélectionner</option>
         <option value="cardiac">IM / RM / RAo / IAo sévère</option>
@@ -738,7 +796,7 @@
         <option value="neutral">Indéterminée</option>
       </select>
 
-      <label>Ventricule droit / profil d’HTP</label>
+      <label>Ventricule droit / profil d’HTP <button type="button" class="info-btn" onclick="showInfo('edema_rv_pattern')">?</button></label>
       <select id="peo_rv">
         <option value="">Sélectionner</option>
         <option value="pulmonary">Dilatation VD / D-shape / strain VD aigu</option>
@@ -751,7 +809,7 @@
   <div class="card">
     <h3>Échographie pulmonaire / signes au lit du malade</h3>
 
-    <label>Distribution des lignes B</label>
+    <label>Distribution des lignes B <button type="button" class="info-btn" onclick="showInfo('edema_blines')">?</button></label>
     <select id="peo_blines">
       <option value="">Sélectionner</option>
       <option value="cardiac">Lignes B diffuses, bilatérales et symétriques</option>
@@ -759,7 +817,7 @@
       <option value="neutral">Non évaluée</option>
     </select>
 
-    <label>Ligne pleurale</label>
+    <label>Ligne pleurale <button type="button" class="info-btn" onclick="showInfo('edema_pleura')">?</button></label>
     <select id="peo_pleura">
       <option value="">Sélectionner</option>
       <option value="cardiac">Ligne pleurale régulière</option>
@@ -767,7 +825,7 @@
       <option value="neutral">Non évaluée</option>
     </select>
 
-    <label>Condensation / bronchogramme aérien</label>
+    <label>Condensation / bronchogramme aérien <button type="button" class="info-btn" onclick="showInfo('edema_consolidation')">?</button></label>
     <select id="peo_consolidation">
       <option value="">Sélectionner</option>
       <option value="pulmonary">Présent</option>
@@ -1007,19 +1065,19 @@
   <div class="card">
   <h3>État clinique</h3>
 
-  <label>Âge</label>
+  <label>Âge <button type="button" class="info-btn" onclick="showInfo('pe_age')">?</button></label>
   <input id="pe_age" type="number" placeholder="ex. 65">
 
-  <label>PAS (mmHg)</label>
+  <label>PAS (mmHg) <button type="button" class="info-btn" onclick="showInfo('pe_hypotension')">?</button></label>
   <input id="pe_sbp" type="number" placeholder="ex. 110">
 
-  <label>Fréquence cardiaque / FC (bpm)</label>
+  <label>Fréquence cardiaque / FC (bpm) <button type="button" class="info-btn" onclick="showInfo('pe_tachycardia')">?</button></label>
   <input id="pe_hr" type="number" placeholder="ex. 115">
 
-  <label>SpO₂ (%)</label>
+  <label>SpO₂ (%) <button type="button" class="info-btn" onclick="showInfo('pe_desaturation')">?</button></label>
   <input id="pe_spo2" type="number" placeholder="ex. 92">
 
-  <label>Choc, vasopresseurs ou arrêt cardiaque ?</label>
+  <label>Choc, vasopresseurs ou arrêt cardiaque ? <button type="button" class="info-btn" onclick="showInfo('pe_hypotension')">?</button></label>
   <select id="pe_shock">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
@@ -1029,37 +1087,37 @@
 <div class="card">
   <h3>Probabilité pré-test : score de Genève révisé</h3>
 
-  <label>Antécédent de TVP ou d’EP</label>
+  <label>Antécédent de TVP ou d’EP <button type="button" class="info-btn" onclick="showInfo('pe_previous_vte')">?</button></label>
   <select id="pe_geneva_prev_vte">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>Chirurgie ou fracture dans le dernier mois</label>
+  <label>Chirurgie ou fracture dans le dernier mois <button type="button" class="info-btn" onclick="showInfo('pe_surgery')">?</button></label>
   <select id="pe_geneva_surgery">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>Cancer actif</label>
+  <label>Cancer actif <button type="button" class="info-btn" onclick="showInfo('pe_cancer')">?</button></label>
   <select id="pe_geneva_cancer">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>Douleur unilatérale d’un membre inférieur</label>
+  <label>Douleur unilatérale d’un membre inférieur <button type="button" class="info-btn" onclick="showInfo('pe_limb_pain')">?</button></label>
   <select id="pe_geneva_unilateral_pain">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>Hémoptysie</label>
+  <label>Hémoptysie <button type="button" class="info-btn" onclick="showInfo('pe_hemoptysis')">?</button></label>
   <select id="pe_geneva_hemoptysis">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>Douleur à la palpation veineuse profonde + œdème unilatéral</label>
+  <label>Douleur à la palpation veineuse profonde + œdème unilatéral <button type="button" class="info-btn" onclick="showInfo('pe_dvt_signs')">?</button></label>
   <select id="pe_geneva_deep_pain_edema">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
@@ -1069,7 +1127,7 @@
 <div class="card">
   <h3>TVP / Recherche de source emboligène</h3>
 
-  <label>Signes cliniques de TVP des membres inférieurs</label>
+  <label>Signes cliniques de TVP des membres inférieurs <button type="button" class="info-btn" onclick="showInfo('pe_dvt_signs')">?</button></label>
   <select id="pe_dvt_symptoms">
     <option value="none">Aucun signe évident des membres inférieurs</option>
     <option value="unilateral_pain">Douleur unilatérale d’un membre inférieur</option>
@@ -1077,7 +1135,7 @@
     <option value="pain_and_edema">Douleur + œdème unilatéral</option>
   </select>
 
-  <label>Échographie veineuse compressive</label>
+  <label>Échographie veineuse compressive <button type="button" class="info-btn" onclick="showInfo('pe_compression_us')">?</button></label>
   <select id="pe_dvt_compression">
     <option value="not_done">Non réalisée</option>
     <option value="compressible">Veines compressibles</option>
@@ -1097,48 +1155,48 @@
 <div class="card">
   <h3>Retentissement droit à l’écho</h3>
 
-  <label>Rapport VD/VG</label>
+  <label>Rapport VD/VG <button type="button" class="info-btn" onclick="showInfo('pe_rv_dilation')">?</button></label>
   <input id="pe_rvlv" type="number" step="0.1" placeholder="ex. 1.1">
 
-  <label>TAPSE (mm)</label>
+  <label>TAPSE (mm) <button type="button" class="info-btn" onclick="showInfo('pe_tapse')">?</button></label>
   <input id="pe_tapse" type="number" placeholder="ex. 15">
 
-  <label>S′ VD (cm/s)</label>
+  <label>S′ VD (cm/s) <button type="button" class="info-btn" onclick="showInfo('pe_rv_sprime')">?</button></label>
   <input id="pe_sprime" type="number" step="0.1" placeholder="ex. 8.5">
 
-  <label>Aspect en D du VG en PSAX</label>
+  <label>Aspect en D du VG en PSAX <button type="button" class="info-btn" onclick="showInfo('pe_d_shape')">?</button></label>
   <select id="pe_dshape">
     <option value="none">Absent</option>
     <option value="systolic">Aspect en D systolique</option>
     <option value="both">Aspect en D systolique + diastolique</option>
   </select>
 
-  <label>Signe de McConnell</label>
+  <label>Signe de McConnell <button type="button" class="info-btn" onclick="showInfo('pe_mcconnell')">?</button></label>
   <select id="pe_mcconnell">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>Vitesse IT (m/s)</label>
+  <label>Vitesse IT (m/s) <button type="button" class="info-btn" onclick="showInfo('pe_tr_velocity')">?</button></label>
   <input id="pe_trv" type="number" step="0.1" placeholder="ex. 3.2">
 
-  <label>Diamètre de la VCI (mm)</label>
+  <label>Diamètre de la VCI (mm) <button type="button" class="info-btn" onclick="showInfo('pe_ivc')">?</button></label>
   <input id="pe_ivc" type="number" placeholder="ex. 22">
 
-  <label>Collapsibilité de la VCI (%)</label>
+  <label>Collapsibilité de la VCI (%) <button type="button" class="info-btn" onclick="showInfo('pe_ivc')">?</button></label>
   <input id="pe_ivc_collapse" type="number" placeholder="ex. 35">
 </div>
 
 <div class="card">
   <h3>Biomarqueurs</h3>
 
-  <label>Troponine</label>
+  <label>Troponine <button type="button" class="info-btn" onclick="showInfo('pe_troponin')">?</button></label>
   <select id="pe_troponin">
     <option value="negative">Négative</option>
     <option value="positive">Positive</option>
   </select>
 
-  <label>BNP / NT-proBNP</label>
+  <label>BNP / NT-proBNP <button type="button" class="info-btn" onclick="showInfo('pe_bnp')">?</button></label>
   <select id="pe_bnp">
     <option value="unknown">Inconnu</option>
     <option value="negative">Négatif</option>
@@ -1178,19 +1236,19 @@
  <div class="card">
   <h3>État clinique</h3>
 
-  <label>Hypotension / choc ?</label>
+  <label>Hypotension / choc ? <button type="button" class="info-btn" onclick="showInfo('tam_hypotension')">?</button></label>
   <select id="tam_shock">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>Tachycardie ?</label>
+  <label>Tachycardie ? <button type="button" class="info-btn" onclick="showInfo('tam_tachycardia')">?</button></label>
   <select id="tam_tachy">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>Pouls paradoxal ?</label>
+  <label>Pouls paradoxal ? <button type="button" class="info-btn" onclick="showInfo('tam_pulsus')">?</button></label>
   <select id="tam_pulsus">
     <option value="unknown">Inconnu</option>
     <option value="no">Non</option>
@@ -1201,7 +1259,7 @@
 <div class="card">
   <h3>Signes échocardiographiques</h3>
 
-  <label>Importance de l’épanchement péricardique</label>
+  <label>Importance de l’épanchement péricardique <button type="button" class="info-btn" onclick="showInfo('tam_effusion')">?</button></label>
   <select id="tam_size">
     <option value="none">Aucun</option>
     <option value="small">Faible</option>
@@ -1209,25 +1267,25 @@
     <option value="large">Abondant</option>
   </select>
 
-  <label>Collapsus de l’oreillette droite</label>
+  <label>Collapsus de l’oreillette droite <button type="button" class="info-btn" onclick="showInfo('tam_ra_collapse')">?</button></label>
   <select id="tam_ra_collapse">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>Collapsus diastolique du ventricule droit</label>
+  <label>Collapsus diastolique du ventricule droit <button type="button" class="info-btn" onclick="showInfo('tam_rv_collapse')">?</button></label>
   <select id="tam_rv_collapse">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>VCI dilatée et peu collapsible</label>
+  <label>VCI dilatée et peu collapsible <button type="button" class="info-btn" onclick="showInfo('tam_ivc')">?</button></label>
   <select id="tam_ivc">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>Variations respiratoires des flux Doppler d’entrée</label>
+  <label>Variations respiratoires des flux Doppler d’entrée <button type="button" class="info-btn" onclick="showInfo('tam_doppler_variation')">?</button></label>
   <select id="tam_doppler">
     <option value="unknown">Inconnu</option>
     <option value="no">Pas de variation significative</option>
@@ -1267,19 +1325,19 @@
  <div class="card">
   <h3>État clinique</h3>
 
-  <label>Hypotension (PAS &lt; 90 mmHg)</label>
+  <label>Hypotension (PAS &lt; 90 mmHg) <button type="button" class="info-btn" onclick="showInfo('shock_hypotension')">?</button></label>
   <select id="shock_hypotension">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>Signes de congestion ?</label>
+  <label>Signes de congestion ? <button type="button" class="info-btn" onclick="showInfo('shock_congestion')">?</button></label>
   <select id="shock_congestion">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>Signes d’hypovolémie ?</label>
+  <label>Signes d’hypovolémie ? <button type="button" class="info-btn" onclick="showInfo('shock_hypovolemia')">?</button></label>
   <select id="shock_hypovolemia">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
@@ -1289,25 +1347,25 @@
 <div class="card">
   <h3>Données échocardiographiques</h3>
 
-  <label>Fonction VG</label>
+  <label>Fonction VG <button type="button" class="info-btn" onclick="showInfo('shock_lv_function')">?</button></label>
   <select id="shock_lv">
     <option value="normal">Normale</option>
     <option value="reduced">Altérée</option>
   </select>
 
-  <label>Dilatation du VD</label>
+  <label>Dilatation du VD <button type="button" class="info-btn" onclick="showInfo('shock_rv')">?</button></label>
   <select id="shock_rv">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>Épanchement péricardique</label>
+  <label>Épanchement péricardique <button type="button" class="info-btn" onclick="showInfo('shock_pericardial_effusion')">?</button></label>
   <select id="shock_effusion">
     <option value="no">Non</option>
     <option value="yes">Oui</option>
   </select>
 
-  <label>État de la VCI</label>
+  <label>État de la VCI <button type="button" class="info-btn" onclick="showInfo('shock_ivc')">?</button></label>
   <select id="shock_ivc">
     <option value="normal">Normale</option>
     <option value="collapsed">Collabée</option>
@@ -1376,13 +1434,94 @@ const infoContent = {
   mitral_sprime: "Onde S’ mitrale latérale :\n- Vitesse systolique en Doppler tissulaire à l’anneau mitral latéral.\n- Reflète la fonction systolique longitudinale du VG.\n- L’alignement angulaire est important.",
   ea_ratio: "Rapport E/A :\n- Doppler pulsé du flux transmitral au bout des feuillets mitraux.\n- Aide à classer le profil de remplissage diastolique.\n- À interpréter avec l’âge, E/e’, le volume OG, la vitesse IT et le rythme.",
   septal_eprime: "e’ septal :\n- Doppler tissulaire à l’anneau mitral septal.\n- Une valeur basse soutient un trouble de relaxation.\n- À utiliser avec e’ latéral et E/e’.",
-  lateral_eprime: "e’ latéral :\n- Doppler tissulaire à l’anneau mitral latéral.\n- Une valeur basse soutient un trouble de relaxation.\n- À utiliser avec e’ septal et E/e’."
+  lateral_eprime: "e’ latéral :\n- Doppler tissulaire à l’anneau mitral latéral.\n- Une valeur basse soutient un trouble de relaxation.\n- À utiliser avec e’ septal et E/e’.",
+  pe_age: { title: "Âge et risque d’embolie pulmonaire", body: "Définition : l’âge intervient dans les scores de probabilité et de sévérité de l’EP.\nIntérêt clinique : un âge avancé augmente le risque de complications et de mortalité.\nÉvaluation : interpréter avec les comorbidités, la pression artérielle, l’oxygénation et les signes de retentissement droit.\nPièges : l’âge seul ne définit pas la gravité ; un patient jeune en choc reste à haut risque." },
+  pe_hypotension: { title: "Hypotension / choc dans l’embolie pulmonaire", body: "Définition : PAS < 90 mmHg ou baisse >= 40 mmHg pendant plus de 15 minutes, non expliquée par arythmie, hypovolémie ou sepsis.\nIntérêt clinique : définit une EP à haut risque si l’EP est suspectée ou confirmée.\nImplication : impose une stratification urgente, une échographie au lit, une anticoagulation si non contre-indiquée et la discussion d’une reperfusion.\nPièges : éliminer infarctus du myocarde, tamponnade, sepsis ou hémorragie." },
+  pe_tachycardia: { title: "Tachycardie dans la suspicion d’EP", body: "Définition : fréquence cardiaque > 100/min, utilisée dans plusieurs scores.\nIntérêt clinique : peut traduire hypoxémie, douleur, activation sympathique ou surcharge du VD.\nÉvaluation : vérifier le rythme, la fièvre, l’anémie, le sepsis et les traitements.\nPièges : une fréquence normale n’exclut pas l’EP, surtout sous bêtabloquant ou chez le sujet âgé." },
+  pe_desaturation: { title: "Désaturation en oxygène", body: "Définition : baisse de la SpO2, souvent < 90 % dans les scores de sévérité.\nIntérêt clinique : suggère une EP cliniquement significative, surtout avec retentissement VD.\nÉvaluation : vérifier la qualité du signal et le niveau d’oxygénothérapie.\nPièges : BPCO, pneumonie, œdème pulmonaire et mauvaise perfusion périphérique peuvent donner le même tableau." },
+  pe_previous_vte: { title: "Antécédent de TVP ou d’EP", body: "Définition : épisode thromboembolique veineux antérieur objectivé.\nIntérêt clinique : augmente la probabilité pré-test et le risque de récidive.\nÉvaluation : préciser anticoagulation, facteurs déclenchants et date de l’épisode.\nPièges : une thrombose veineuse superficielle n’équivaut pas à une TVP/EP." },
+  pe_surgery: { title: "Chirurgie / immobilisation récente", body: "Définition : chirurgie, fracture ou immobilisation importante, surtout dans le dernier mois.\nIntérêt clinique : facteur transitoire majeur de maladie thromboembolique veineuse.\nÉvaluation : rechercher opération, traumatisme, plâtre, alitement ou long voyage.\nPièges : les gestes mineurs sans immobilisation ont un poids plus faible." },
+  pe_cancer: { title: "Cancer actif", body: "Définition : cancer évolutif, métastatique, traitement récent ou prise en charge palliative.\nIntérêt clinique : facteur majeur de TVP/EP et élément du choix anticoagulant.\nÉvaluation : préciser type tumoral, traitement, risque hémorragique et plaquettes.\nPièges : un cancer ancien guéri est moins prédictif qu’une maladie active." },
+  pe_limb_pain: { title: "Douleur unilatérale d’un membre inférieur", body: "Définition : douleur récente d’un mollet ou d’une cuisse évoquant une TVP.\nIntérêt clinique : augmente la probabilité d’EP si compatible avec une thrombose veineuse.\nÉvaluation : rechercher douleur veineuse profonde, asymétrie et œdème.\nPièges : traumatisme, cellulite et insuffisance veineuse chronique peuvent mimer une TVP." },
+  pe_hemoptysis: { title: "Hémoptysie", body: "Définition : expectoration de sang ou de crachats striés de sang.\nIntérêt clinique : augmente la probabilité d’EP, souvent en lien avec un infarctus pulmonaire.\nÉvaluation : quantifier et rechercher une cause pulmonaire alternative.\nPièges : infection, cancer, bronchectasies ou anticoagulation peuvent aussi provoquer une hémoptysie." },
+  pe_dvt_signs: { title: "Signes cliniques de TVP", body: "Définition : œdème unilatéral, douleur à la palpation veineuse profonde, asymétrie du mollet ou trajet veineux douloureux.\nIntérêt clinique : augmente la probabilité pré-test et peut orienter vers la source emboligène.\nÉvaluation : comparer les deux membres et demander une échographie veineuse compressive si besoin.\nPièges : signes peu sensibles et peu spécifiques ; leur absence n’exclut pas la TVP." },
+  pe_compression_us: { title: "Échographie veineuse compressive", body: "Évaluation : compression des veines fémorales et poplitées ; une non-compressibilité soutient une TVP.\nIntérêt clinique : une TVP proximale chez un patient suspect d’EP peut justifier le traitement si l’imagerie thoracique est retardée ou contre-indiquée.\nPièges : la TVP distale est plus facilement manquée ; les séquelles chroniques peuvent simuler un thrombus aigu." },
+  pe_rv_dilation: { title: "Dilatation du ventricule droit", body: "Vue échographique : incidence apicale 4 cavités centrée sur le ventricule droit.\nÉvaluation : comparer la taille du VD à celle du VG. Un rapport VD/VG > 1 suggère une dilatation du VD.\nIntérêt clinique : signe de surcharge aiguë en pression du VD, utile dans la stratification du risque de l’embolie pulmonaire.\nPièges : hypertension pulmonaire chronique, BPCO, infarctus du VD ou cardiopathie droite chronique." },
+  pe_d_shape: { title: "Ventricule gauche en D", body: "Vue échographique : parasternal petit axe.\nÉvaluation : aplatissement du septum interventriculaire donnant un VG en D.\nIntérêt clinique : traduit une surcharge en pression du VD, surtout si présent en systole.\nPièges : non spécifique de l’EP ; observé aussi dans l’hypertension pulmonaire et les autres surcharges droites." },
+  pe_tapse: { title: "TAPSE", body: "Vue échographique : apicale 4 cavités.\nMesure : curseur TM à travers l’anneau tricuspide latéral.\nSeuil : TAPSE < 17 mm suggère une dysfonction systolique du VD.\nIntérêt clinique : marqueur simple de fonction VD dans l’EP suspectée.\nPièges : dépendance à l’angle et anomalies régionales du VD." },
+  pe_rv_sprime: { title: "Onde S’ du VD", body: "Vue échographique : apicale 4 cavités centrée sur le VD.\nDoppler : Doppler tissulaire à l’anneau tricuspide latéral.\nSeuil : S’ < 9,5 cm/s soutient une dysfonction systolique VD.\nIntérêt clinique : complète l’évaluation du retentissement droit.\nPièges : mauvais alignement annulaire et traction peuvent fausser la mesure." },
+  pe_mcconnell: { title: "Signe de McConnell", body: "Vue échographique : apicale 4 cavités centrée sur le VD.\nÉvaluation : akinésie de la paroi libre du VD avec relative préservation apicale.\nIntérêt clinique : soutient un strain VD aigu et peut orienter vers une EP.\nPièges : non spécifique ; infarctus du VD et autres atteintes aiguës du VD peuvent être similaires." },
+  pe_tr_velocity: { title: "Vitesse IT / estimation des PAPs", body: "Vues échographiques : apicale 4 cavités, chambre d’admission VD, petit axe ou sous-costale.\nDoppler : Doppler continu sur le jet d’insuffisance tricuspide.\nIntérêt clinique : une vitesse élevée soutient une augmentation de la pression systolique VD.\nPièges : un mauvais alignement sous-estime ; l’absence d’IT n’exclut pas un strain VD." },
+  pe_ivc: { title: "Dilatation de la VCI / POD élevée", body: "Vue échographique : sous-costale grand axe de la VCI.\nÉvaluation : mesurer à 1-2 cm de l’OD et apprécier le collapsus inspiratoire.\nIntérêt clinique : VCI dilatée peu collapsible suggère une pression auriculaire droite élevée.\nPièges : ventilation mécanique, effort inspiratoire insuffisant et cardiopathie droite chronique diminuent la fiabilité." },
+  pe_troponin: { title: "Troponine dans l’EP", body: "Définition : biomarqueur de souffrance myocardique.\nIntérêt clinique : une troponine positive suggère un strain myocardique du VD et un risque précoce plus élevé.\nÉvaluation : interpréter avec ECG, fonction rénale et contexte clinique.\nPièges : SCA, myocardite, insuffisance rénale et sepsis peuvent aussi l’élever." },
+  pe_bnp: { title: "BNP / NT-proBNP dans l’EP", body: "Définition : biomarqueurs de stress pariétal myocardique.\nIntérêt clinique : une élévation soutient un retentissement VD et aide à la stratification.\nÉvaluation : tenir compte de l’âge, de la fonction rénale et d’une insuffisance cardiaque chronique.\nPièges : non spécifique de l’EP." },
+  tam_hypotension: { title: "Hypotension / choc dans la tamponnade", body: "Définition : baisse tensionnelle ou hypoperfusion liée à une gêne au remplissage cardiaque.\nIntérêt clinique : évoque une tamponnade hémodynamique avec épanchement et signes échographiques.\nÉvaluation : rechercher confusion, oligurie, marbrures et pincement de la pression pulsée.\nPièges : la pression peut rester normale au début ; le choc a de nombreuses causes." },
+  tam_tachycardia: { title: "Tachycardie dans la tamponnade", body: "Définition : réponse compensatrice à la baisse du volume d’éjection.\nIntérêt clinique : indice clinique fréquent avec épanchement et pression veineuse élevée.\nPièges : bêtabloquants, troubles conductifs ou décompensation terminale peuvent l’atténuer." },
+  tam_pulsus: { title: "Pouls paradoxal", body: "Définition : baisse inspiratoire de la PAS > 10 mmHg.\nIntérêt clinique : soutient une physiologie de tamponnade et l’interdépendance ventriculaire.\nÉvaluation : mesure soigneuse au brassard ou sur ligne artérielle en respiration calme.\nPièges : BPCO, asthme et EP massive peuvent aussi le provoquer." },
+  tam_effusion: { title: "Épanchement péricardique", body: "Vues échographiques : parasternal grand axe, petit axe, apicale 4 cavités et sous-costale.\nÉvaluation : rechercher un espace anéchogène autour du cœur et estimer taille et distribution.\nIntérêt clinique : nécessaire mais insuffisant pour diagnostiquer une tamponnade.\nPièges : épanchement cloisonné parfois manqué ; épanchement pleural pouvant mimer un épanchement péricardique." },
+  tam_ra_collapse: { title: "Collapsus de l’oreillette droite", body: "Vue échographique : apicale 4 cavités ou sous-costale.\nÉvaluation : collapsus de la paroi de l’OD, le plus souvent en systole.\nIntérêt clinique : signe échographique précoce d’élévation de la pression péricardique.\nPièges : à interpréter avec la clinique et la taille de l’épanchement." },
+  tam_rv_collapse: { title: "Collapsus diastolique du ventricule droit", body: "Vue échographique : parasternal grand axe, apicale 4 cavités ou sous-costale.\nÉvaluation : collapsus de la paroi libre du VD en début de diastole.\nIntérêt clinique : signe fort de retentissement hémodynamique d’une tamponnade.\nPièges : peut être absent en cas d’hypertension pulmonaire ou d’hypertrophie importante du VD." },
+  tam_ivc: { title: "Pléthore de la VCI", body: "Vue échographique : sous-costale centrée sur la VCI.\nÉvaluation : VCI dilatée avec collapsus inspiratoire réduit.\nIntérêt clinique : suggère une pression auriculaire droite élevée et soutient la physiologie de tamponnade.\nPièges : non spécifique ; aussi observé dans l’insuffisance droite, l’HTP et la surcharge volémique." },
+  tam_doppler_variation: { title: "Variations respiratoires Doppler", body: "Doppler : Doppler pulsé au bout des feuillets mitraux et tricuspides.\nSeuils : baisse inspiratoire de E mitral > 25 % ou augmentation inspiratoire de E tricuspide > 40 %.\nIntérêt clinique : reflète l’interdépendance ventriculaire.\nPièges : fibrillation atriale, tachycardie et mauvais alignement Doppler limitent la fiabilité." },
+  shock_hypotension: { title: "Choc / hypotension", body: "Définition : le choc est une hypoperfusion tissulaire, pas seulement une pression basse. PAS < 90 mmHg ou PAM < 65 mmHg soutient le diagnostic.\nIntérêt clinique : rechercher extrémités froides, confusion, oligurie, marbrures et lactate élevé.\nPièges : une pression normale n’exclut pas un choc compensé." },
+  shock_congestion: { title: "Signes de congestion", body: "Définition : turgescence jugulaire, œdèmes, râles, hépatomégalie ou congestion pulmonaire.\nIntérêt clinique : oriente vers une physiologie cardiogénique ou obstructive selon l’écho.\nPièges : les œdèmes périphériques peuvent être chroniques ou non cardiaques." },
+  shock_hypovolemia: { title: "Signes d’hypovolémie", body: "Définition : signes de volume circulant bas : muqueuses sèches, jugulaires plates, hémorragie, diarrhée ou VCI très collabée.\nIntérêt clinique : soutient un choc hypovolémique si VG hyperkinétique et poumons secs.\nPièges : le sepsis peut associer vasodilatation et hypovolémie relative." },
+  shock_lv_function: { title: "Fonction systolique du ventricule gauche", body: "Vues échographiques : parasternal grand axe, petit axe, apicale 4 cavités et 2 cavités.\nÉvaluation : apprécier la contractilité globale du VG et rechercher des troubles segmentaires de cinétique.\nIntérêt clinique : une dysfonction VG sévère oriente vers un choc cardiogénique.\nPièges : tachycardie, conditions de charge et mauvaise qualité d’image peuvent fausser l’estimation visuelle." },
+  shock_rv: { title: "Dilatation / dysfonction du VD", body: "Vues échographiques : apicale 4 cavités centrée VD et sous-costale.\nÉvaluation : taille du VD, rapport VD/VG, TAPSE, septum aplati.\nIntérêt clinique : suggère un choc obstructif par EP, infarctus du VD ou HTP sévère.\nPièges : une cardiopathie droite chronique peut mimer un strain aigu." },
+  shock_ivc: { title: "Taille et collapsibilité de la VCI", body: "Vue échographique : sous-costale VCI.\nÉvaluation : diamètre de la VCI et collapsus inspiratoire.\nIntérêt clinique : aide à estimer la pression auriculaire droite et l’état volémique.\nPièges : ventilation mécanique, pression intra-abdominale élevée et insuffisance droite chronique limitent la fiabilité." },
+  shock_pericardial_effusion: { title: "Épanchement péricardique dans le choc", body: "Vues échographiques : PLAX, PSAX, apicale et sous-costale.\nIntérêt clinique : épanchement avec collapsus des cavités droites suggère un choc obstructif par tamponnade.\nPièges : un petit épanchement peut suffire s’il s’accumule rapidement." },
+  edema_bp: { title: "Pression artérielle dans l’œdème pulmonaire", body: "Définition : l’HTA oriente vers un œdème cardiogénique ; l’hypotension peut évoquer choc, sepsis ou dysfonction pompe sévère.\nIntérêt clinique : guide l’urgence et l’orientation thérapeutique.\nPièges : la pression artérielle seule ne distingue pas l’origine cardiogénique d’une origine non cardiogénique." },
+  edema_orthopnea: { title: "Orthopnée / dyspnée paroxystique nocturne", body: "Définition : dyspnée aggravée en décubitus ou réveil nocturne brutal par dyspnée.\nIntérêt clinique : soutient des pressions de remplissage gauches élevées.\nPièges : obésité, BPCO et apnées du sommeil peuvent donner des symptômes proches." },
+  edema_ivc_congestion: { title: "Congestion veineuse systémique", body: "Évaluation : œdèmes périphériques, turgescence jugulaire et VCI dilatée soutiennent une pression auriculaire droite élevée.\nIntérêt clinique : renforce un profil cardiogénique ou de surcharge.\nPièges : maladie veineuse chronique, insuffisance rénale ou hépatopathie peuvent mimer la congestion." },
+  edema_blines: { title: "Lignes B pulmonaires", body: "Vue échographique : zones antérieures et latérales des deux hémithorax.\nÉvaluation : lignes verticales hyperéchogènes partant de la ligne pleurale jusqu’au bas de l’écran.\nIntérêt clinique : des lignes B diffuses bilatérales soutiennent fortement un œdème pulmonaire avec anomalies cardiaques.\nPièges : non spécifiques ; ARDS, pneumonie ou fibrose peuvent aussi en donner." },
+  edema_lv_function: { title: "Fonction systolique du ventricule gauche", body: "Vues échographiques : parasternal grand axe, petit axe, apicale 4 cavités et 2 cavités.\nÉvaluation : estimer la FEVG visuellement ou par Simpson biplan si possible.\nIntérêt clinique : une FEVG réduite soutient un œdème pulmonaire cardiogénique.\nPièges : une FEVG conservée n’exclut pas HFpEF ni œdème valvulaire aigu." },
+  edema_e_eprime: { title: "Rapport E/e’", body: "Vue échographique : apicale 4 cavités.\nDoppler : flux mitral en Doppler pulsé et e’ en Doppler tissulaire à l’anneau mitral septal et/ou latéral.\nIntérêt clinique : un E/e’ élevé soutient l’hypothèse de pressions de remplissage VG augmentées.\nPièges : interprétation limitée en cas de valvulopathie mitrale significative, prothèse mitrale, calcification annulaire importante ou tachyarythmie." },
+  edema_la: { title: "Dilatation de l’oreillette gauche", body: "Vues échographiques : apicale 4 cavités et 2 cavités.\nÉvaluation : l’index de volume de l’OG est préférable si possible.\nIntérêt clinique : suggère des pressions de remplissage VG chroniquement élevées.\nPièges : un œdème pulmonaire aigu peut survenir avant dilatation de l’OG." },
+  edema_mr: { title: "Insuffisance mitrale / valvulopathie", body: "Vues échographiques : PLAX, apicale 4 cavités et 2 cavités.\nDoppler : Doppler couleur, Doppler continu, PISA si besoin.\nIntérêt clinique : une IM aiguë sévère ou une valvulopathie sévère peut provoquer un œdème pulmonaire brutal.\nPièges : la surface du jet couleur seule peut sous-estimer une IM excentrée." },
+  edema_rv_pattern: { title: "VD / profil d’hypertension pulmonaire", body: "Vues échographiques : apicale 4 cavités centrée VD, PSAX et sous-costale.\nIntérêt clinique : un strain VD aigu oriente vers EP ou cause pulmonaire ; un profil post-capillaire avec cardiopathie gauche soutient l’origine cardiogénique.\nPièges : l’HTP chronique peut masquer la cause aiguë." },
+  edema_pleura: { title: "Ligne pleurale", body: "Échographie pulmonaire : zones antérieures et latérales.\nÉvaluation : ligne pleurale régulière en faveur d’un œdème hydrostatique ; ligne irrégulière ou fragmentée en faveur d’ARDS, pneumonie ou fibrose.\nPièges : interpréter avec la distribution des lignes B et le contexte clinique." },
+  edema_consolidation: { title: "Condensation / bronchogramme aérien", body: "Échographie pulmonaire : explorer les zones symptomatiques et postéro-latérales si possible.\nIntérêt clinique : condensation ou bronchogrammes aériens dynamiques favorisent pneumonie ou atteinte pulmonaire non cardiogénique.\nPièges : atélectasie et infarctus pulmonaire peuvent aussi donner une condensation." },
+  edema_cardiogenic: { title: "Œdème pulmonaire cardiogénique", body: "Arguments : lignes B diffuses bilatérales, pressions de remplissage élevées, dysfonction VG ou valvulopathie significative, dilatation OG, épanchement pleural, VCI dilatée.\nIntérêt clinique : soutient diurétiques, vasodilatateurs si HTA et traitement de la cause cardiaque.\nPièges : les mécanismes cardiogéniques et non cardiogéniques peuvent coexister." },
+  edema_noncardiogenic: { title: "Œdème pulmonaire non cardiogénique / SDRA", body: "Arguments : lignes B patchy, anomalies de la ligne pleurale, condensations, pressions de remplissage VG non élevées et absence de cause cardiaque majeure.\nIntérêt clinique : évoquer pneumonie, SDRA, sepsis, inhalation ou maladie inflammatoire pulmonaire.\nPièges : l’écho cardiaque et pulmonaire doivent être intégrées au contexte clinique." }
 };
 
 function showInfo(key) {
-  const content = infoContent[key] || "No information available.";
-  alert(content);
+  const content = infoContent[key] || { title: "Information", body: "Information non disponible." };
+  const title = typeof content === "string" ? "Information clinique" : content.title;
+  const body = typeof content === "string" ? content : content.body;
+  let backdrop = document.getElementById("infoModalBackdrop");
+  if (!backdrop) {
+    backdrop = document.createElement("div");
+    backdrop.id = "infoModalBackdrop";
+    backdrop.className = "info-modal-backdrop";
+    backdrop.innerHTML = `
+      <div class="info-modal" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle">
+        <div class="info-modal-header">
+          <h3 id="infoModalTitle"></h3>
+          <button type="button" class="info-modal-close" aria-label="Fermer l’information clinique">&times;</button>
+        </div>
+        <div id="infoModalBody" class="info-modal-body"></div>
+      </div>
+    `;
+    document.body.appendChild(backdrop);
+    backdrop.addEventListener("click", event => {
+      if (event.target === backdrop) backdrop.classList.remove("active");
+    });
+    backdrop.querySelector(".info-modal-close").addEventListener("click", () => {
+      backdrop.classList.remove("active");
+    });
+  }
+  backdrop.querySelector("#infoModalTitle").textContent = title;
+  backdrop.querySelector("#infoModalBody").textContent = body;
+  backdrop.classList.add("active");
 }
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    const backdrop = document.getElementById("infoModalBackdrop");
+    if (backdrop) backdrop.classList.remove("active");
+  }
+});
 
 let historyStack = ["dashboard"];
 function showPanel(panelId) {

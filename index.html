@@ -467,6 +467,64 @@
   .info-btn:hover {
     background: #173a8a;
   }
+
+  .info-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(15, 23, 42, 0.45);
+    z-index: 1000;
+  }
+
+  .info-modal-backdrop.active {
+    display: flex;
+  }
+
+  .info-modal {
+    width: min(640px, 100%);
+    max-height: min(82vh, 760px);
+    overflow: auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+    padding: 22px;
+  }
+
+  .info-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .info-modal-header h3 {
+    margin: 0;
+    color: #18345f;
+    font-size: 20px;
+  }
+
+  .info-modal-close {
+    width: 34px;
+    height: 34px;
+    border: 1px solid #d8e0ec;
+    border-radius: 50%;
+    background: #f7f9fc;
+    color: #24364f;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .info-modal-body {
+    color: #24364f;
+    font-size: 14px;
+    line-height: 1.55;
+    white-space: pre-line;
+  }
   </style>
 </head>
 <body>
@@ -867,19 +925,19 @@
   <div class="card">
   <h3>Clinical status</h3>
 
-  <label>Age</label>
+  <label>Age <button type="button" class="info-btn" onclick="showInfo('pe_age')">?</button></label>
   <input id="pe_age" type="number" placeholder="e.g. 65">
 
-  <label>SBP / PAS (mmHg)</label>
+  <label>SBP / PAS (mmHg) <button type="button" class="info-btn" onclick="showInfo('pe_hypotension')">?</button></label>
   <input id="pe_sbp" type="number" placeholder="e.g. 110">
 
-  <label>Heart rate / FC (bpm)</label>
+  <label>Heart rate / FC (bpm) <button type="button" class="info-btn" onclick="showInfo('pe_tachycardia')">?</button></label>
   <input id="pe_hr" type="number" placeholder="e.g. 115">
 
-  <label>SpO₂ (%)</label>
+  <label>SpO₂ (%) <button type="button" class="info-btn" onclick="showInfo('pe_desaturation')">?</button></label>
   <input id="pe_spo2" type="number" placeholder="e.g. 92">
 
-  <label>Shock, vasopressors, or cardiac arrest?</label>
+  <label>Shock, vasopressors, or cardiac arrest? <button type="button" class="info-btn" onclick="showInfo('pe_hypotension')">?</button></label>
   <select id="pe_shock">
     <option value="no">No</option>
     <option value="yes">Yes</option>
@@ -889,37 +947,37 @@
 <div class="card">
   <h3>Pre-test probability: Revised Geneva Score</h3>
 
-  <label>Previous DVT or PE</label>
+  <label>Previous DVT or PE <button type="button" class="info-btn" onclick="showInfo('pe_previous_vte')">?</button></label>
   <select id="pe_geneva_prev_vte">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>Surgery or fracture within the last month</label>
+  <label>Surgery or fracture within the last month <button type="button" class="info-btn" onclick="showInfo('pe_surgery')">?</button></label>
   <select id="pe_geneva_surgery">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>Active cancer</label>
+  <label>Active cancer <button type="button" class="info-btn" onclick="showInfo('pe_cancer')">?</button></label>
   <select id="pe_geneva_cancer">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>Unilateral lower limb pain</label>
+  <label>Unilateral lower limb pain <button type="button" class="info-btn" onclick="showInfo('pe_limb_pain')">?</button></label>
   <select id="pe_geneva_unilateral_pain">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>Hemoptysis</label>
+  <label>Hemoptysis <button type="button" class="info-btn" onclick="showInfo('pe_hemoptysis')">?</button></label>
   <select id="pe_geneva_hemoptysis">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>Pain on lower limb deep venous palpation and unilateral edema</label>
+  <label>Pain on lower limb deep venous palpation and unilateral edema <button type="button" class="info-btn" onclick="showInfo('pe_dvt_signs')">?</button></label>
   <select id="pe_geneva_deep_pain_edema">
     <option value="no">No</option>
     <option value="yes">Yes</option>
@@ -929,7 +987,7 @@
 <div class="card">
   <h3>DVT / Embolic source assessment</h3>
 
-  <label>Clinical signs of lower limb DVT</label>
+  <label>Clinical signs of lower limb DVT <button type="button" class="info-btn" onclick="showInfo('pe_dvt_signs')">?</button></label>
   <select id="pe_dvt_symptoms">
     <option value="none">No clear lower limb signs</option>
     <option value="unilateral_pain">Unilateral lower limb pain</option>
@@ -937,7 +995,7 @@
     <option value="pain_and_edema">Pain + unilateral edema</option>
   </select>
 
-  <label>Venous compression ultrasound</label>
+  <label>Venous compression ultrasound <button type="button" class="info-btn" onclick="showInfo('pe_compression_us')">?</button></label>
   <select id="pe_dvt_compression">
     <option value="not_done">Not done</option>
     <option value="compressible">Veins compressible</option>
@@ -957,48 +1015,48 @@
 <div class="card">
   <h3>Echo RV strain</h3>
 
-  <label>RV/LV ratio</label>
+  <label>RV/LV ratio <button type="button" class="info-btn" onclick="showInfo('pe_rv_dilation')">?</button></label>
   <input id="pe_rvlv" type="number" step="0.1" placeholder="e.g. 1.1">
 
-  <label>TAPSE (mm)</label>
+  <label>TAPSE (mm) <button type="button" class="info-btn" onclick="showInfo('pe_tapse')">?</button></label>
   <input id="pe_tapse" type="number" placeholder="e.g. 15">
 
-  <label>RV S′ (cm/s)</label>
+  <label>RV S′ (cm/s) <button type="button" class="info-btn" onclick="showInfo('pe_rv_sprime')">?</button></label>
   <input id="pe_sprime" type="number" step="0.1" placeholder="e.g. 8.5">
 
-  <label>D-shape LV in PSAX</label>
+  <label>D-shape LV in PSAX <button type="button" class="info-btn" onclick="showInfo('pe_d_shape')">?</button></label>
   <select id="pe_dshape">
     <option value="none">Absent</option>
     <option value="systolic">Systolic D-shape</option>
     <option value="both">Systolic + diastolic D-shape</option>
   </select>
 
-  <label>McConnell sign</label>
+  <label>McConnell sign <button type="button" class="info-btn" onclick="showInfo('pe_mcconnell')">?</button></label>
   <select id="pe_mcconnell">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>TR velocity (m/s)</label>
+  <label>TR velocity (m/s) <button type="button" class="info-btn" onclick="showInfo('pe_tr_velocity')">?</button></label>
   <input id="pe_trv" type="number" step="0.1" placeholder="e.g. 3.2">
 
-  <label>IVC diameter / VCI (mm)</label>
+  <label>IVC diameter / VCI (mm) <button type="button" class="info-btn" onclick="showInfo('pe_ivc')">?</button></label>
   <input id="pe_ivc" type="number" placeholder="e.g. 22">
 
-  <label>IVC collapsibility / collapsibilité VCI (%)</label>
+  <label>IVC collapsibility / collapsibilité VCI (%) <button type="button" class="info-btn" onclick="showInfo('pe_ivc')">?</button></label>
   <input id="pe_ivc_collapse" type="number" placeholder="e.g. 35">
 </div>
 
 <div class="card">
   <h3>Biomarkers</h3>
 
-  <label>Troponin</label>
+  <label>Troponin <button type="button" class="info-btn" onclick="showInfo('pe_troponin')">?</button></label>
   <select id="pe_troponin">
     <option value="negative">Negative</option>
     <option value="positive">Positive</option>
   </select>
 
-  <label>BNP / NT-proBNP</label>
+  <label>BNP / NT-proBNP <button type="button" class="info-btn" onclick="showInfo('pe_bnp')">?</button></label>
   <select id="pe_bnp">
     <option value="unknown">Unknown</option>
     <option value="negative">Negative</option>
@@ -1038,19 +1096,19 @@
  <div class="card">
   <h3>Clinical status</h3>
 
-  <label>Hypotension / shock?</label>
+  <label>Hypotension / shock? <button type="button" class="info-btn" onclick="showInfo('tam_hypotension')">?</button></label>
   <select id="tam_shock">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>Tachycardia?</label>
+  <label>Tachycardia? <button type="button" class="info-btn" onclick="showInfo('tam_tachycardia')">?</button></label>
   <select id="tam_tachy">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>Pulsus paradoxus?</label>
+  <label>Pulsus paradoxus? <button type="button" class="info-btn" onclick="showInfo('tam_pulsus')">?</button></label>
   <select id="tam_pulsus">
     <option value="unknown">Unknown</option>
     <option value="no">No</option>
@@ -1061,7 +1119,7 @@
 <div class="card">
   <h3>Echo signs</h3>
 
-  <label>Pericardial effusion size</label>
+  <label>Pericardial effusion size <button type="button" class="info-btn" onclick="showInfo('tam_effusion')">?</button></label>
   <select id="tam_size">
     <option value="none">None</option>
     <option value="small">Small</option>
@@ -1069,25 +1127,25 @@
     <option value="large">Large</option>
   </select>
 
-  <label>Right atrial collapse</label>
+  <label>Right atrial collapse <button type="button" class="info-btn" onclick="showInfo('tam_ra_collapse')">?</button></label>
   <select id="tam_ra_collapse">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>Right ventricular diastolic collapse</label>
+  <label>Right ventricular diastolic collapse <button type="button" class="info-btn" onclick="showInfo('tam_rv_collapse')">?</button></label>
   <select id="tam_rv_collapse">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>IVC dilated and poorly collapsible</label>
+  <label>IVC dilated and poorly collapsible <button type="button" class="info-btn" onclick="showInfo('tam_ivc')">?</button></label>
   <select id="tam_ivc">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>Respiratory variation on Doppler inflow</label>
+  <label>Respiratory variation on Doppler inflow <button type="button" class="info-btn" onclick="showInfo('tam_doppler_variation')">?</button></label>
   <select id="tam_doppler">
     <option value="unknown">Unknown</option>
     <option value="no">No significant variation</option>
@@ -1127,19 +1185,19 @@
  <div class="card">
   <h3>Clinical status</h3>
 
-  <label>Hypotension (SBP &lt; 90 mmHg)</label>
+  <label>Hypotension (SBP &lt; 90 mmHg) <button type="button" class="info-btn" onclick="showInfo('shock_hypotension')">?</button></label>
   <select id="shock_hypotension">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>Signs of congestion?</label>
+  <label>Signs of congestion? <button type="button" class="info-btn" onclick="showInfo('shock_congestion')">?</button></label>
   <select id="shock_congestion">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>Signs of hypovolemia?</label>
+  <label>Signs of hypovolemia? <button type="button" class="info-btn" onclick="showInfo('shock_hypovolemia')">?</button></label>
   <select id="shock_hypovolemia">
     <option value="no">No</option>
     <option value="yes">Yes</option>
@@ -1149,25 +1207,25 @@
 <div class="card">
   <h3>Echo findings</h3>
 
-  <label>LV function</label>
+  <label>LV function <button type="button" class="info-btn" onclick="showInfo('shock_lv_function')">?</button></label>
   <select id="shock_lv">
     <option value="normal">Normal</option>
     <option value="reduced">Reduced</option>
   </select>
 
-  <label>RV dilatation</label>
+  <label>RV dilatation <button type="button" class="info-btn" onclick="showInfo('shock_rv')">?</button></label>
   <select id="shock_rv">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>Pericardial effusion</label>
+  <label>Pericardial effusion <button type="button" class="info-btn" onclick="showInfo('shock_pericardial_effusion')">?</button></label>
   <select id="shock_effusion">
     <option value="no">No</option>
     <option value="yes">Yes</option>
   </select>
 
-  <label>IVC status</label>
+  <label>IVC status <button type="button" class="info-btn" onclick="showInfo('shock_ivc')">?</button></label>
   <select id="shock_ivc">
     <option value="normal">Normal</option>
     <option value="collapsed">Collapsed</option>
@@ -1209,7 +1267,7 @@
     <div class="card">
       <h3>Clinical data</h3>
 
-      <label>Blood pressure / hypertension</label>
+      <label>Blood pressure / hypertension <button type="button" class="info-btn" onclick="showInfo('edema_bp')">?</button></label>
       <select id="peo_bp">
         <option value="">Select</option>
         <option value="cardiac">High BP or hypertensive crisis</option>
@@ -1217,7 +1275,7 @@
         <option value="pulmonary">Low BP / shock / sepsis context</option>
       </select>
 
-      <label>History of heart disease</label>
+      <label>History of heart disease <button type="button" class="info-btn" onclick="showInfo('edema_cardiogenic')">?</button></label>
       <select id="peo_history">
         <option value="">Select</option>
         <option value="cardiac">HF / ischemic heart disease / valve disease / AF</option>
@@ -1225,14 +1283,14 @@
         <option value="neutral">Unknown</option>
       </select>
 
-      <label>Fever / infection / COPD-asthma context</label>
+      <label>Fever / infection / COPD-asthma context <button type="button" class="info-btn" onclick="showInfo('edema_noncardiogenic')">?</button></label>
       <select id="peo_infection">
         <option value="">Select</option>
         <option value="pulmonary">Present</option>
         <option value="neutral">Absent or unclear</option>
       </select>
 
-      <label>Orthopnea / paroxysmal nocturnal dyspnea</label>
+      <label>Orthopnea / paroxysmal nocturnal dyspnea <button type="button" class="info-btn" onclick="showInfo('edema_orthopnea')">?</button></label>
       <select id="peo_orthopnea">
         <option value="">Select</option>
         <option value="cardiac">Present</option>
@@ -1240,7 +1298,7 @@
         <option value="neutral">Unclear</option>
       </select>
 
-      <label>Peripheral edema / raised JVP</label>
+      <label>Peripheral edema / raised JVP <button type="button" class="info-btn" onclick="showInfo('edema_ivc_congestion')">?</button></label>
       <select id="peo_congestion">
         <option value="">Select</option>
         <option value="cardiac">Present</option>
@@ -1252,7 +1310,7 @@
     <div class="card">
       <h3>Echocardiographic data</h3>
 
-      <label>LVEF</label>
+      <label>LVEF <button type="button" class="info-btn" onclick="showInfo('edema_lv_function')">?</button></label>
       <select id="peo_lvef">
         <option value="">Select</option>
         <option value="cardiac">Reduced LVEF</option>
@@ -1260,7 +1318,7 @@
         <option value="neutral">Not assessed</option>
       </select>
 
-      <label>LV filling pressures</label>
+      <label>LV filling pressures <button type="button" class="info-btn" onclick="showInfo('edema_e_eprime')">?</button></label>
       <select id="peo_filling">
         <option value="">Select</option>
         <option value="cardiac">High: E/e’ elevated / restrictive pattern</option>
@@ -1268,7 +1326,7 @@
         <option value="neutral">Indeterminate</option>
       </select>
 
-      <label>Left atrium</label>
+      <label>Left atrium <button type="button" class="info-btn" onclick="showInfo('edema_la')">?</button></label>
       <select id="peo_la">
         <option value="">Select</option>
         <option value="cardiac">Dilated LA</option>
@@ -1276,7 +1334,7 @@
         <option value="neutral">Not assessed</option>
       </select>
 
-      <label>Significant valve disease</label>
+      <label>Significant valve disease <button type="button" class="info-btn" onclick="showInfo('edema_mr')">?</button></label>
       <select id="peo_valve">
         <option value="">Select</option>
         <option value="cardiac">Severe MR / MS / AS / AR</option>
@@ -1284,7 +1342,7 @@
         <option value="neutral">Indeterminate</option>
       </select>
 
-      <label>Right ventricle / pulmonary hypertension pattern</label>
+      <label>Right ventricle / pulmonary hypertension pattern <button type="button" class="info-btn" onclick="showInfo('edema_rv_pattern')">?</button></label>
       <select id="peo_rv">
         <option value="">Select</option>
         <option value="pulmonary">RV dilatation / D-shape / acute RV strain</option>
@@ -1297,7 +1355,7 @@
   <div class="card">
     <h3>Lung ultrasound / bedside signs</h3>
 
-    <label>B-lines distribution</label>
+    <label>B-lines distribution <button type="button" class="info-btn" onclick="showInfo('edema_blines')">?</button></label>
     <select id="peo_blines">
       <option value="">Select</option>
       <option value="cardiac">Diffuse bilateral symmetric B-lines</option>
@@ -1305,7 +1363,7 @@
       <option value="neutral">Not assessed</option>
     </select>
 
-    <label>Pleural line</label>
+    <label>Pleural line <button type="button" class="info-btn" onclick="showInfo('edema_pleura')">?</button></label>
     <select id="peo_pleura">
       <option value="">Select</option>
       <option value="cardiac">Regular pleural line</option>
@@ -1313,7 +1371,7 @@
       <option value="neutral">Not assessed</option>
     </select>
 
-    <label>Consolidation / air bronchogram</label>
+    <label>Consolidation / air bronchogram <button type="button" class="info-btn" onclick="showInfo('edema_consolidation')">?</button></label>
     <select id="peo_consolidation">
       <option value="">Select</option>
       <option value="pulmonary">Present</option>
@@ -1374,13 +1432,94 @@ const infoContent = {
   mitral_sprime: "Mitral lateral S’:\n- Tissue Doppler systolic velocity at the lateral mitral annulus.\n- Reflects longitudinal LV systolic function.\n- Angle alignment is important.",
   ea_ratio: "E/A ratio:\n- Pulsed Doppler transmitral inflow at leaflet tips.\n- Helps classify diastolic filling pattern.\n- Interpret with age, E/e’, LA volume, TR velocity, and rhythm.",
   septal_eprime: "Septal e’:\n- Tissue Doppler at septal mitral annulus.\n- Reduced septal e’ supports impaired relaxation.\n- Use with lateral e’ and E/e’.",
-  lateral_eprime: "Lateral e’:\n- Tissue Doppler at lateral mitral annulus.\n- Reduced lateral e’ supports impaired relaxation.\n- Use with septal e’ and E/e’."
+  lateral_eprime: "Lateral e’:\n- Tissue Doppler at lateral mitral annulus.\n- Reduced lateral e’ supports impaired relaxation.\n- Use with septal e’ and E/e’.",
+  pe_age: { title: "Age in Pulmonary Embolism Risk", body: "Definition: Age contributes to clinical probability and simplified PE severity scores.\nClinical value: Older age increases the risk of complications and mortality after PE.\nAssessment: Confirm actual age and interpret with comorbidities, blood pressure, oxygenation and RV findings.\nPitfalls: Age alone does not define severity; a young patient with shock or RV failure is high risk." },
+  pe_hypotension: { title: "Hypotension / Shock in Pulmonary Embolism", body: "Definition: SBP < 90 mmHg or a fall >= 40 mmHg for more than 15 minutes, not explained by arrhythmia, hypovolemia or sepsis.\nClinical value: Defines high-risk pulmonary embolism when PE is suspected or confirmed.\nImplication: Requires urgent risk stratification, bedside echo, anticoagulation if not contraindicated, and consideration of reperfusion therapy.\nPitfalls: Always exclude myocardial infarction, tamponade, sepsis and bleeding." },
+  pe_tachycardia: { title: "Tachycardia in Suspected PE", body: "Definition: Heart rate > 100 bpm is a severity and probability marker in PE scores.\nClinical value: Reflects sympathetic activation, hypoxemia, pain or RV strain.\nAssessment: Check rhythm, fever, anemia, sepsis and medication effects.\nPitfalls: Normal heart rate does not exclude PE, especially in elderly patients or beta-blocker use." },
+  pe_desaturation: { title: "Oxygen Desaturation in PE", body: "Definition: Reduced SpO2, commonly < 90% in severity scores, suggests impaired gas exchange.\nClinical value: Supports clinically significant PE and increases concern when associated with RV strain.\nAssessment: Verify waveform quality and oxygen therapy level.\nPitfalls: COPD, pneumonia, pulmonary edema and poor peripheral perfusion can cause similar desaturation." },
+  pe_previous_vte: { title: "Previous DVT or PE", body: "Definition: Prior objectively diagnosed venous thromboembolism.\nClinical value: Increases pre-test probability and recurrence risk.\nAssessment: Confirm history, anticoagulation status and provoking factors.\nPitfalls: Superficial thrombophlebitis is not equivalent to DVT/PE." },
+  pe_surgery: { title: "Recent Surgery / Immobilization", body: "Definition: Recent surgery, fracture or significant immobilization, especially within the last month.\nClinical value: Major transient provoking factor for venous thromboembolism.\nAssessment: Ask about operations, trauma, plaster cast, bed rest and long travel.\nPitfalls: Minor procedures without immobility carry lower risk." },
+  pe_cancer: { title: "Active Cancer", body: "Definition: Ongoing cancer, metastatic disease, treatment within recent months or palliative cancer care.\nClinical value: Strong VTE risk factor and affects anticoagulation choice.\nAssessment: Clarify cancer type, treatment, bleeding risk and platelet count.\nPitfalls: Remote cured cancer is less predictive than active disease." },
+  pe_limb_pain: { title: "Unilateral Lower Limb Pain", body: "Definition: New unilateral calf or thigh pain suggesting DVT.\nClinical value: Raises PE probability when compatible with venous thrombosis.\nAssessment: Examine for tenderness along deep veins, asymmetry and edema.\nPitfalls: Musculoskeletal injury, cellulitis and chronic venous disease can mimic DVT." },
+  pe_hemoptysis: { title: "Hemoptysis", body: "Definition: Coughing blood or blood-streaked sputum.\nClinical value: Supports PE probability, often due to pulmonary infarction.\nAssessment: Quantify bleeding and evaluate alternative lung causes.\nPitfalls: Infection, malignancy, bronchiectasis and anticoagulation can also cause hemoptysis." },
+  pe_dvt_signs: { title: "Clinical Signs of DVT", body: "Definition: Unilateral swelling, pain on deep venous palpation, calf asymmetry or venous tenderness.\nClinical value: Increases pre-test probability and may reveal the embolic source.\nAssessment: Compare both legs and consider compression ultrasound.\nPitfalls: Clinical signs are insensitive and nonspecific; absence does not exclude DVT." },
+  pe_compression_us: { title: "Venous Compression Ultrasound", body: "Assessment: Compress femoral and popliteal veins; non-compressibility supports DVT.\nClinical value: Proximal DVT in suspected PE can justify treatment when chest imaging is delayed or contraindicated.\nPitfalls: Distal calf DVT is easier to miss; chronic post-thrombotic changes may mimic acute clot." },
+  pe_rv_dilation: { title: "Right Ventricular Dilatation", body: "Echo view: Apical 4-chamber view focused on the right ventricle.\nHow to measure / assess: Compare RV size to LV size. RV/LV ratio > 1 suggests RV dilatation.\nClinical value: Suggests acute RV pressure overload and supports intermediate/high-risk PE.\nCommon mistakes: Chronic pulmonary hypertension, COPD, RV infarction and chronic RV disease may mimic acute PE." },
+  pe_d_shape: { title: "D-shaped Left Ventricle", body: "Echo view: Parasternal short-axis view.\nHow to measure / assess: Flattening of the interventricular septum causing a D-shaped LV.\nClinical value: Indicates RV pressure overload, especially when present in systole.\nCommon mistakes: Not specific to PE; can occur in pulmonary hypertension and other causes of RV pressure overload." },
+  pe_tapse: { title: "TAPSE", body: "Echo view: Apical 4-chamber.\nHow to measure / assess: M-mode cursor through the lateral tricuspid annulus.\nThreshold: TAPSE < 17 mm suggests RV systolic dysfunction.\nClinical value: Useful marker of RV function in suspected PE.\nCommon mistakes: Angle dependency and regional RV dysfunction may affect accuracy." },
+  pe_rv_sprime: { title: "RV S' Velocity", body: "Echo view: Apical 4-chamber focused on the RV.\nDoppler type: Tissue Doppler at the lateral tricuspid annulus.\nThreshold: S' < 9.5 cm/s supports RV systolic dysfunction.\nClinical value: Helps identify RV impairment in PE.\nCommon mistakes: Poor annular alignment and tethering can mislead interpretation." },
+  pe_mcconnell: { title: "McConnell Sign", body: "Echo view: Apical 4-chamber focused RV view.\nHow to assess: Regional RV free-wall akinesia with relative apical sparing.\nClinical value: Supports acute RV strain and may raise suspicion for PE.\nCommon mistakes: Not specific; RV infarction and other acute RV insults can look similar." },
+  pe_tr_velocity: { title: "TR Velocity / Estimated sPAP", body: "Echo view: Apical 4-chamber, RV inflow, parasternal short-axis or subcostal views.\nDoppler type: Continuous-wave Doppler through the TR jet.\nClinical value: Elevated TR velocity supports increased RV systolic pressure and RV afterload.\nCommon mistakes: Poor alignment underestimates pressure; absent TR does not exclude RV strain." },
+  pe_ivc: { title: "IVC Dilatation / Elevated RAP", body: "Echo view: Subcostal IVC long-axis view.\nHow to measure / assess: Measure IVC 1-2 cm from the RA junction and assess inspiratory collapse.\nClinical value: Dilated poorly collapsible IVC suggests elevated right atrial pressure.\nCommon mistakes: Mechanical ventilation, poor inspiratory effort and chronic right-heart disease reduce reliability." },
+  pe_troponin: { title: "Troponin in PE", body: "Definition: Myocardial injury biomarker.\nClinical value: Positive troponin suggests RV myocardial strain and higher early risk.\nAssessment: Interpret with ECG, renal function and clinical context.\nPitfalls: ACS, myocarditis, renal failure and sepsis can also elevate troponin." },
+  pe_bnp: { title: "BNP / NT-proBNP in PE", body: "Definition: Biomarkers of myocardial wall stress.\nClinical value: Elevation supports RV strain and helps risk stratification.\nAssessment: Interpret with age, renal function and chronic heart failure.\nPitfalls: Not specific for PE and may be chronically elevated." },
+  tam_hypotension: { title: "Hypotension / Shock in Tamponade", body: "Definition: Low BP or tissue hypoperfusion due to impaired cardiac filling.\nClinical value: Suggests hemodynamic tamponade when associated with pericardial effusion and echo signs.\nAssessment: Look for altered mental status, oliguria, mottling and narrow pulse pressure.\nPitfalls: Early tamponade may preserve BP; shock has many competing causes." },
+  tam_tachycardia: { title: "Tachycardia in Tamponade", body: "Definition: Compensatory sinus tachycardia from reduced stroke volume.\nClinical value: Common clinical clue when paired with effusion and elevated venous pressure.\nPitfalls: Beta-blockers, conduction disease or terminal decompensation may blunt tachycardia." },
+  tam_pulsus: { title: "Pulsus Paradoxus", body: "Definition: Inspiratory fall in systolic BP > 10 mmHg.\nClinical value: Supports tamponade physiology and marked ventricular interdependence.\nAssessment: Measure carefully with cuff or arterial line during quiet breathing.\nPitfalls: COPD, asthma and massive PE can also produce pulsus paradoxus." },
+  tam_effusion: { title: "Pericardial Effusion", body: "Echo view: Parasternal long-axis, parasternal short-axis, apical 4-chamber and subcostal views.\nHow to assess: Look for echo-free space around the heart and estimate size and distribution.\nClinical value: Effusion is necessary but not sufficient to diagnose tamponade.\nCommon mistakes: Loculated effusion may be missed; pleural effusion can mimic pericardial effusion." },
+  tam_ra_collapse: { title: "Right Atrial Collapse", body: "Echo view: Apical 4-chamber or subcostal view.\nHow to assess: Right atrial wall collapse, usually during systole.\nClinical value: Early echocardiographic sign of increased pericardial pressure.\nCommon mistakes: Must be interpreted with clinical context and effusion size." },
+  tam_rv_collapse: { title: "Right Ventricular Diastolic Collapse", body: "Echo view: Parasternal long-axis, apical 4-chamber or subcostal view.\nHow to assess: Collapse of RV free wall during early diastole.\nClinical value: Strong sign of tamponade physiology.\nCommon mistakes: May be absent in pulmonary hypertension or severe RV hypertrophy." },
+  tam_ivc: { title: "IVC Plethora", body: "Echo view: Subcostal IVC view.\nHow to assess: Dilated IVC with reduced inspiratory collapse.\nClinical value: Suggests elevated right atrial pressure and supports tamponade physiology.\nCommon mistakes: Not specific; also seen in right heart failure, pulmonary hypertension and volume overload." },
+  tam_doppler_variation: { title: "Respiratory Doppler Variation", body: "Doppler type: Pulsed-wave Doppler at mitral and tricuspid leaflet tips.\nThresholds: Inspiratory decrease in mitral E velocity > 25% or inspiratory increase in tricuspid E velocity > 40% supports tamponade physiology.\nClinical value: Reflects ventricular interdependence.\nCommon mistakes: Atrial fibrillation, tachycardia and poor Doppler alignment limit reliability." },
+  shock_hypotension: { title: "Shock / Hypotension", body: "Definition: Shock is tissue hypoperfusion, not only low blood pressure. SBP < 90 mmHg or MAP < 65 mmHg supports the diagnosis.\nClinical value: Look for cold extremities, altered mental status, oliguria, mottling and elevated lactate.\nPitfalls: Normal BP does not exclude compensated shock." },
+  shock_congestion: { title: "Clinical Congestion", body: "Definition: Raised filling pressures suggested by JVP elevation, edema, crackles, hepatomegaly or pulmonary congestion.\nClinical value: Supports cardiogenic or obstructive physiology when paired with echo findings.\nPitfalls: Peripheral edema can be chronic or non-cardiac." },
+  shock_hypovolemia: { title: "Hypovolemia Signs", body: "Definition: Clinical signs of low effective circulating volume such as dry mucosa, flat neck veins, bleeding, diarrhea or marked IVC collapse.\nClinical value: Supports hypovolemic shock when LV is hyperdynamic and lungs are dry.\nPitfalls: Sepsis can show vasodilation with relative hypovolemia." },
+  shock_lv_function: { title: "LV Systolic Function", body: "Echo view: PLAX, PSAX, apical 4-chamber and apical 2-chamber.\nHow to assess: Estimate global LV contractility and look for regional wall motion abnormalities.\nClinical value: Severe LV dysfunction supports cardiogenic shock.\nCommon mistakes: Tachycardia, loading conditions and poor image quality can mislead visual estimation." },
+  shock_rv: { title: "RV Dilatation / Dysfunction", body: "Echo view: Apical 4-chamber focused RV view and subcostal view.\nHow to assess: RV size, RV/LV ratio, TAPSE and septal flattening.\nClinical value: Suggests obstructive shock such as PE, RV infarction or severe pulmonary hypertension.\nCommon mistakes: Chronic RV disease may mimic acute RV strain." },
+  shock_ivc: { title: "IVC Size and Collapsibility", body: "Echo view: Subcostal IVC view.\nHow to assess: Measure IVC diameter and inspiratory collapse.\nClinical value: Helps estimate right atrial pressure and volume status.\nCommon mistakes: Mechanical ventilation, high intra-abdominal pressure and chronic right heart failure reduce reliability." },
+  shock_pericardial_effusion: { title: "Pericardial Effusion in Shock", body: "Echo view: PLAX, PSAX, apical and subcostal views.\nClinical value: Effusion plus right-sided chamber collapse suggests obstructive shock due to tamponade.\nPitfalls: Small effusion does not exclude tamponade if rapidly accumulating." },
+  edema_bp: { title: "Blood Pressure in Pulmonary Edema", body: "Definition: Hypertension supports cardiogenic pulmonary edema; hypotension may suggest shock, sepsis or severe pump failure.\nClinical value: Guides urgency and treatment direction.\nPitfalls: BP pattern alone does not distinguish cardiogenic from non-cardiogenic edema." },
+  edema_orthopnea: { title: "Orthopnea / Paroxysmal Nocturnal Dyspnea", body: "Definition: Dyspnea worse lying flat or sudden nocturnal dyspnea.\nClinical value: Supports elevated left-sided filling pressures.\nPitfalls: Obesity, COPD and sleep apnea can produce similar symptoms." },
+  edema_ivc_congestion: { title: "Systemic Venous Congestion", body: "Assessment: Peripheral edema, raised JVP and dilated IVC support elevated right atrial pressure.\nClinical value: Strengthens cardiogenic or volume-overload profile.\nPitfalls: Chronic venous disease, renal disease and liver disease may mimic congestion." },
+  edema_blines: { title: "Lung B-lines", body: "Ultrasound view: Scan anterior and lateral lung zones bilaterally.\nHow to assess: Multiple diffuse bilateral B-lines suggest interstitial/alveolar fluid.\nClinical value: Strongly supports pulmonary edema when associated with cardiac abnormalities.\nCommon mistakes: B-lines are not specific and can be seen in ARDS, pneumonia or fibrosis." },
+  edema_lv_function: { title: "LV Systolic Function", body: "Echo view: PLAX, PSAX, apical 4-chamber and 2-chamber.\nHow to assess: Estimate LVEF visually or by Simpson biplane if available.\nClinical value: Reduced LVEF supports cardiogenic pulmonary edema.\nCommon mistakes: Preserved LVEF does not exclude HFpEF or acute valvular pulmonary edema." },
+  edema_e_eprime: { title: "E/e' Ratio", body: "Echo view: Apical 4-chamber.\nDoppler type: Mitral inflow PW Doppler and tissue Doppler e' at septal/lateral annulus.\nClinical value: Elevated E/e' supports increased LV filling pressure.\nCommon mistakes: Less reliable in significant mitral valve disease, prosthetic valves, heavy annular calcification or tachyarrhythmia." },
+  edema_la: { title: "Left Atrial Enlargement", body: "Echo view: Apical 4-chamber and 2-chamber.\nHow to assess: LA volume index is preferred when possible.\nClinical value: Suggests chronically elevated LV filling pressures.\nCommon mistakes: Acute pulmonary edema can occur before LA enlargement." },
+  edema_mr: { title: "Mitral Regurgitation / Valve Disease", body: "Echo view: PLAX, apical 4-chamber and apical 2-chamber.\nDoppler type: Color Doppler, CW Doppler and PISA if needed.\nClinical value: Acute severe MR or severe valve disease can cause sudden cardiogenic pulmonary edema.\nCommon mistakes: Color jet area alone can underestimate eccentric MR." },
+  edema_rv_pattern: { title: "RV / Pulmonary Hypertension Pattern", body: "Echo view: RV-focused apical 4-chamber, PSAX and subcostal views.\nClinical value: Acute RV strain may suggest PE or primary pulmonary disease; post-capillary PH with left-heart disease supports cardiogenic edema.\nPitfalls: Chronic pulmonary hypertension may obscure the acute cause." },
+  edema_pleura: { title: "Pleural Line", body: "Ultrasound view: Anterior and lateral lung zones.\nAssessment: A regular pleural line favors hydrostatic edema; irregular or fragmented pleura suggests ARDS, pneumonia or fibrosis.\nPitfalls: Findings must be integrated with B-lines distribution and clinical context." },
+  edema_consolidation: { title: "Consolidation / Air Bronchogram", body: "Ultrasound view: Scan symptomatic and posterior/lateral lung zones when possible.\nClinical value: Consolidation or dynamic air bronchograms favor pneumonia or non-cardiogenic lung disease.\nPitfalls: Atelectasis and infarction can also produce consolidation." },
+  edema_cardiogenic: { title: "Cardiogenic Pulmonary Edema", body: "Suggestive findings: Bilateral diffuse B-lines, elevated filling pressures, LV dysfunction or significant valvular disease, LA enlargement, pleural effusion and dilated IVC.\nClinical value: Supports diuretics, vasodilators if hypertensive, and treatment of the cardiac cause.\nPitfalls: Mixed cardiogenic and non-cardiogenic edema can occur." },
+  edema_noncardiogenic: { title: "Non-cardiogenic Pulmonary Edema / ARDS", body: "Suggestive findings: Patchy B-lines, pleural line abnormalities, consolidations, preserved LV filling pressures and no major cardiac cause.\nClinical value: Consider pneumonia, ARDS, sepsis, aspiration or inflammatory lung disease.\nPitfalls: Echo and lung ultrasound must be interpreted with clinical context." }
 };
 
 function showInfo(key) {
-  const content = infoContent[key] || "No information available.";
-  alert(content);
+  const content = infoContent[key] || { title: "Information", body: "No information available." };
+  const title = typeof content === "string" ? "Clinical information" : content.title;
+  const body = typeof content === "string" ? content : content.body;
+  let backdrop = document.getElementById("infoModalBackdrop");
+  if (!backdrop) {
+    backdrop = document.createElement("div");
+    backdrop.id = "infoModalBackdrop";
+    backdrop.className = "info-modal-backdrop";
+    backdrop.innerHTML = `
+      <div class="info-modal" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle">
+        <div class="info-modal-header">
+          <h3 id="infoModalTitle"></h3>
+          <button type="button" class="info-modal-close" aria-label="Close clinical information">&times;</button>
+        </div>
+        <div id="infoModalBody" class="info-modal-body"></div>
+      </div>
+    `;
+    document.body.appendChild(backdrop);
+    backdrop.addEventListener("click", event => {
+      if (event.target === backdrop) backdrop.classList.remove("active");
+    });
+    backdrop.querySelector(".info-modal-close").addEventListener("click", () => {
+      backdrop.classList.remove("active");
+    });
+  }
+  backdrop.querySelector("#infoModalTitle").textContent = title;
+  backdrop.querySelector("#infoModalBody").textContent = body;
+  backdrop.classList.add("active");
 }
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    const backdrop = document.getElementById("infoModalBackdrop");
+    if (backdrop) backdrop.classList.remove("active");
+  }
+});
 
 let historyStack = ["dashboard"];
 function val(id) {
