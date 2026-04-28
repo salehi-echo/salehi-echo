@@ -1023,7 +1023,10 @@
   <div class="grid-2">
     <div class="card">
       <h3>Protocole</h3>
-      <label>Médicament</label>
+      <label>
+        Médicament
+        <button type="button" class="info-btn" onclick="showInfo('inf_drug_info')">?</button>
+      </label>
       <select id="inf_drug" onchange="updateInfusionDoseOptions()">
         <option value="noradrenaline">Noradrénaline</option>
         <option value="dobutamine">Dobutamine</option>
@@ -1034,7 +1037,10 @@
       <label>Poids (kg)</label>
       <input id="inf_weight" type="number" step="0.1" min="0">
 
-      <label>Dose cible</label>
+      <label>
+        Dose cible
+        <button type="button" class="info-btn" onclick="showInfo('inf_dose_info')">?</button>
+      </label>
       <select id="inf_dose"></select>
 
       <div class="actions">
@@ -1963,7 +1969,9 @@ const infoContent = {
   edema_pleura: { title: "Ligne pleurale", body: "Échographie pulmonaire : zones antérieures et latérales.\nÉvaluation : ligne pleurale régulière en faveur d’un œdème hydrostatique ; ligne irrégulière ou fragmentée en faveur d’ARDS, pneumonie ou fibrose.\nPièges : interpréter avec la distribution des lignes B et le contexte clinique." },
   edema_consolidation: { title: "Condensation / bronchogramme aérien", body: "Échographie pulmonaire : explorer les zones symptomatiques et postéro-latérales si possible.\nIntérêt clinique : condensation ou bronchogrammes aériens dynamiques favorisent pneumonie ou atteinte pulmonaire non cardiogénique.\nPièges : atélectasie et infarctus pulmonaire peuvent aussi donner une condensation." },
   edema_cardiogenic: { title: "Œdème pulmonaire cardiogénique", body: "Arguments : lignes B diffuses bilatérales, pressions de remplissage élevées, dysfonction VG ou valvulopathie significative, dilatation OG, épanchement pleural, VCI dilatée.\nIntérêt clinique : soutient diurétiques, vasodilatateurs si HTA et traitement de la cause cardiaque.\nPièges : les mécanismes cardiogéniques et non cardiogéniques peuvent coexister." },
-  edema_noncardiogenic: { title: "Œdème pulmonaire non cardiogénique / SDRA", body: "Arguments : lignes B patchy, anomalies de la ligne pleurale, condensations, pressions de remplissage VG non élevées et absence de cause cardiaque majeure.\nIntérêt clinique : évoquer pneumonie, SDRA, sepsis, inhalation ou maladie inflammatoire pulmonaire.\nPièges : l’écho cardiaque et pulmonaire doivent être intégrées au contexte clinique." }
+  edema_noncardiogenic: { title: "Œdème pulmonaire non cardiogénique / SDRA", body: "Arguments : lignes B patchy, anomalies de la ligne pleurale, condensations, pressions de remplissage VG non élevées et absence de cause cardiaque majeure.\nIntérêt clinique : évoquer pneumonie, SDRA, sepsis, inhalation ou maladie inflammatoire pulmonaire.\nPièges : l’écho cardiaque et pulmonaire doivent être intégrées au contexte clinique." },
+  inf_drug_info: { title: "Médicament en perfusion d’urgence", body: "Ce choix détermine le protocole fixe utilisé pour le calcul.\nNoradrénaline : vasopresseur de référence dans la plupart des états de choc vasoplégique ou septique ; utile aussi dans le choc cardiogénique hypotensif pour restaurer la pression de perfusion.\nDobutamine : inotrope indiqué en cas de bas débit cardiaque, surtout si la pression artérielle est acceptable ou après support vasopresseur.\nAdrénaline : vasopresseur/inotrope puissant, utilisée dans l’arrêt cardiaque, l’anaphylaxie, certains chocs sévères ou hypotensions réfractaires selon le protocole local.\nAmiodarone : antiarythmique utilisé dans les tachyarythmies ventriculaires ou certaines tachyarythmies supraventriculaires.\nToujours vérifier l’indication, les contre-indications, le rythme ECG, la pression artérielle et le protocole local." },
+  inf_dose_info: { title: "Dose cible", body: "Choisir la dose initiale selon la gravité clinique, la pression artérielle et la réponse du patient.\nNoradrénaline : début fréquent à 0,05–0,1 µg/kg/min, puis titration pour obtenir une PAM ≥ 65 mmHg ou une cible individualisée.\nDobutamine : début souvent à 2–5 µg/kg/min, augmentation progressive selon le débit cardiaque, la congestion, la pression artérielle et les troubles du rythme.\nAdrénaline : commencer bas lorsqu’elle est utilisée en perfusion continue ; titration prudente à cause du risque de tachycardie, ischémie et augmentation du lactate.\nAmiodarone : bolus et entretien dépendent du trouble du rythme et du contexte d’urgence.\nSurveillance continue obligatoire. Réévaluation fréquente. Cet outil reste une aide à la décision clinique." }
 };
 
 function showInfo(key) {

@@ -1024,7 +1024,10 @@
   <div class="grid-2">
     <div class="card">
       <h3>Protocol</h3>
-      <label>Drug</label>
+      <label>
+        Drug
+        <button type="button" class="info-btn" onclick="showInfo('inf_drug_info')">?</button>
+      </label>
       <select id="inf_drug" onchange="updateInfusionDoseOptions()">
         <option value="noradrenaline">Noradrenaline</option>
         <option value="dobutamine">Dobutamine</option>
@@ -1035,7 +1038,10 @@
       <label>Weight (kg)</label>
       <input id="inf_weight" type="number" step="0.1" min="0">
 
-      <label>Target dose</label>
+      <label>
+        Target dose
+        <button type="button" class="info-btn" onclick="showInfo('inf_dose_info')">?</button>
+      </label>
       <select id="inf_dose"></select>
 
       <div class="actions">
@@ -1961,7 +1967,9 @@ const infoContent = {
   edema_pleura: { title: "Pleural Line", body: "Ultrasound view: Anterior and lateral lung zones.\nAssessment: A regular pleural line favors hydrostatic edema; irregular or fragmented pleura suggests ARDS, pneumonia or fibrosis.\nPitfalls: Findings must be integrated with B-lines distribution and clinical context." },
   edema_consolidation: { title: "Consolidation / Air Bronchogram", body: "Ultrasound view: Scan symptomatic and posterior/lateral lung zones when possible.\nClinical value: Consolidation or dynamic air bronchograms favor pneumonia or non-cardiogenic lung disease.\nPitfalls: Atelectasis and infarction can also produce consolidation." },
   edema_cardiogenic: { title: "Cardiogenic Pulmonary Edema", body: "Suggestive findings: Bilateral diffuse B-lines, elevated filling pressures, LV dysfunction or significant valvular disease, LA enlargement, pleural effusion and dilated IVC.\nClinical value: Supports diuretics, vasodilators if hypertensive, and treatment of the cardiac cause.\nPitfalls: Mixed cardiogenic and non-cardiogenic edema can occur." },
-  edema_noncardiogenic: { title: "Non-cardiogenic Pulmonary Edema / ARDS", body: "Suggestive findings: Patchy B-lines, pleural line abnormalities, consolidations, preserved LV filling pressures and no major cardiac cause.\nClinical value: Consider pneumonia, ARDS, sepsis, aspiration or inflammatory lung disease.\nPitfalls: Echo and lung ultrasound must be interpreted with clinical context." }
+  edema_noncardiogenic: { title: "Non-cardiogenic Pulmonary Edema / ARDS", body: "Suggestive findings: Patchy B-lines, pleural line abnormalities, consolidations, preserved LV filling pressures and no major cardiac cause.\nClinical value: Consider pneumonia, ARDS, sepsis, aspiration or inflammatory lung disease.\nPitfalls: Echo and lung ultrasound must be interpreted with clinical context." },
+  inf_drug_info: { title: "Emergency infusion drug", body: "This selector chooses the fixed protocol used for calculation.\nNoradrenaline: first-line vasopressor in most vasodilatory or septic shock states; also used in hypotensive cardiogenic shock to restore perfusion pressure.\nDobutamine: inotrope for low cardiac output, especially when blood pressure is acceptable or after vasopressor support.\nAdrenaline: potent vasopressor/inotrope, used in cardiac arrest, anaphylaxis, severe shock or refractory hypotension depending on local protocols.\nAmiodarone: antiarrhythmic for ventricular tachyarrhythmias or selected supraventricular arrhythmias.\nAlways verify indication, contraindications, ECG rhythm, blood pressure and local protocol." },
+  inf_dose_info: { title: "Target dose", body: "Choose the starting dose according to clinical severity, blood pressure and response.\nNoradrenaline: common starting range 0.05–0.1 µg/kg/min, then titrate to MAP ≥ 65 mmHg or individualized target.\nDobutamine: often start 2–5 µg/kg/min, increase gradually according to cardiac output, congestion, blood pressure and arrhythmias.\nAdrenaline: start low in shock when used as infusion; titrate carefully due to tachycardia, ischemia and lactate increase.\nAmiodarone: loading and maintenance rates depend on rhythm and emergency context.\nUse continuous monitoring. Reassess frequently. This tool is clinical decision support only." }
 };
 
 function showInfo(key) {
