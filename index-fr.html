@@ -1002,8 +1002,53 @@
         <button class="primary module-btn" data-tab="diagnostic">Ouvrir le moteur diagnostique</button>
       </div>
     </div>
+
+    <div class="card home-card">
+      <h2>Perfusions d’urgence</h2>
+      <p class="sub">
+        Dosage des vasopresseurs et inotropes (cc/h) avec protocoles fixes
+      </p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="emergency-infusions">Ouvrir les perfusions d’urgence</button>
+      </div>
+    </div>
   </div>
     </section>
+<section id="emergency-infusions" class="panel">
+  <div class="card">
+    <h2>Perfusions d’urgence</h2>
+    <p class="sub">Dosage des vasopresseurs et inotropes (cc/h) avec protocoles fixes.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Protocole</h3>
+      <label>Médicament</label>
+      <select id="inf_drug" onchange="updateInfusionDoseOptions()">
+        <option value="noradrenaline">Noradrénaline</option>
+        <option value="dobutamine">Dobutamine</option>
+        <option value="adrenaline">Adrénaline</option>
+        <option value="amiodarone">Amiodarone</option>
+      </select>
+
+      <label>Poids (kg)</label>
+      <input id="inf_weight" type="number" step="0.1" min="0">
+
+      <label>Dose cible</label>
+      <select id="inf_dose"></select>
+
+      <div class="actions">
+        <button class="primary" onclick="calculateEmergencyInfusion()">Calculer</button>
+        <button type="button" class="btn secondary" onclick="resetPanel('emergency-infusions'); updateInfusionDoseOptions();">Réinitialiser</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Résultat</h3>
+      <div id="inf_results" class="summary-box">Sélectionnez un protocole puis calculez.</div>
+    </div>
+  </div>
+</section>
 <section id="echo-menu" class="panel">
   <div class="card">
     <h2>Mesures échocardiographiques</h2>
@@ -2071,6 +2116,116 @@ if (backBtn) {
         el.textContent = '';
       });
     }
+
+    const infusionProtocols = {
+      noradrenaline: {
+        drug: 'Noradrénaline',
+        preparation: '4 mg dans 50 mL',
+        concentration: '80 µg/mL',
+        concentrationValue: 80,
+        doseUnit: 'µg/kg/min',
+        doses: [0.05, 0.1, 0.2, 0.3, 0.5, 1],
+        note: 'Titrer pour obtenir une PAM ≥ 65 mmHg. Utiliser une voie centrale si possible.'
+      },
+      dobutamine: {
+        drug: 'Dobutamine',
+        preparation: '250 mg dans 50 mL',
+        concentration: '5000 µg/mL',
+        concentrationValue: 5000,
+        doseUnit: 'µg/kg/min',
+        doses: [2, 5, 10, 15, 20],
+        note: 'Titrer selon la réponse clinique et les objectifs de débit cardiaque. Utiliser une voie centrale si possible.'
+      },
+      adrenaline: {
+        drug: 'Adrénaline',
+        preparation: '1 mg dans 50 mL',
+        concentration: '20 µg/mL',
+        concentrationValue: 20,
+        doseUnit: 'µg/kg/min',
+        doses: [0.02, 0.05, 0.1, 0.2, 0.3],
+        note: 'Titrer pour obtenir une PAM ≥ 65 mmHg. Utiliser une voie centrale si possible.'
+      },
+      amiodarone: {
+        drug: 'Amiodarone',
+        preparation: '300 mg dans 50 mL',
+        concentration: '6 mg/mL',
+        concentrationValue: 6,
+        doseUnit: '',
+        doses: [
+          { label: 'Charge : 150 mg en 10 min', value: 'loading' },
+          { label: 'Entretien : 1 mg/min', value: '1' },
+          { label: 'Entretien : 0,5 mg/min', value: '0.5' }
+        ],
+        note: 'Surveiller le rythme, la pression artérielle, l’intervalle QT et les protocoles locaux.'
+      }
+    };
+
+    function updateInfusionDoseOptions() {
+      const drugSelect = document.getElementById('inf_drug');
+      const doseSelect = document.getElementById('inf_dose');
+      if (!drugSelect || !doseSelect) return;
+
+      const drugKey = drugSelect.value || 'noradrenaline';
+      if (!drugSelect.value) drugSelect.value = drugKey;
+      const protocol = infusionProtocols[drugKey] || infusionProtocols.noradrenaline;
+
+      doseSelect.innerHTML = protocol.doses.map(dose => {
+        if (typeof dose === 'object') {
+          return `<option value="${dose.value}">${dose.label}</option>`;
+        }
+        return `<option value="${dose}">${dose} ${protocol.doseUnit}</option>`;
+      }).join('');
+    }
+
+    function calculateEmergencyInfusion() {
+      const drugKey = document.getElementById('inf_drug')?.value || 'noradrenaline';
+      const protocol = infusionProtocols[drugKey];
+      const weight = g('inf_weight');
+      const selectedDose = document.getElementById('inf_dose')?.value;
+
+      if (!protocol || !selectedDose) {
+        s('inf_results', '<div class="alert-item caution">Sélectionnez un médicament et une dose cible.</div>');
+        return;
+      }
+
+      if (drugKey !== 'amiodarone' && (!weight || weight <= 0)) {
+        s('inf_results', '<div class="alert-item caution">Entrez un poids valide en kg.</div>');
+        return;
+      }
+
+      let rate = 0;
+      let patientLine = drugKey === 'amiodarone' && (!weight || weight <= 0)
+        ? 'Poids : non requis pour ce protocole fixe'
+        : `Poids : ${fmt(weight, 1)} kg`;
+      let doseLine = '';
+
+      if (drugKey === 'amiodarone') {
+        if (selectedDose === 'loading') {
+          rate = (150 / protocol.concentrationValue) / (10 / 60);
+          doseLine = 'Charge : 150 mg en 10 min';
+        } else {
+          const mgPerMin = parseFloat(selectedDose);
+          rate = (mgPerMin * 60) / protocol.concentrationValue;
+          doseLine = `${mgPerMin} mg/min`;
+        }
+      } else {
+        const dose = parseFloat(selectedDose);
+        rate = (dose * weight * 60) / protocol.concentrationValue;
+        doseLine = `${dose} ${protocol.doseUnit}`;
+      }
+
+      s('inf_results', `
+        <p><strong>Préparation :</strong><br>${protocol.preparation}</p>
+        <p><strong>Concentration :</strong><br>${protocol.concentration}</p>
+        <p><strong>Patient :</strong><br>${patientLine}</p>
+        <p><strong>Dose sélectionnée :</strong><br>${doseLine}</p>
+        <div class="status-box success"><strong>DÉBIT :</strong><br>👉 ${fmt(rate, 1)} mL/h</div>
+        <p><strong>Note clinique :</strong><br>${protocol.note}</p>
+        <p class="sub">Aide à la décision clinique uniquement. Toujours vérifier les doses et les protocoles locaux.</p>
+      `);
+    }
+
+    updateInfusionDoseOptions();
 
     function diastolicAssessment(eovere, eprime, lavi, trv) {
       let score = 0;
