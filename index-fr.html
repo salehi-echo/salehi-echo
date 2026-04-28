@@ -610,22 +610,22 @@
   <div class="grid-2">
     <div class="card">
       <h3>Mesures valvulaires</h3>
-      <label>Diamètre LVOT (cm)</label><input id="as_lvot" type="number" step="0.01">
-      <label>VTI LVOT (cm)</label><input id="as_lvotvti" type="number" step="0.1">
-      <label>VTI valve aortique (cm)</label><input id="as_avvti" type="number" step="0.1">
-      <label>Vmax valve aortique (m/s)</label><input id="as_vmax" type="number" step="0.1">
-      <label>Gradient moyen (mmHg)</label><input id="as_mg" type="number" step="1">
+      <label>Diamètre LVOT (cm) <button type="button" class="info-btn" onclick="showInfo('lvot_diameter')">?</button></label><input id="as_lvot" type="number" step="0.01">
+      <label>VTI LVOT (cm) <button type="button" class="info-btn" onclick="showInfo('lvot_vti')">?</button></label><input id="as_lvotvti" type="number" step="0.1">
+      <label>VTI valve aortique (cm) <button type="button" class="info-btn" onclick="showInfo('av_vti')">?</button></label><input id="as_avvti" type="number" step="0.1">
+      <label>Vmax valve aortique (m/s) <button type="button" class="info-btn" onclick="showInfo('av_vmax')">?</button></label><input id="as_vmax" type="number" step="0.1">
+      <label>Gradient moyen (mmHg) <button type="button" class="info-btn" onclick="showInfo('av_mean_gradient')">?</button></label><input id="as_mg" type="number" step="1">
     </div>
 
     <div class="card">
       <h3>Contexte hémodynamique</h3>
-      <label>Surface corporelle / BSA (m²)</label><input id="as_bsa" type="number" step="0.01">
-      <label>FEVG (%)</label><input id="as_ef" type="number" step="1">
-      <label>E/e′ moyen (optionnel)</label><input id="as_eovere" type="number" step="0.1">
-      <label>LAVI mL/m² (optionnel)</label><input id="as_lavi" type="number" step="1">
+      <label>Surface corporelle / BSA (m²) <button type="button" class="info-btn" onclick="showInfo('height_bsa')">?</button></label><input id="as_bsa" type="number" step="0.01">
+      <label>FEVG (%) <button type="button" class="info-btn" onclick="showInfo('lvef')">?</button></label><input id="as_ef" type="number" step="1">
+      <label>E/e′ moyen (optionnel) <button type="button" class="info-btn" onclick="showInfo('e_over_e')">?</button></label><input id="as_eovere" type="number" step="0.1">
+      <label>LAVI mL/m² (optionnel) <button type="button" class="info-btn" onclick="showInfo('lavi')">?</button></label><input id="as_lavi" type="number" step="1">
       <label>GLS (%) (optionnel)</label><input id="as_gls" type="number" step="0.1">
-      <label>e′ septal (cm/s) (optionnel)</label><input id="as_eprime" type="number" step="0.1">
-      <label>Vitesse IT (m/s) (optionnel)</label><input id="as_trv" type="number" step="0.1">
+      <label>e′ septal (cm/s) (optionnel) <button type="button" class="info-btn" onclick="showInfo('eprime')">?</button></label><input id="as_eprime" type="number" step="0.1">
+      <label>Vitesse IT (m/s) (optionnel) <button type="button" class="info-btn" onclick="showInfo('tr_velocity')">?</button></label><input id="as_trv" type="number" step="0.1">
       <div class="actions">
         <button class="primary" onclick="calculateAS()">Calculer le RAo</button>
         <button type="button" class="btn secondary" onclick="resetPanel('as')">Réinitialiser</button>
@@ -803,7 +803,7 @@
           <label>Vitesse d’aliasing Va (cm/s) <button type="button" class="info-btn" onclick="showInfo('va')">?</button></label><input id="mr_va" type="number" step="1">
           <label>Vitesse maximale de l’IM (cm/s) <button type="button" class="info-btn" onclick="showInfo('mr_velocity')">?</button></label><input id="mr_vmax" type="number" step="1">
           <label>ITV de l’IM (cm) <button type="button" class="info-btn" onclick="showInfo('mr_vti')">?</button></label><input id="mr_vti" type="number" step="1">
-          <label>Vena contracta (mm) (optionnel) <button type="button" class="info-btn" onclick="showInfo('vc')">?</button></label><input id="mr_vc" type="number" step="0.1">
+          <label>Vena contracta (mm) (optionnel) <button type="button" class="info-btn" onclick="showInfo('vena_contracta_mr')">?</button></label><input id="mr_vc" type="number" step="0.1">
           <label>Mécanisme</label>
           <select id="mr_mech">
             <option value="primary">Primaire</option>
@@ -833,10 +833,10 @@
 
       <div class="grid-2">
         <div class="card">
-          <label>PHT (ms)</label><input id="ms_pht" type="number" step="1">
-          <label>Gradient moyen (mmHg)</label><input id="ms_grad" type="number" step="1">
-          <label>Fréquence cardiaque (bpm)</label><input id="ms_hr" type="number" step="1">
-          <label>Rythme</label>
+          <label>PHT (ms) <button type="button" class="info-btn" onclick="showInfo('mitral_pht')">?</button></label><input id="ms_pht" type="number" step="1">
+          <label>Gradient moyen (mmHg) <button type="button" class="info-btn" onclick="showInfo('mitral_mean_gradient')">?</button></label><input id="ms_grad" type="number" step="1">
+          <label>Fréquence cardiaque (bpm) <button type="button" class="info-btn" onclick="showInfo('heart_rate_gradient')">?</button></label><input id="ms_hr" type="number" step="1">
+          <label>Rythme <button type="button" class="info-btn" onclick="showInfo('rhythm_gradient')">?</button></label>
           <select id="ms_rhythm">
             <option value="sinus">Sinusal</option>
             <option value="af">FA</option>
@@ -864,9 +864,9 @@
 
       <div class="grid-2">
         <div class="card">
-          <label>Pressure half-time / PHT (ms)</label><input id="ar_pht" type="number" step="1">
-          <label>Vena contracta (mm)</label><input id="ar_vc" type="number" step="0.1">
-          <label>Flux holodiastolique rétrograde dans l’aorte descendante</label>
+          <label>Pressure half-time / PHT (ms) <button type="button" class="info-btn" onclick="showInfo('ar_pht')">?</button></label><input id="ar_pht" type="number" step="1">
+          <label>Vena contracta (mm) <button type="button" class="info-btn" onclick="showInfo('vena_contracta_ar')">?</button></label><input id="ar_vc" type="number" step="0.1">
+          <label>Flux holodiastolique rétrograde dans l’aorte descendante <button type="button" class="info-btn" onclick="showInfo('holodiastolic_flow_reversal')">?</button></label>
           <select id="ar_flowrev">
             <option value="no">Non</option>
             <option value="yes">Oui</option>
@@ -895,13 +895,13 @@
 
       <div class="grid-2">
         <div class="card">
-          <label>Vitesse IT (m/s)</label><input id="tr_vmax" type="number" step="0.1">
-          <label>Diamètre de la VCI (mm)</label>
+          <label>Vitesse IT (m/s) <button type="button" class="info-btn" onclick="showInfo('tr_velocity')">?</button></label><input id="tr_vmax" type="number" step="0.1">
+          <label>Diamètre de la VCI (mm) <button type="button" class="info-btn" onclick="showInfo('ivc_diameter')">?</button></label>
 <input id="tr_ivc" type="number" step="1" placeholder="ex. 18">
 
-<label>Collapsibilité de la VCI (%)</label>
+<label>Collapsibilité de la VCI (%) <button type="button" class="info-btn" onclick="showInfo('ivc_collapsibility')">?</button></label>
 <input id="tr_ivc_collapse" type="number" step="1" placeholder="ex. 50">
-          <label>Vena contracta de l’IT (mm) (optionnel)</label><input id="tr_vc" type="number" step="0.1">
+          <label>Vena contracta de l’IT (mm) (optionnel) <button type="button" class="info-btn" onclick="showInfo('vena_contracta_tr')">?</button></label><input id="tr_vc" type="number" step="0.1">
           <div class="actions">
             <button class="primary" onclick="calculateTR()">Calculer IT/PAPs</button>
             <button type="button" class="btn secondary" onclick="resetPanel('tr')">Réinitialiser</button>
@@ -928,37 +928,37 @@
     <div class="card">
       <h3>Données corporelles</h3>
 
-      <label>Taille (cm)</label>
+      <label>Taille (cm) <button type="button" class="info-btn" onclick="showInfo('height_bsa')">?</button></label>
       <input id="fn_height" type="number" step="1" placeholder="ex. 170">
 
-      <label>Poids (kg)</label>
+      <label>Poids (kg) <button type="button" class="info-btn" onclick="showInfo('weight_bsa')">?</button></label>
       <input id="fn_weight" type="number" step="0.1" placeholder="ex. 70">
 
       <h3 style="margin-top:16px;">Oreillette gauche</h3>
 
-      <label>Longueur OG (cm)</label>
+      <label>Longueur OG (cm) <button type="button" class="info-btn" onclick="showInfo('la_length')">?</button></label>
       <input id="fn_la_length" type="number" step="0.1" placeholder="ex. 5.2">
 
-      <label>Largeur OG (cm)</label>
+      <label>Largeur OG (cm) <button type="button" class="info-btn" onclick="showInfo('la_width')">?</button></label>
       <input id="fn_la_width" type="number" step="0.1" placeholder="ex. 4.0">
 
-      <label>Profondeur OG (cm)</label>
+      <label>Profondeur OG (cm) <button type="button" class="info-btn" onclick="showInfo('la_depth')">?</button></label>
       <input id="fn_la_depth" type="number" step="0.1" placeholder="ex. 4.5">
     </div>
 
     <div class="card">
       <h3>Fonction systolique VG</h3>
 
-      <label>FEVG (%)</label>
+      <label>FEVG (%) <button type="button" class="info-btn" onclick="showInfo('lvef')">?</button></label>
       <input id="fn_ef" type="number" step="1" placeholder="ex. 60">
 
-      <label>Fraction de raccourcissement (%)</label>
+      <label>Fraction de raccourcissement (%) <button type="button" class="info-btn" onclick="showInfo('fractional_shortening')">?</button></label>
       <input id="fn_fs" type="number" step="1" placeholder="ex. 32">
 
-      <label>MAPSE (mm)</label>
+      <label>MAPSE (mm) <button type="button" class="info-btn" onclick="showInfo('mapse')">?</button></label>
       <input id="fn_mapse" type="number" step="0.1" placeholder="ex. 12">
 
-      <label>Onde S′ mitrale latérale (cm/s)</label>
+      <label>Onde S′ mitrale latérale (cm/s) <button type="button" class="info-btn" onclick="showInfo('mitral_sprime')">?</button></label>
       <input id="fn_sprime_mitral" type="number" step="0.1" placeholder="ex. 8">
     </div>
   </div>
@@ -967,19 +967,19 @@
     <div class="card">
       <h3>Fonction diastolique / pressions de remplissage</h3>
 
-      <label>Rapport E/A</label>
+      <label>Rapport E/A <button type="button" class="info-btn" onclick="showInfo('ea_ratio')">?</button></label>
       <input id="fn_ea" type="number" step="0.1" placeholder="ex. 1.1">
 
-      <label>E/e′</label>
+      <label>E/e′ <button type="button" class="info-btn" onclick="showInfo('e_over_e')">?</button></label>
       <input id="fn_eovere" type="number" step="0.1" placeholder="ex. 9">
 
-      <label>e′ septal (cm/s)</label>
+      <label>e′ septal (cm/s) <button type="button" class="info-btn" onclick="showInfo('septal_eprime')">?</button></label>
       <input id="fn_eprime_septal" type="number" step="0.1" placeholder="ex. 7">
 
-      <label>e′ latéral (cm/s)</label>
+      <label>e′ latéral (cm/s) <button type="button" class="info-btn" onclick="showInfo('lateral_eprime')">?</button></label>
       <input id="fn_eprime_lateral" type="number" step="0.1" placeholder="ex. 10">
 
-      <label>Vitesse IT / TR velocity (m/s)</label>
+      <label>Vitesse IT / TR velocity (m/s) <button type="button" class="info-btn" onclick="showInfo('tr_velocity')">?</button></label>
       <input id="fn_trv" type="number" step="0.1" placeholder="ex. 2.6">
 
       <div class="actions">
@@ -1341,11 +1341,42 @@
 <script>
   const backBtn = document.getElementById("backBtn");
 const infoContent = {
-  pisa: "Rayon PISA :\n- Vue : apicale 4 cavités ou vue optimisée du jet d’IM.\n- Utiliser le Doppler couleur.\n- Diminuer la limite de Nyquist, généralement autour de 20–40 cm/s.\n- Mesurer de l’orifice régurgitant jusqu’à la première hémisphère d’aliasing.\n- Erreur fréquente : mesurer tout le jet au lieu de la coque PISA.",
-  va: "Vitesse d’aliasing Va :\n- Correspond à la limite de Nyquist affichée en Doppler couleur.\n- Elle est souvent réglée autour de 20–40 cm/s pour la PISA.\n- Elle doit être lue sur l’échographe, pas estimée.\n- Erreur fréquente : garder une échelle couleur trop élevée, ce qui sous-estime la PISA.",
-  mr_velocity: "Vitesse maximale de l’IM :\n- Mesurée en Doppler continu.\n- Aligner le faisceau Doppler le plus parallèlement possible au jet d’IM.\n- Généralement autour de 4–6 m/s.\n- Utilisée dans les calculs PISA/SOR.",
-  mr_vti: "ITV de l’IM :\n- Obtenue à partir de l’enveloppe Doppler continu du jet d’IM.\n- Tracer toute l’enveloppe systolique.\n- Représente l’intégrale temps-vitesse du jet régurgitant.",
-  vc: "Vena contracta :\n- Partie la plus étroite du jet juste en aval de l’orifice régurgitant.\n- Mesure en Doppler couleur zoomé.\n- <3 mm suggère une IM légère ; >7 mm soutient une IM sévère.\n- Erreur fréquente : mesure oblique ou trop loin de l’orifice."
+  lvot_diameter: "Diamètre LVOT :\n- Vue : vue parasternale grand axe.\n- Mesure en mésosystole, bord interne à bord interne.\n- Sert au calcul de la surface du LVOT/CCVG.\n- Une petite erreur est amplifiée car la surface dépend du rayon au carré.\n- Erreur fréquente : mesurer trop loin de l’anneau aortique.",
+  lvot_vti: "ITV LVOT :\n- Doppler pulsé en vue apicale 5 cavités ou 3 cavités.\n- Placer le volume d’échantillonnage juste sous la valve aortique, dans le LVOT/CCVG.\n- Tracer l’enveloppe systolique.\n- Sert au calcul du volume d’éjection et de la surface aortique.",
+  av_vti: "ITV valve aortique :\n- Doppler continu à travers la valve aortique.\n- Chercher la vitesse la plus élevée par plusieurs fenêtres : apicale, parasternale droite, sus-sternale si besoin.\n- Tracer toute l’enveloppe systolique.\n- L’alignement Doppler est essentiel.",
+  av_vmax: "Vmax aortique :\n- Vitesse maximale à travers la valve aortique en Doppler continu.\n- Explorer plusieurs fenêtres.\n- Un mauvais alignement Doppler sous-estime la sévérité.",
+  av_mean_gradient: "Gradient moyen aortique :\n- Dérivé du tracé Doppler continu transaortique.\n- Nécessite un bon alignement et une enveloppe complète.\n- À interpréter avec le débit et la surface valvulaire.",
+  height_bsa: "Taille / surface corporelle :\n- La taille et le poids servent à calculer la surface corporelle.\n- Les mesures indexées comme AVAi ou LAVI dépendent de cette valeur.\n- Vérifier les unités avant le calcul.",
+  weight_bsa: "Poids :\n- Utilisé avec la taille pour calculer la surface corporelle.\n- Indispensable pour les mesures indexées.\n- Une erreur d’unité fausse l’indexation.",
+  lvef: "FEVG :\n- Privilégier la méthode Simpson biplan en vues apicales 4 et 2 cavités.\n- Éviter les vues apicales raccourcies.\n- L’estimation visuelle est moins reproductible.",
+  e_over_e: "E/e’ :\n- Onde E du flux transmitral et e’ en Doppler tissulaire.\n- Aide à estimer les pressions de remplissage du VG.\n- À interpréter avec la taille de l’OG, la vitesse IT, le rythme et le contexte clinique.",
+  lavi: "LAVI :\n- Volume de l’OG indexé à la surface corporelle.\n- Privilégier la méthode biplan aire-longueur ou Simpson.\n- Une OG dilatée soutient des pressions de remplissage chroniquement élevées.",
+  eprime: "Vitesse e’ :\n- Vitesse en Doppler tissulaire à l’anneau mitral.\n- e’ septal <7 cm/s ou e’ latéral <10 cm/s soutient une dysfonction diastolique.\n- L’alignement de l’angle est important.",
+  tr_velocity: "Vitesse IT :\n- Doppler continu sur le jet d’insuffisance tricuspide.\n- Sert à estimer le gradient VD-OD et les PAPs.\n- Aligner le Doppler avec le jet et retenir la meilleure enveloppe.",
+  pisa: "Rayon PISA :\n- Vue : apicale 4 cavités ou vue optimisée du jet d’IM.\n- Utiliser le Doppler couleur.\n- Abaisser la limite de Nyquist, souvent autour de 20–40 cm/s.\n- Mesurer de l’orifice régurgitant à la première hémisphère d’aliasing.\n- Erreur fréquente : mesurer tout le jet au lieu de la coque PISA.",
+  va: "Vitesse d’aliasing Va :\n- Limite de Nyquist affichée en Doppler couleur.\n- Souvent réglée autour de 20–40 cm/s pour la PISA.\n- À lire sur l’échographe, ne pas l’estimer.\n- Une échelle couleur trop élevée peut sous-estimer la PISA.",
+  mr_velocity: "Vitesse maximale de l’IM :\n- Mesurée en Doppler continu.\n- Aligner le faisceau Doppler parallèlement au jet d’IM.\n- Utilisée dans les calculs PISA/SOR.",
+  mr_vti: "ITV de l’IM :\n- Tracer toute l’enveloppe Doppler continu du jet d’IM.\n- Représente l’intégrale temps-vitesse du flux régurgitant.",
+  vena_contracta_mr: "Vena contracta de l’IM :\n- Partie la plus étroite du jet juste en aval de l’orifice.\n- Utiliser le Doppler couleur zoomé.\n- <3 mm suggère une IM légère ; >7 mm soutient une IM sévère.",
+  mitral_pht: "Pressure half-time mitral :\n- Doppler continu du flux transmitral.\n- Sert à estimer la surface mitrale : SM = 220 / PHT.\n- Moins fiable si compliance altérée, IA significative ou après valvuloplastie.",
+  mitral_mean_gradient: "Gradient moyen mitral :\n- Gradient transmitral en Doppler continu.\n- Dépend fortement de la fréquence cardiaque et du débit.\n- Moyenner plusieurs cycles, surtout en fibrillation atriale.",
+  heart_rate_gradient: "Fréquence cardiaque :\n- Élément majeur pour interpréter les gradients.\n- La tachycardie augmente les gradients transmitraux et peut surestimer la sévérité.",
+  rhythm_gradient: "Rythme :\n- La fibrillation atriale rend les gradients variables.\n- Moyenner plusieurs cycles avec intervalles R-R similaires.",
+  ar_pht: "PHT de l’IA :\n- Doppler continu du jet d’insuffisance aortique.\n- Un PHT court suggère une IA sévère, mais dépend de la compliance VG et de la pression aortique.\n- Toujours l’intégrer à une évaluation multiparamétrique.",
+  vena_contracta_ar: "Vena contracta de l’IA :\n- Largeur la plus étroite du jet d’IA près de la valve aortique.\n- Mesure en Doppler couleur zoomé.\n- À interpréter avec largeur du jet, reflux diastolique, taille du VG et Doppler.",
+  holodiastolic_flow_reversal: "Flux holodiastolique rétrograde :\n- Doppler pulsé dans l’aorte descendante ou abdominale.\n- Un reflux holodiastolique soutient une IA significative/sévère.\n- Vérifier la position de l’échantillon et l’échelle Doppler.",
+  ivc_diameter: "Diamètre de la VCI :\n- Vue sous-costale grand axe.\n- Mesurer à 1–2 cm de la jonction avec l’oreillette droite.\n- Utilisé avec la collapsibilité pour estimer la POD.",
+  ivc_collapsibility: "Collapsibilité de la VCI :\n- Évaluer la diminution respiratoire du diamètre de la VCI.\n- >50 % suggère une POD basse ; <50 % avec VCI dilatée suggère une POD élevée.\n- Interprétation prudente sous ventilation ou en effort inspiratoire insuffisant.",
+  vena_contracta_tr: "Vena contracta de l’IT :\n- Largeur de la partie la plus étroite du jet d’IT en Doppler couleur.\n- Aide à grader la sévérité de l’IT.\n- À interpréter avec le flux des veines hépatiques, l’anneau, le VD et la densité du jet.",
+  la_length: "Longueur OG :\n- Mesurer du plan de l’anneau mitral à la paroi postérieure de l’OG.\n- Éviter les veines pulmonaires et l’auricule gauche.\n- Sert à estimer le volume OG.",
+  la_width: "Largeur OG :\n- Dimension utilisée dans l’estimation simplifiée du volume OG.\n- Éviter les vues raccourcies.\n- L’erreur de coupe modifie le volume calculé.",
+  la_depth: "Profondeur OG :\n- Dimension orthogonale de l’OG utilisée pour le volume.\n- La précision dépend d’une vue correcte et non raccourcie.",
+  fractional_shortening: "Fraction de raccourcissement :\n- Mesure linéaire VG en mode M ou 2D.\n- Moins fiable en cas d’anomalies segmentaires de cinétique.\n- Utile lorsque la FEVG Simpson n’est pas disponible.",
+  mapse: "MAPSE :\n- Déplacement de l’anneau mitral en mode M.\n- Reflète la fonction systolique longitudinale du VG.\n- Une MAPSE basse soutient une dysfonction systolique VG.",
+  mitral_sprime: "Onde S’ mitrale latérale :\n- Vitesse systolique en Doppler tissulaire à l’anneau mitral latéral.\n- Reflète la fonction systolique longitudinale du VG.\n- L’alignement angulaire est important.",
+  ea_ratio: "Rapport E/A :\n- Doppler pulsé du flux transmitral au bout des feuillets mitraux.\n- Aide à classer le profil de remplissage diastolique.\n- À interpréter avec l’âge, E/e’, le volume OG, la vitesse IT et le rythme.",
+  septal_eprime: "e’ septal :\n- Doppler tissulaire à l’anneau mitral septal.\n- Une valeur basse soutient un trouble de relaxation.\n- À utiliser avec e’ latéral et E/e’.",
+  lateral_eprime: "e’ latéral :\n- Doppler tissulaire à l’anneau mitral latéral.\n- Une valeur basse soutient un trouble de relaxation.\n- À utiliser avec e’ septal et E/e’."
 };
 
 function showInfo(key) {
