@@ -1026,16 +1026,27 @@
       <label>
         Médicament
         <button type="button" class="info-btn" onclick="showInfo('inf_drug_info')">?</button>
+        <span id="inf_drug_specific_info"></span>
       </label>
       <select id="inf_drug" onchange="updateInfusionDoseOptions()">
-        <option value="noradrenaline">Noradrénaline</option>
-        <option value="dobutamine">Dobutamine</option>
-        <option value="adrenaline">Adrénaline</option>
-        <option value="amiodarone">Amiodarone</option>
+        <optgroup label="Vasopresseurs / Inotropes">
+          <option value="noradrenaline">Noradrénaline</option>
+          <option value="dobutamine">Dobutamine</option>
+          <option value="adrenaline">Adrénaline</option>
+        </optgroup>
+        <optgroup label="Antiarythmique">
+          <option value="amiodarone">Amiodarone</option>
+        </optgroup>
+        <optgroup label="Antihypertenseurs / Vasodilatateurs">
+          <option value="nicardipine">Nicardipine / Loxen</option>
+          <option value="risordan">Dinitrate d’isosorbide / Risordan</option>
+        </optgroup>
       </select>
 
-      <label>Poids (kg)</label>
-      <input id="inf_weight" type="number" step="0.1" min="0">
+      <div id="inf_weight_group">
+        <label>Poids (kg)</label>
+        <input id="inf_weight" type="number" step="0.1" min="0">
+      </div>
 
       <label>
         Dose cible
@@ -1970,8 +1981,10 @@ const infoContent = {
   edema_consolidation: { title: "Condensation / bronchogramme aérien", body: "Échographie pulmonaire : explorer les zones symptomatiques et postéro-latérales si possible.\nIntérêt clinique : condensation ou bronchogrammes aériens dynamiques favorisent pneumonie ou atteinte pulmonaire non cardiogénique.\nPièges : atélectasie et infarctus pulmonaire peuvent aussi donner une condensation." },
   edema_cardiogenic: { title: "Œdème pulmonaire cardiogénique", body: "Arguments : lignes B diffuses bilatérales, pressions de remplissage élevées, dysfonction VG ou valvulopathie significative, dilatation OG, épanchement pleural, VCI dilatée.\nIntérêt clinique : soutient diurétiques, vasodilatateurs si HTA et traitement de la cause cardiaque.\nPièges : les mécanismes cardiogéniques et non cardiogéniques peuvent coexister." },
   edema_noncardiogenic: { title: "Œdème pulmonaire non cardiogénique / SDRA", body: "Arguments : lignes B patchy, anomalies de la ligne pleurale, condensations, pressions de remplissage VG non élevées et absence de cause cardiaque majeure.\nIntérêt clinique : évoquer pneumonie, SDRA, sepsis, inhalation ou maladie inflammatoire pulmonaire.\nPièges : l’écho cardiaque et pulmonaire doivent être intégrées au contexte clinique." },
-  inf_drug_info: { title: "Médicament en perfusion d’urgence", body: "Ce choix détermine le protocole fixe utilisé pour le calcul.\nNoradrénaline : vasopresseur de référence dans la plupart des états de choc vasoplégique ou septique ; utile aussi dans le choc cardiogénique hypotensif pour restaurer la pression de perfusion.\nDobutamine : inotrope indiqué en cas de bas débit cardiaque, surtout si la pression artérielle est acceptable ou après support vasopresseur.\nAdrénaline : vasopresseur/inotrope puissant, utilisée dans l’arrêt cardiaque, l’anaphylaxie, certains chocs sévères ou hypotensions réfractaires selon le protocole local.\nAmiodarone : antiarythmique utilisé dans les tachyarythmies ventriculaires ou certaines tachyarythmies supraventriculaires.\nToujours vérifier l’indication, les contre-indications, le rythme ECG, la pression artérielle et le protocole local." },
-  inf_dose_info: { title: "Dose cible", body: "Choisir la dose initiale selon la gravité clinique, la pression artérielle et la réponse du patient.\nNoradrénaline : début fréquent à 0,05–0,1 µg/kg/min, puis titration pour obtenir une PAM ≥ 65 mmHg ou une cible individualisée.\nDobutamine : début souvent à 2–5 µg/kg/min, augmentation progressive selon le débit cardiaque, la congestion, la pression artérielle et les troubles du rythme.\nAdrénaline : commencer bas lorsqu’elle est utilisée en perfusion continue ; titration prudente à cause du risque de tachycardie, ischémie et augmentation du lactate.\nAmiodarone : bolus et entretien dépendent du trouble du rythme et du contexte d’urgence.\nSurveillance continue obligatoire. Réévaluation fréquente. Cet outil reste une aide à la décision clinique." }
+  inf_drug_info: { title: "Médicament en perfusion d’urgence", body: "Choisir la famille du médicament selon le contexte clinique.\nNoradrénaline, dobutamine et adrénaline sont des drogues vasoactives utilisées dans les états de choc.\nL’amiodarone est utilisée dans certaines tachyarythmies.\nNicardipine/Loxen et Risordan sont utilisés dans les urgences hypertensives ou les stratégies vasodilatatrices.\nToujours vérifier le rythme ECG, la pression artérielle, les contre-indications, la surveillance et le protocole local." },
+  inf_dose_info: { title: "Dose cible", body: "La dose cible ne se calcule pas directement à partir de la pression artérielle. On commence par une dose prudente, puis on titre selon la réponse.\nPour les vasopresseurs/inotropes : titrer selon la perfusion, la PAM cible et le débit cardiaque.\nPour la nicardipine : titration progressive selon la réponse tensionnelle.\nPour le Risordan : titration selon la pression artérielle, la douleur thoracique et l’œdème pulmonaire.\nSurveillance continue obligatoire." },
+  inf_nicardipine: { title: "Nicardipine / Loxen", body: "Indication : urgence hypertensive nécessitant une baisse contrôlée de la pression artérielle par voie IV.\nDébut habituel : 1–5 mg/h selon la sévérité et le protocole local.\nTitration : augmentation progressive selon la réponse tensionnelle.\nÉviter les chutes tensionnelles brutales.\nPrudence : rétrécissement aortique serré, insuffisance cardiaque décompensée, hypotension, sujet âgé ou insuffisance rénale/hépatique." },
+  inf_risordan: { title: "Dinitrate d’isosorbide / Risordan", body: "Indication : OAP hypertensif, syndrome coronarien aigu avec hypertension, ou stratégie vasodilatatrice adaptée.\nPlage habituelle : 2–10 mg/h, à titrer selon la réponse.\nSurveiller la pression artérielle et les symptômes.\nContre-indications/prudence : hypotension, infarctus du ventricule droit, rétrécissement aortique serré, prise récente d’inhibiteurs de la PDE5." }
 };
 
 function showInfo(key) {
@@ -2132,6 +2145,8 @@ if (backBtn) {
         concentration: '80 µg/mL',
         concentrationValue: 80,
         doseUnit: 'µg/kg/min',
+        requiresWeight: true,
+        rateMode: 'weight',
         doses: [0.05, 0.1, 0.2, 0.3, 0.5, 1],
         note: 'Titrer pour obtenir une PAM ≥ 65 mmHg. Utiliser une voie centrale si possible.'
       },
@@ -2141,6 +2156,8 @@ if (backBtn) {
         concentration: '5000 µg/mL',
         concentrationValue: 5000,
         doseUnit: 'µg/kg/min',
+        requiresWeight: true,
+        rateMode: 'weight',
         doses: [2, 5, 10, 15, 20],
         note: 'Titrer selon la réponse clinique et les objectifs de débit cardiaque. Utiliser une voie centrale si possible.'
       },
@@ -2150,6 +2167,8 @@ if (backBtn) {
         concentration: '20 µg/mL',
         concentrationValue: 20,
         doseUnit: 'µg/kg/min',
+        requiresWeight: true,
+        rateMode: 'weight',
         doses: [0.02, 0.05, 0.1, 0.2, 0.3],
         note: 'Titrer pour obtenir une PAM ≥ 65 mmHg. Utiliser une voie centrale si possible.'
       },
@@ -2159,23 +2178,65 @@ if (backBtn) {
         concentration: '6 mg/mL',
         concentrationValue: 6,
         doseUnit: '',
+        requiresWeight: false,
+        rateMode: 'amiodarone',
         doses: [
           { label: 'Charge : 150 mg en 10 min', value: 'loading' },
           { label: 'Entretien : 1 mg/min', value: '1' },
           { label: 'Entretien : 0,5 mg/min', value: '0.5' }
         ],
         note: 'Surveiller le rythme, la pression artérielle, l’intervalle QT et les protocoles locaux.'
+      },
+      nicardipine: {
+        drug: 'Nicardipine / Loxen',
+        preparation: '10 mg dans 50 mL',
+        concentration: '0,2 mg/mL',
+        concentrationValue: 0.2,
+        doseUnit: 'mg/h',
+        requiresWeight: false,
+        rateMode: 'hourly',
+        doses: [1, 2, 3, 5, 7.5, 10, 15],
+        note: 'Titrer progressivement selon la réponse tensionnelle. Éviter les chutes tensionnelles brutales.'
+      },
+      risordan: {
+        drug: 'Dinitrate d’isosorbide / Risordan',
+        preparation: '50 mg dans 50 mL',
+        concentration: '1 mg/mL',
+        concentrationValue: 1,
+        doseUnit: 'mg/h',
+        requiresWeight: false,
+        rateMode: 'hourly',
+        doses: [1, 2, 5, 10, 12, 20],
+        note: 'Titrer selon la pression artérielle, la douleur thoracique et la réponse de l’œdème pulmonaire.'
       }
     };
 
     function updateInfusionDoseOptions() {
       const drugSelect = document.getElementById('inf_drug');
       const doseSelect = document.getElementById('inf_dose');
+      const weightGroup = document.getElementById('inf_weight_group');
+      const weightInput = document.getElementById('inf_weight');
+      const specificInfo = document.getElementById('inf_drug_specific_info');
       if (!drugSelect || !doseSelect) return;
 
       const drugKey = drugSelect.value || 'noradrenaline';
       if (!drugSelect.value) drugSelect.value = drugKey;
       const protocol = infusionProtocols[drugKey] || infusionProtocols.noradrenaline;
+
+      if (weightGroup) {
+        weightGroup.style.display = protocol.requiresWeight ? '' : 'none';
+      }
+      if (weightInput) {
+        weightInput.disabled = !protocol.requiresWeight;
+        if (!protocol.requiresWeight) weightInput.value = '';
+      }
+      if (specificInfo) {
+        specificInfo.innerHTML = drugKey === 'nicardipine'
+          ? `<button type="button" class="info-btn" onclick="showInfo('inf_nicardipine')">?</button>`
+          : drugKey === 'risordan'
+            ? `<button type="button" class="info-btn" onclick="showInfo('inf_risordan')">?</button>`
+            : '';
+      }
 
       doseSelect.innerHTML = protocol.doses.map(dose => {
         if (typeof dose === 'object') {
@@ -2196,18 +2257,18 @@ if (backBtn) {
         return;
       }
 
-      if (drugKey !== 'amiodarone' && (!weight || weight <= 0)) {
+      if (protocol.requiresWeight && (!weight || weight <= 0)) {
         s('inf_results', '<div class="alert-item caution">Entrez un poids valide en kg.</div>');
         return;
       }
 
       let rate = 0;
-      let patientLine = drugKey === 'amiodarone' && (!weight || weight <= 0)
+      let patientLine = !protocol.requiresWeight
         ? 'Poids : non requis pour ce protocole fixe'
         : `Poids : ${fmt(weight, 1)} kg`;
       let doseLine = '';
 
-      if (drugKey === 'amiodarone') {
+      if (protocol.rateMode === 'amiodarone') {
         if (selectedDose === 'loading') {
           rate = (150 / protocol.concentrationValue) / (10 / 60);
           doseLine = 'Charge : 150 mg en 10 min';
@@ -2216,6 +2277,10 @@ if (backBtn) {
           rate = (mgPerMin * 60) / protocol.concentrationValue;
           doseLine = `${mgPerMin} mg/min`;
         }
+      } else if (protocol.rateMode === 'hourly') {
+        const dose = parseFloat(selectedDose);
+        rate = dose / protocol.concentrationValue;
+        doseLine = `${dose} ${protocol.doseUnit}`;
       } else {
         const dose = parseFloat(selectedDose);
         rate = (dose * weight * 60) / protocol.concentrationValue;
