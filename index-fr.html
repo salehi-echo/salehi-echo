@@ -447,6 +447,25 @@
     font-size: 13px;
   }
 }   
+
+  .info-btn {
+    margin-left: 6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    background: #2c5aa0;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+    line-height: 20px;
+  }
+
+  .info-btn:hover {
+    background: #173a8a;
+  }
   </style>
 </head>
 <body>
@@ -780,11 +799,11 @@
 
       <div class="grid-2">
         <div class="card">
-          <label>Rayon PISA (cm)</label><input id="mr_r" type="number" step="0.01">
-          <label>Vitesse d’aliasing Va (cm/s)</label><input id="mr_va" type="number" step="1">
-          <label>Vitesse maximale de l’IM (cm/s)</label><input id="mr_vmax" type="number" step="1">
-          <label>ITV de l’IM (cm)</label><input id="mr_vti" type="number" step="1">
-          <label>Vena contracta (mm) (optionnel)</label><input id="mr_vc" type="number" step="0.1">
+          <label>Rayon PISA (cm) <button type="button" class="info-btn" onclick="showInfo('pisa')">?</button></label><input id="mr_r" type="number" step="0.01">
+          <label>Vitesse d’aliasing Va (cm/s) <button type="button" class="info-btn" onclick="showInfo('va')">?</button></label><input id="mr_va" type="number" step="1">
+          <label>Vitesse maximale de l’IM (cm/s) <button type="button" class="info-btn" onclick="showInfo('mr_velocity')">?</button></label><input id="mr_vmax" type="number" step="1">
+          <label>ITV de l’IM (cm) <button type="button" class="info-btn" onclick="showInfo('mr_vti')">?</button></label><input id="mr_vti" type="number" step="1">
+          <label>Vena contracta (mm) (optionnel) <button type="button" class="info-btn" onclick="showInfo('vc')">?</button></label><input id="mr_vc" type="number" step="0.1">
           <label>Mécanisme</label>
           <select id="mr_mech">
             <option value="primary">Primaire</option>
@@ -1321,6 +1340,19 @@
   </main>
 <script>
   const backBtn = document.getElementById("backBtn");
+const infoContent = {
+  pisa: "Rayon PISA :\n- Vue : apicale 4 cavités ou vue optimisée du jet d’IM.\n- Utiliser le Doppler couleur.\n- Diminuer la limite de Nyquist, généralement autour de 20–40 cm/s.\n- Mesurer de l’orifice régurgitant jusqu’à la première hémisphère d’aliasing.\n- Erreur fréquente : mesurer tout le jet au lieu de la coque PISA.",
+  va: "Vitesse d’aliasing Va :\n- Correspond à la limite de Nyquist affichée en Doppler couleur.\n- Elle est souvent réglée autour de 20–40 cm/s pour la PISA.\n- Elle doit être lue sur l’échographe, pas estimée.\n- Erreur fréquente : garder une échelle couleur trop élevée, ce qui sous-estime la PISA.",
+  mr_velocity: "Vitesse maximale de l’IM :\n- Mesurée en Doppler continu.\n- Aligner le faisceau Doppler le plus parallèlement possible au jet d’IM.\n- Généralement autour de 4–6 m/s.\n- Utilisée dans les calculs PISA/SOR.",
+  mr_vti: "ITV de l’IM :\n- Obtenue à partir de l’enveloppe Doppler continu du jet d’IM.\n- Tracer toute l’enveloppe systolique.\n- Représente l’intégrale temps-vitesse du jet régurgitant.",
+  vc: "Vena contracta :\n- Partie la plus étroite du jet juste en aval de l’orifice régurgitant.\n- Mesure en Doppler couleur zoomé.\n- <3 mm suggère une IM légère ; >7 mm soutient une IM sévère.\n- Erreur fréquente : mesure oblique ou trop loin de l’orifice."
+};
+
+function showInfo(key) {
+  const content = infoContent[key] || "No information available.";
+  alert(content);
+}
+
 let historyStack = ["dashboard"];
 function showPanel(panelId) {
   const targetPanel = document.getElementById(panelId);
