@@ -6,13 +6,22 @@
   <title>Salehi Cardio Assistant</title>
   <style>
     :root {
+      --primary: #173f8f;
+      --primary-dark: #0f2f6d;
+      --primary-soft: #eaf1ff;
+      --text-main: #0f172a;
+      --text-muted: #536173;
+      --border: #d9e2ef;
+      --surface: #ffffff;
+      --surface-soft: #f6f8fc;
+      --shadow-soft: 0 8px 24px rgba(15, 23, 42, 0.08);
+      --radius-lg: 22px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
       --bg: #f3f6fb;
-      --card: #ffffff;
-      --primary: #173a8a;
-      --primary-dark: #10295f;
-      --text: #162033;
-      --muted: #5f6b7a;
-      --border: #d9e1ec;
+      --card: var(--surface);
+      --text: var(--text-main);
+      --muted: var(--text-muted);
       --success: #0f9f6e;
       --warning: #d48a00;
       --danger: #dc3d3d;
@@ -525,6 +534,380 @@
     line-height: 1.55;
     white-space: pre-line;
   }
+
+    body {
+      background: linear-gradient(180deg, #f7faff 0%, #eef4fb 100%);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-rendering: optimizeLegibility;
+    }
+
+    .app-header {
+      padding: 16px 22px;
+      background: rgba(255, 255, 255, 0.92);
+      border-bottom: 1px solid rgba(217, 226, 239, 0.88);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .app-logo-shell {
+      border-color: var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: 0 6px 16px rgba(15, 47, 109, 0.12);
+    }
+
+    .app-title h1,
+    .home-card h2,
+    h2,
+    h3 {
+      color: var(--primary-dark);
+      letter-spacing: 0;
+    }
+
+    .app-title p,
+    p.sub {
+      color: var(--text-muted);
+    }
+
+    .app {
+      max-width: 1280px;
+      margin: 24px auto 48px;
+      padding: 0 18px;
+    }
+
+    .card,
+    .module-card,
+    .panel-card,
+    .home-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 24px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover,
+    .module-card:hover,
+    .home-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+      border-color: #cbd8ea;
+    }
+
+    .home-hero {
+      border: 1px solid rgba(217, 226, 239, 0.32);
+      box-shadow: 0 18px 42px rgba(15, 47, 109, 0.2);
+    }
+
+    label {
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+
+    input,
+    select,
+    textarea {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      min-height: 48px;
+      font-size: 1rem;
+      background: #fff;
+      color: var(--text-main);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(23, 63, 143, 0.12);
+    }
+
+    button,
+    .btn,
+    .tab-btn,
+    .module-btn,
+    .back-btn {
+      min-height: 44px;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .primary,
+    button.primary,
+    .tab-btn.active,
+    .module-btn.primary,
+    .back-btn {
+      background: var(--primary);
+      color: #fff;
+      border: 1px solid var(--primary);
+      box-shadow: 0 6px 14px rgba(23, 63, 143, 0.25);
+    }
+
+    .primary:hover,
+    button.primary:hover,
+    .tab-btn.active:hover,
+    .module-btn.primary:hover,
+    .back-btn:hover {
+      background: var(--primary-dark);
+      border-color: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .secondary,
+    button.secondary,
+    .btn.secondary,
+    .tab-btn:not(.active) {
+      background: #fff;
+      color: var(--primary);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .secondary:hover,
+    button.secondary:hover,
+    .btn.secondary:hover,
+    .tab-btn:not(.active):hover {
+      background: var(--primary-soft);
+      border-color: #cfe0ff;
+      transform: translateY(-1px);
+    }
+
+    .danger-btn {
+      border-radius: 999px;
+      box-shadow: 0 6px 14px rgba(220, 61, 61, 0.18);
+    }
+
+    .lang-switch {
+      background: var(--surface);
+      color: var(--primary);
+      border: 1px solid var(--border);
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.1);
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lang-switch:hover {
+      background: var(--primary-soft);
+      transform: translateY(-1px);
+    }
+
+    .metric,
+    .summary-box,
+    .conclusion,
+    .result,
+    .results,
+    .interpretation {
+      background: var(--primary-soft);
+      border: 1px solid #cfe0ff;
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+    }
+
+    .summary-box,
+    .conclusion,
+    .result,
+    .results,
+    .interpretation {
+      padding: 18px;
+      line-height: 1.65;
+    }
+
+    .status-box {
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+    }
+
+    .info-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      margin-left: 8px;
+      border: none;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(23, 63, 143, 0.25);
+      vertical-align: middle;
+      line-height: 1;
+      padding: 0;
+      flex: 0 0 26px;
+    }
+
+    .info-btn:hover {
+      background: var(--primary-dark);
+      transform: scale(1.05);
+    }
+
+    .info-btn:active {
+      transform: scale(0.95);
+    }
+
+    .info-modal-backdrop,
+    .info-modal-backdrop.active {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .info-modal-backdrop {
+      display: none;
+    }
+
+    .info-modal-backdrop.active {
+      display: flex;
+    }
+
+    .info-modal,
+    .modal-content,
+    .info-modal-content {
+      position: relative;
+      width: min(92vw, 560px);
+      max-height: 82vh;
+      overflow-y: auto;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 28px 26px;
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+      border: 1px solid rgba(217, 226, 239, 0.9);
+    }
+
+    .info-modal-header {
+      display: block;
+      margin-bottom: 16px;
+      padding-right: 48px;
+    }
+
+    .info-modal-header h3,
+    .modal-content h3,
+    .info-modal-content h3 {
+      margin: 0;
+      font-size: 1.35rem;
+      color: var(--primary-dark);
+      line-height: 1.25;
+    }
+
+    .info-modal-body,
+    .modal-content p,
+    .modal-content pre,
+    .info-modal-content p,
+    .info-modal-content pre {
+      color: var(--text-main);
+      font-size: 1rem;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      margin: 0;
+      font-family: inherit;
+    }
+
+    .modal-close,
+    .info-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 38px;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+      box-shadow: 0 6px 14px rgba(23, 63, 143, 0.28);
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .modal-close:hover,
+    .info-modal-close:hover {
+      background: var(--primary-dark);
+      transform: scale(1.06);
+    }
+
+    .modal-close:active,
+    .info-modal-close:active {
+      transform: scale(0.94);
+    }
+
+    .modal-close:focus-visible,
+    .info-modal-close:focus-visible {
+      outline: 3px solid rgba(23, 63, 143, 0.25);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        margin: 16px auto 32px;
+        padding: 0 12px;
+      }
+
+      .app-header {
+        align-items: center;
+        padding: 12px;
+      }
+
+      .card,
+      .module-card,
+      .panel-card,
+      .home-card {
+        padding: 20px;
+        border-radius: 20px;
+      }
+
+      .actions {
+        gap: 10px;
+      }
+
+      .actions button,
+      .actions .btn,
+      .module-btn,
+      .back-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .info-modal,
+      .modal-content,
+      .info-modal-content {
+        width: 94vw;
+        max-height: 84vh;
+        padding: 24px 20px;
+        border-radius: 22px;
+      }
+
+      .info-modal-header {
+        padding-right: 44px;
+      }
+
+      .modal-close,
+      .info-modal-close {
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        font-size: 22px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1496,7 +1879,7 @@ function showInfo(key) {
       <div class="info-modal" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle">
         <div class="info-modal-header">
           <h3 id="infoModalTitle"></h3>
-          <button type="button" class="info-modal-close" aria-label="Close clinical information">&times;</button>
+          <button type="button" class="modal-close info-modal-close" aria-label="Close information popup">×</button>
         </div>
         <div id="infoModalBody" class="info-modal-body"></div>
       </div>
