@@ -1106,6 +1106,12 @@
     </div>
 
     <div class="card">
+      <h3>Congénital / Shunts</h3>
+      <p class="sub">Quantification CIA/ASD du shunt et retentissement droit.</p>
+      <button class="primary module-btn" data-tab="asd">CIA / ASD - Calculateur de shunt</button>
+    </div>
+
+    <div class="card">
       <h3>Systolique / Diastolique</h3>
       <p class="sub">FEVG, TAPSE, S’, E/e’, e’, vitesse IT et profil diastolique.</p>
       <button class="primary module-btn" data-tab="function">Ouvrir</button>
@@ -1471,6 +1477,101 @@
           <div id="tr_alerts" class="alerts"></div>
           <div id="tr_conclusion" class="summary-box" style="margin-top:12px;">Remplissez les champs puis lancez le calcul.</div>
         </div>
+      </div>
+    </section>
+
+    <section id="asd" class="panel">
+      <div class="card">
+        <h2>CIA / ASD - Calculateur de shunt</h2>
+        <p class="sub">Calculer Qp/Qs, estimer la pression pulmonaire, évaluer la surcharge droite et le risque avant fermeture.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Anatomie du shunt</h3>
+          <label>Type de CIA/ASD <button type="button" class="info-btn" onclick="showInfo('asd_type')">?</button></label>
+          <select id="asd_type">
+            <option value="">Sélectionner</option>
+            <option value="secundum">Ostium secundum</option>
+            <option value="primum">Ostium primum</option>
+            <option value="sinus_venosus">Sinus venosus</option>
+            <option value="coronary_sinus">Sinus coronaire</option>
+            <option value="unspecified">Non précisé</option>
+          </select>
+
+          <label>Diamètre CIA/ASD en mm <button type="button" class="info-btn" onclick="showInfo('asd_diameter')">?</button></label>
+          <input id="asd_diameter" type="number" step="0.1">
+
+          <label>Direction du shunt <button type="button" class="info-btn" onclick="showInfo('asd_direction')">?</button></label>
+          <select id="asd_direction">
+            <option value="">Sélectionner</option>
+            <option value="ltr">Gauche-droite</option>
+            <option value="bidir">Bidirectionnel</option>
+            <option value="rtl">Droite-gauche</option>
+          </select>
+
+          <label>Dilatation de l'OD <button type="button" class="info-btn" onclick="showInfo('asd_ra_dilation')">?</button></label>
+          <select id="asd_ra_dilation">
+            <option value="">Sélectionner</option>
+            <option value="none">Absente</option>
+            <option value="mild">Légère</option>
+            <option value="moderate">Modérée</option>
+            <option value="severe">Sévère</option>
+          </select>
+
+          <label>Dilatation du VD <button type="button" class="info-btn" onclick="showInfo('asd_rv_dilation')">?</button></label>
+          <select id="asd_rv_dilation">
+            <option value="">Sélectionner</option>
+            <option value="none">Absente</option>
+            <option value="mild">Légère</option>
+            <option value="moderate">Modérée</option>
+            <option value="severe">Sévère</option>
+          </select>
+        </div>
+
+        <div class="card">
+          <h3>Débits et pressions</h3>
+          <label>Diamètre RVOT / chambre de chasse VD en cm <button type="button" class="info-btn" onclick="showInfo('asd_rvot_diameter')">?</button></label>
+          <input id="asd_rvot_diameter" type="number" step="0.01">
+
+          <label>ITV RVOT / chambre de chasse VD en cm <button type="button" class="info-btn" onclick="showInfo('asd_rvot_vti')">?</button></label>
+          <input id="asd_rvot_vti" type="number" step="0.1">
+
+          <label>Diamètre LVOT / chambre de chasse VG en cm <button type="button" class="info-btn" onclick="showInfo('asd_lvot_diameter')">?</button></label>
+          <input id="asd_lvot_diameter" type="number" step="0.01">
+
+          <label>ITV LVOT / chambre de chasse VG en cm <button type="button" class="info-btn" onclick="showInfo('asd_lvot_vti')">?</button></label>
+          <input id="asd_lvot_vti" type="number" step="0.1">
+
+          <label>Vmax IT en m/s <button type="button" class="info-btn" onclick="showInfo('asd_tr_vmax')">?</button></label>
+          <input id="asd_tr_vmax" type="number" step="0.1">
+
+          <label>POD / pression auriculaire droite en mmHg <button type="button" class="info-btn" onclick="showInfo('asd_rap')">?</button></label>
+          <input id="asd_rap" type="number" step="1">
+
+          <label>TAPSE en mm, optionnel <button type="button" class="info-btn" onclick="showInfo('asd_tapse')">?</button></label>
+          <input id="asd_tapse" type="number" step="0.1">
+
+          <label>S' VD en cm/s, optionnel <button type="button" class="info-btn" onclick="showInfo('asd_rv_sprime')">?</button></label>
+          <input id="asd_rv_sprime" type="number" step="0.1">
+
+          <label>SpO2 en %, optionnel <button type="button" class="info-btn" onclick="showInfo('asd_spo2')">?</button></label>
+          <input id="asd_spo2" type="number" step="1">
+
+          <div class="actions">
+            <button class="primary" onclick="calculateASD()">Calculer CIA/ASD</button>
+            <button type="button" class="btn secondary" onclick="resetASD()">Réinitialiser</button>
+            <button type="button" class="btn secondary" onclick="showPanel('echo-menu')">Retour</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Résultats</h3>
+        <div id="asd_results" class="result-grid"></div>
+        <div id="asd_status" class="status-box neutral">En attente des données...</div>
+        <div id="asd_alerts" class="alerts"></div>
+        <div id="asd_conclusion" class="summary-box" style="margin-top:12px;">Remplissez les champs puis lancez le calcul.</div>
       </div>
     </section>
 
@@ -1981,6 +2082,20 @@ const infoContent = {
   edema_consolidation: { title: "Condensation / bronchogramme aérien", body: "Échographie pulmonaire : explorer les zones symptomatiques et postéro-latérales si possible.\nIntérêt clinique : condensation ou bronchogrammes aériens dynamiques favorisent pneumonie ou atteinte pulmonaire non cardiogénique.\nPièges : atélectasie et infarctus pulmonaire peuvent aussi donner une condensation." },
   edema_cardiogenic: { title: "Œdème pulmonaire cardiogénique", body: "Arguments : lignes B diffuses bilatérales, pressions de remplissage élevées, dysfonction VG ou valvulopathie significative, dilatation OG, épanchement pleural, VCI dilatée.\nIntérêt clinique : soutient diurétiques, vasodilatateurs si HTA et traitement de la cause cardiaque.\nPièges : les mécanismes cardiogéniques et non cardiogéniques peuvent coexister." },
   edema_noncardiogenic: { title: "Œdème pulmonaire non cardiogénique / SDRA", body: "Arguments : lignes B patchy, anomalies de la ligne pleurale, condensations, pressions de remplissage VG non élevées et absence de cause cardiaque majeure.\nIntérêt clinique : évoquer pneumonie, SDRA, sepsis, inhalation ou maladie inflammatoire pulmonaire.\nPièges : l’écho cardiaque et pulmonaire doivent être intégrées au contexte clinique." },
+  asd_type: { title: "Type de CIA/ASD", body: "Définit le type anatomique. L’ostium secundum est le plus fréquent et peut être accessible à une fermeture percutanée. Les formes primum, sinus venosus et sinus coronaire nécessitent une imagerie experte et souvent une chirurgie." },
+  asd_diameter: { title: "Diamètre CIA/ASD", body: "Mesurer le diamètre maximal en mm. Préférer la voie sous-costale en ETT ou les vues bicavale/petit axe en ETO. Éviter de se baser uniquement sur l’apicale 4 cavités à cause du faux dropout septal." },
+  asd_direction: { title: "Direction du shunt", body: "Direction du flux au Doppler couleur à travers le septum inter-auriculaire. Le gauche-droite est typique. Un flux bidirectionnel ou droite-gauche suggère une pression droite élevée ou une maladie vasculaire pulmonaire." },
+  asd_rvot_diameter: { title: "Diamètre RVOT", body: "Mesuré en cm près de la valve pulmonaire, en vue RVOT ou petit axe parasternal. Utilisé pour estimer le débit pulmonaire Qp. Une petite erreur de diamètre modifie fortement Qp car la surface dépend du diamètre au carré." },
+  asd_rvot_vti: { title: "ITV RVOT", body: "ITV en Doppler pulsé dans le RVOT, volume d’échantillonnage juste en amont de la valve pulmonaire. Sert à estimer Qp. Aligner le Doppler le plus parallèle possible au flux." },
+  asd_lvot_diameter: { title: "Diamètre LVOT", body: "Mesuré en cm en grand axe parasternal, bord interne-bord interne, juste sous la valve aortique. Sert à estimer le débit systémique Qs. Une erreur de diamètre modifie fortement Qs." },
+  asd_lvot_vti: { title: "ITV LVOT", body: "ITV en Doppler pulsé dans le LVOT, volume d’échantillonnage juste sous la valve aortique. Sert à estimer Qs." },
+  asd_tr_vmax: { title: "Vmax IT", body: "Vitesse maximale de l’insuffisance tricuspide en Doppler continu. Utiliser plusieurs vues et garder l’alignement parallèle au jet. Sert à estimer la PAPs." },
+  asd_rap: { title: "POD", body: "Estimation de la pression auriculaire droite, habituellement à partir du diamètre et de la collapsibilité de la VCI. Valeurs usuelles: 3, 8 ou 15 mmHg." },
+  asd_ra_dilation: { title: "Dilatation OD", body: "La dilatation de l’OD soutient une surcharge volumique droite chronique liée à un shunt gauche-droite significatif." },
+  asd_rv_dilation: { title: "Dilatation VD", body: "La dilatation du VD est un marqueur clé d’une CIA/ASD hémodynamiquement significative. Évaluer le VD en apicale 4 cavités centrée sur le VD." },
+  asd_tapse: { title: "TAPSE", body: "Mesure la fonction systolique longitudinale du VD en mode M à l’anneau tricuspide latéral. Normal habituellement >=17 mm." },
+  asd_rv_sprime: { title: "S’ VD", body: "Vélocité systolique tissulaire à l’anneau tricuspide latéral. Normal habituellement >=9,5 cm/s." },
+  asd_spo2: { title: "SpO2", body: "Une saturation basse avec shunt bidirectionnel ou droite-gauche suggère une hypertension pulmonaire sévère ou une physiologie d’Eisenmenger. La fermeture peut être dangereuse sans évaluation experte." },
   inf_drug_info: { title: "Médicament en perfusion d’urgence", body: "Choisir la famille du médicament selon le contexte clinique.\nNoradrénaline, dobutamine et adrénaline sont des drogues vasoactives utilisées dans les états de choc.\nL’amiodarone est utilisée dans certaines tachyarythmies.\nNicardipine/Loxen et Risordan sont utilisés dans les urgences hypertensives ou les stratégies vasodilatatrices.\nToujours vérifier le rythme ECG, la pression artérielle, les contre-indications, la surveillance et le protocole local." },
   inf_dose_info: { title: "Dose cible", body: "La dose cible ne se calcule pas directement à partir de la pression artérielle. On commence par une dose prudente, puis on titre selon la réponse.\nPour les vasopresseurs/inotropes : titrer selon la perfusion, la PAM cible et le débit cardiaque.\nPour la nicardipine : titration progressive selon la réponse tensionnelle.\nPour le Risordan : titration selon la pression artérielle, la douleur thoracique et l’œdème pulmonaire.\nSurveillance continue obligatoire." },
   inf_nicardipine: { title: "Nicardipine / Loxen", body: "Indication : urgence hypertensive nécessitant une baisse contrôlée de la pression artérielle par voie IV.\nDébut habituel : 1–5 mg/h selon la sévérité et le protocole local.\nTitration : augmentation progressive selon la réponse tensionnelle.\nÉviter les chutes tensionnelles brutales.\nPrudence : rétrécissement aortique serré, insuffisance cardiaque décompensée, hypotension, sujet âgé ou insuffisance rénale/hépatique." },
@@ -2647,6 +2762,114 @@ metric('POD estimée', fmt(rap, 0), 'mmHg') +
       s('tr_alerts', '');
       status('tr_status', 'neutral', 'En attente des données...');
       s('tr_conclusion', 'Remplissez les champs puis lancez le calcul.');
+    }
+
+    function calculateASD() {
+      const rvotDiameter = g('asd_rvot_diameter');
+      const rvotVti = g('asd_rvot_vti');
+      const lvotDiameter = g('asd_lvot_diameter');
+      const lvotVti = g('asd_lvot_vti');
+      const trVmax = g('asd_tr_vmax');
+      const rap = g('asd_rap');
+      const tapse = g('asd_tapse');
+      const rvSprime = g('asd_rv_sprime');
+      const spo2 = g('asd_spo2');
+      const direction = document.getElementById('asd_direction').value;
+      const raDilation = document.getElementById('asd_ra_dilation').value;
+      const rvDilation = document.getElementById('asd_rv_dilation').value;
+
+      const qpReady = [rvotDiameter, rvotVti, lvotDiameter, lvotVti].every(v => v !== null);
+      const papsReady = trVmax !== null && rap !== null;
+      const rvotCsa = qpReady ? Math.PI * Math.pow(rvotDiameter / 2, 2) : null;
+      const lvotCsa = qpReady ? Math.PI * Math.pow(lvotDiameter / 2, 2) : null;
+      const qp = qpReady ? rvotCsa * rvotVti : null;
+      const qs = qpReady ? lvotCsa * lvotVti : null;
+      const qpqs = qpReady && qs > 0 ? qp / qs : null;
+      const paps = papsReady ? 4 * Math.pow(trVmax, 2) + rap : null;
+      const alerts = [];
+
+      let shuntCategory = 'Renseigner le diamètre RVOT, l’ITV RVOT, le diamètre LVOT et l’ITV LVOT pour calculer Qp/Qs.';
+      let klass = 'neutral';
+      if (qpqs !== null) {
+        if (qpqs < 1.5) {
+          shuntCategory = 'Shunt faible ou non significatif sur le plan hémodynamique.';
+          klass = 'success';
+        } else if (qpqs < 2.0) {
+          shuntCategory = 'Shunt hémodynamiquement significatif.';
+          klass = 'warning';
+        } else {
+          shuntCategory = 'Shunt important.';
+          klass = 'danger';
+        }
+      }
+
+      const overloadPresent = ['moderate', 'severe'].includes(raDilation) || ['moderate', 'severe'].includes(rvDilation);
+      const rightHeartImpact = overloadPresent ? 'Surcharge volumique droite présente.' : 'Pas de dilatation droite modérée/sévère saisie.';
+      if (overloadPresent) alerts.push(alertBox('warning', 'Surcharge volumique droite présente.'));
+
+      let conclusion = qpqs === null
+        ? 'Renseigner le diamètre RVOT, l’ITV RVOT, le diamètre LVOT et l’ITV LVOT pour calculer Qp/Qs.'
+        : shuntCategory;
+
+      if (qpqs !== null && qpqs >= 1.5 && ['mild', 'moderate', 'severe'].includes(rvDilation) && direction === 'ltr') {
+        conclusion = 'CIA/ASD probablement hémodynamiquement significative. Discussion de fermeture indiquée si l’anatomie et les résistances vasculaires pulmonaires sont favorables.';
+      }
+
+      if (!papsReady) {
+        alerts.push(alertBox('warning', 'Renseigner la Vmax IT et la POD pour estimer la PAPs.'));
+      } else if (paps >= 40) {
+        alerts.push(alertBox('warning', 'Hypertension pulmonaire suspectée. Une évaluation des résistances vasculaires pulmonaires par cathétérisme droit peut être nécessaire avant fermeture.'));
+      }
+
+      if (direction === 'rtl') {
+        klass = 'danger';
+        alerts.push(alertBox('danger', 'Un shunt droite-gauche suggère une hypertension pulmonaire sévère ou une physiologie d’Eisenmenger. Ne pas fermer la CIA/ASD avant évaluation experte et cathétérisme droit.'));
+      }
+
+      if (direction === 'bidir') {
+        if (klass !== 'danger') klass = 'warning';
+        alerts.push(alertBox('warning', 'Un shunt bidirectionnel impose la prudence. Évaluer les pressions pulmonaires et les résistances vasculaires pulmonaires avant fermeture.'));
+      }
+
+      if (spo2 !== null && spo2 < 92) {
+        alerts.push(alertBox('danger', 'Une saturation basse suggère une composante droite-gauche significative ou une maladie vasculaire pulmonaire.'));
+      }
+
+      if (tapse !== null && tapse < 17) {
+        alerts.push(alertBox('warning', 'Fonction systolique longitudinale du VD diminuée.'));
+      }
+
+      if (rvSprime !== null && rvSprime < 9.5) {
+        alerts.push(alertBox('warning', 'Vélocité systolique tissulaire du VD diminuée.'));
+      }
+
+      s('asd_results',
+        metric('Surface RVOT', rvotCsa === null ? '—' : fmt(rvotCsa), 'cm²') +
+        metric('Surface LVOT', lvotCsa === null ? '—' : fmt(lvotCsa), 'cm²') +
+        metric('Qp', qp === null ? '—' : fmt(qp), 'mL') +
+        metric('Qs', qs === null ? '—' : fmt(qs), 'mL') +
+        metric('Qp/Qs', qpqs === null ? '—' : fmt(qpqs), '') +
+        metric('PAPs', paps === null ? '—' : fmt(paps, 0), 'mmHg') +
+        metric('Catégorie du shunt', shuntCategory, '') +
+        metric('Impact sur le cœur droit', rightHeartImpact, '')
+      );
+
+      status('asd_status', klass, qpqs === null ? 'Qp/Qs en attente des données.' : shuntCategory);
+      s('asd_alerts', alerts.join(''));
+      s('asd_conclusion', conclusion);
+    }
+
+    function resetASD() {
+      resetFields([
+        'asd_type', 'asd_diameter', 'asd_direction',
+        'asd_rvot_diameter', 'asd_rvot_vti', 'asd_lvot_diameter', 'asd_lvot_vti',
+        'asd_tr_vmax', 'asd_rap', 'asd_ra_dilation', 'asd_rv_dilation',
+        'asd_tapse', 'asd_rv_sprime', 'asd_spo2'
+      ]);
+      s('asd_results', '');
+      s('asd_alerts', '');
+      status('asd_status', 'neutral', 'En attente des données...');
+      s('asd_conclusion', 'Remplissez les champs puis lancez le calcul.');
     }
 
     function calculateFunction() {
