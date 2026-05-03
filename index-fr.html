@@ -1012,8 +1012,104 @@
         <button class="primary module-btn" data-tab="emergency-infusions">Ouvrir les perfusions d’urgence</button>
       </div>
     </div>
+
+    <div class="card home-card">
+      <h2>Orientation clinique initiale</h2>
+      <p class="sub">
+        Partir du symptôme de présentation, vérifier les premières cibles échographiques, puis ouvrir le module utile.
+      </p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="chief-complaint">Ouvrir l’orientation clinique</button>
+      </div>
+    </div>
   </div>
     </section>
+<section id="chief-complaint" class="panel">
+  <div class="card">
+    <h2>Orientation clinique initiale</h2>
+    <p class="sub">Point d’entrée clinique pour les symptômes urgents avant de choisir un module de mesure ou de diagnostic.</p>
+    <div class="actions">
+      <button type="button" class="btn secondary" onclick="showPanel('dashboard')">Retour</button>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Dyspnée aiguë</h3>
+      <p><strong>Penser à :</strong> œdème pulmonaire, embolie pulmonaire, tamponnade, valvulopathie aiguë, insuffisance VG/VD.</p>
+      <p><strong>Premières vérifications écho :</strong> fonction systolique VG <button type="button" class="info-btn" onclick="showInfo('nav_lv_function')">?</button>, taille/fonction VD <button type="button" class="info-btn" onclick="showInfo('nav_rv_function')">?</button>, vitesse IT/PAPs <button type="button" class="info-btn" onclick="showInfo('nav_tr_paps')">?</button>, VCI <button type="button" class="info-btn" onclick="showInfo('nav_ivc')">?</button>, épanchement péricardique <button type="button" class="info-btn" onclick="showInfo('nav_effusion')">?</button>, lignes B pulmonaires si disponibles <button type="button" class="info-btn" onclick="showInfo('nav_blines')">?</button>.</p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="oedeme-pulmonaire">Œdème pulmonaire</button>
+        <button class="primary module-btn" data-tab="pe">Embolie pulmonaire</button>
+        <button class="primary module-btn" data-tab="tamponade">Tamponnade</button>
+        <button class="primary module-btn" data-tab="tr">IT/PAPs</button>
+        <button class="primary module-btn" data-tab="function">Fonction systolique/diastolique</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Douleur thoracique</h3>
+      <p><strong>Penser à :</strong> SCA, rétrécissement aortique, embolie pulmonaire, maladie péricardique.</p>
+      <p><strong>Premières vérifications écho :</strong> fonction VG régionale/globale <button type="button" class="info-btn" onclick="showInfo('nav_lv_function')">?</button>, contrainte VD <button type="button" class="info-btn" onclick="showInfo('nav_rv_function')">?</button>, épanchement péricardique <button type="button" class="info-btn" onclick="showInfo('nav_effusion')">?</button>, valvulopathie sévère <button type="button" class="info-btn" onclick="showInfo('nav_valves')">?</button>.</p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="function">Fonction systolique</button>
+        <button class="primary module-btn" data-tab="as">Rétrécissement aortique</button>
+        <button class="primary module-btn" data-tab="pe">Embolie pulmonaire</button>
+        <button class="primary module-btn" data-tab="tamponade">Tamponnade</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Choc / hypotension</h3>
+      <p><strong>Penser à :</strong> choc cardiogénique, choc obstructif, hypovolémie, choc distributif.</p>
+      <p><strong>Premières vérifications écho :</strong> fonction VG <button type="button" class="info-btn" onclick="showInfo('nav_lv_function')">?</button>, dilatation VD <button type="button" class="info-btn" onclick="showInfo('nav_rv_function')">?</button>, épanchement péricardique <button type="button" class="info-btn" onclick="showInfo('nav_effusion')">?</button>, VCI <button type="button" class="info-btn" onclick="showInfo('nav_ivc')">?</button>, VTI/LVOT si disponible <button type="button" class="info-btn" onclick="showInfo('nav_lvot_vti')">?</button>.</p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="shock">Module choc</button>
+        <button class="primary module-btn" data-tab="tamponade">Tamponnade</button>
+        <button class="primary module-btn" data-tab="pe">Embolie pulmonaire</button>
+        <button class="primary module-btn" data-tab="function">Fonction systolique</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Syncope</h3>
+      <p><strong>Penser à :</strong> RA sévère, embolie pulmonaire, tamponnade, trouble du rythme.</p>
+      <p><strong>Premières vérifications écho :</strong> Vmax/gradient moyen/SVA aortiques <button type="button" class="info-btn" onclick="showInfo('nav_av_assessment')">?</button>, taille/fonction VD <button type="button" class="info-btn" onclick="showInfo('nav_rv_function')">?</button>, épanchement péricardique <button type="button" class="info-btn" onclick="showInfo('nav_effusion')">?</button>, fonction VG <button type="button" class="info-btn" onclick="showInfo('nav_lv_function')">?</button>.</p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="as">Rétrécissement aortique</button>
+        <button class="primary module-btn" data-tab="pe">Embolie pulmonaire</button>
+        <button class="primary module-btn" data-tab="tamponade">Tamponnade</button>
+        <button class="primary module-btn" data-tab="function">Fonction systolique</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Palpitations / fibrillation atriale</h3>
+      <p><strong>Penser à :</strong> FA rapide, cardiopathie structurelle, rétrécissement mitral, dilatation OG, dysfonction VG.</p>
+      <p><strong>Premières vérifications écho :</strong> taille/volume OG <button type="button" class="info-btn" onclick="showInfo('nav_la_volume')">?</button>, fonction VG <button type="button" class="info-btn" onclick="showInfo('nav_lv_function')">?</button>, sténose/insuffisance mitrale <button type="button" class="info-btn" onclick="showInfo('nav_mitral_valve')">?</button>, PAPs <button type="button" class="info-btn" onclick="showInfo('nav_tr_paps')">?</button>.</p>
+      <p class="sub">En cas de rétrécissement mitral rhumatismal, les AOD/DOACs ne sont pas recommandés ; les AVK sont préférés.</p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="ms">Rétrécissement mitral</button>
+        <button class="primary module-btn" data-tab="mr">Insuffisance mitrale</button>
+        <button class="primary module-btn" data-tab="tr">IT/PAPs</button>
+        <button class="primary module-btn" data-tab="function">Fonction systolique/diastolique</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Souffle cardiaque découvert</h3>
+      <p><strong>Penser à :</strong> RA, IA, RM, IM, IT.</p>
+      <p><strong>Premières vérifications écho :</strong> morphologie valvulaire <button type="button" class="info-btn" onclick="showInfo('nav_valve_morphology')">?</button>, gradients <button type="button" class="info-btn" onclick="showInfo('nav_gradients')">?</button>, sévérité de la régurgitation <button type="button" class="info-btn" onclick="showInfo('nav_regurgitation')">?</button>, retentissement sur les cavités <button type="button" class="info-btn" onclick="showInfo('nav_chamber_impact')">?</button>, PAPs <button type="button" class="info-btn" onclick="showInfo('nav_tr_paps')">?</button>.</p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="as">Rétrécissement aortique</button>
+        <button class="primary module-btn" data-tab="ar">Insuffisance aortique</button>
+        <button class="primary module-btn" data-tab="ms">Rétrécissement mitral</button>
+        <button class="primary module-btn" data-tab="mr">Insuffisance mitrale</button>
+        <button class="primary module-btn" data-tab="tr">IT/PAPs</button>
+      </div>
+    </div>
+  </div>
+</section>
 <section id="emergency-infusions" class="panel">
   <div class="card">
     <h2>Perfusions d’urgence</h2>
@@ -1415,6 +1511,65 @@
           <div id="ms_status" class="status-box neutral">En attente des données...</div>
           <div id="ms_alerts" class="alerts"></div>
           <div id="ms_conclusion" class="summary-box" style="margin-top:12px;">Remplissez les champs puis lancez le calcul.</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Score de Wilkins — Anatomie mitrale</h3>
+          <label>Mobilité valvulaire <button type="button" class="info-btn" onclick="showInfo('wilkins_mobility')">?</button></label>
+          <select id="wilkins_mobility" onchange="calculateWilkinsScore()">
+            <option value="">Sélectionner</option>
+            <option value="1">1 - Très mobile, restriction limitée aux extrémités</option>
+            <option value="2">2 - Mouvement médian/basal conservé</option>
+            <option value="3">3 - Mouvement antérieur surtout basal</option>
+            <option value="4">4 - Mouvement antérieur minime ou absent</option>
+          </select>
+
+          <label>Épaississement valvulaire <button type="button" class="info-btn" onclick="showInfo('wilkins_thickening')">?</button></label>
+          <select id="wilkins_thickening" onchange="calculateWilkinsScore()">
+            <option value="">Sélectionner</option>
+            <option value="1">1 - Épaisseur quasi normale</option>
+            <option value="2">2 - Épaississement léger, surtout aux bords</option>
+            <option value="3">3 - Épaississement de tout le feuillet</option>
+            <option value="4">4 - Épaississement marqué de tout le tissu valvulaire</option>
+          </select>
+
+          <label>Calcification valvulaire <button type="button" class="info-btn" onclick="showInfo('wilkins_calcification')">?</button></label>
+          <select id="wilkins_calcification" onchange="calculateWilkinsScore()">
+            <option value="">Sélectionner</option>
+            <option value="1">1 - Une zone hyperéchogène isolée</option>
+            <option value="2">2 - Hyperéchogénicités dispersées aux bords</option>
+            <option value="3">3 - Hyperéchogénicité jusqu’au milieu du feuillet</option>
+            <option value="4">4 - Hyperéchogénicité étendue à la majorité du feuillet</option>
+          </select>
+
+          <label>Atteinte sous-valvulaire <button type="button" class="info-btn" onclick="showInfo('wilkins_subvalvular')">?</button></label>
+          <select id="wilkins_subvalvular" onchange="calculateWilkinsScore()">
+            <option value="">Sélectionner</option>
+            <option value="1">1 - Épaississement chordal minime</option>
+            <option value="2">2 - Épaississement jusqu’au tiers proximal des cordages</option>
+            <option value="3">3 - Épaississement jusqu’au tiers distal</option>
+            <option value="4">4 - Épaississement/raccourcissement étendu jusqu’aux piliers</option>
+          </select>
+
+          <label>Insuffisance mitrale &gt; modérée ? <button type="button" class="info-btn" onclick="showInfo('wilkins_mr')">?</button></label>
+          <select id="wilkins_mr" onchange="calculateWilkinsScore()">
+            <option value="no">Non</option>
+            <option value="yes">Oui</option>
+          </select>
+
+          <div class="actions">
+            <button class="primary" onclick="calculateWilkinsScore()">Calculer le score de Wilkins</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Interprétation Wilkins</h3>
+          <div id="wilkins_results" class="result-grid"></div>
+          <div id="wilkins_status" class="status-box neutral">En attente des données anatomiques Wilkins...</div>
+          <div id="wilkins_alerts" class="alerts"></div>
+          <div id="wilkins_conclusion" class="summary-box" style="margin-top:12px;">Toujours vérifier la calcification commissurale, le thrombus de l’OG, la sévérité de l’IM, la morphologie valvulaire et le contexte clinique avant de décider une CMP/BMC.</div>
         </div>
       </div>
     </section>
@@ -2015,10 +2170,10 @@ const infoContent = {
   mr_velocity: "Vitesse maximale de l’IM :\n- Mesurée en Doppler continu.\n- Aligner le faisceau Doppler parallèlement au jet d’IM.\n- Utilisée dans les calculs PISA/SOR.",
   mr_vti: "ITV de l’IM :\n- Tracer toute l’enveloppe Doppler continu du jet d’IM.\n- Représente l’intégrale temps-vitesse du flux régurgitant.",
   vena_contracta_mr: "Vena contracta de l’IM :\n- Partie la plus étroite du jet juste en aval de l’orifice.\n- Utiliser le Doppler couleur zoomé.\n- <3 mm suggère une IM légère ; >7 mm soutient une IM sévère.",
-  mitral_pht: "Pressure half-time mitral :\n- Doppler continu du flux transmitral.\n- Sert à estimer la surface mitrale : SM = 220 / PHT.\n- Moins fiable si compliance altérée, IA significative ou après valvuloplastie.",
-  mitral_mean_gradient: "Gradient moyen mitral :\n- Gradient transmitral en Doppler continu.\n- Dépend fortement de la fréquence cardiaque et du débit.\n- Moyenner plusieurs cycles, surtout en fibrillation atriale.",
-  heart_rate_gradient: "Fréquence cardiaque :\n- Élément majeur pour interpréter les gradients.\n- La tachycardie augmente les gradients transmitraux et peut surestimer la sévérité.",
-  rhythm_gradient: "Rythme :\n- La fibrillation atriale rend les gradients variables.\n- Moyenner plusieurs cycles avec intervalles R-R similaires.",
+  mitral_pht: "Pressure half-time mitral :\n- Définition : décélération du flux transmitral utilisée pour estimer SM = 220 / PHT.\n- Vue : apicale 4 cavités, Doppler continu sur le flux mitral.\n- Intérêt : aide à grader la sévérité du RM.\n- Piège : peu fiable si compliance altérée, IA significative ou après valvuloplastie.",
+  mitral_mean_gradient: "Gradient moyen mitral :\n- Définition : gradient diastolique moyen à travers la valve mitrale.\n- Vue : apicale 4 cavités, Doppler continu aligné sur le flux.\n- Intérêt : reflète le retentissement hémodynamique.\n- Piège : tachycardie, haut débit et FA surestiment la sévérité.",
+  heart_rate_gradient: "Fréquence cardiaque :\n- Définition : fréquence au moment de la mesure du gradient.\n- Fenêtre : ECG/monitoring pendant le Doppler.\n- Intérêt : la tachycardie augmente les gradients transmitraux.\n- Piège : interpréter le gradient sans la fréquence simultanée.",
+  rhythm_gradient: "Rythme :\n- Définition : rythme sinusal ou FA pendant la mesure Doppler.\n- Fenêtre : tracé ECG pendant le flux mitral.\n- Intérêt : la FA rend les gradients très variables.\n- Piège : moyenner plusieurs cycles avec R-R similaires en FA.",
   ar_pht: "PHT de l’IA :\n- Doppler continu du jet d’insuffisance aortique.\n- Un PHT court suggère une IA sévère, mais dépend de la compliance VG et de la pression aortique.\n- Toujours l’intégrer à une évaluation multiparamétrique.",
   vena_contracta_ar: "Vena contracta de l’IA :\n- Largeur la plus étroite du jet d’IA près de la valve aortique.\n- Mesure en Doppler couleur zoomé.\n- À interpréter avec largeur du jet, reflux diastolique, taille du VG et Doppler.",
   holodiastolic_flow_reversal: "Flux holodiastolique rétrograde :\n- Doppler pulsé dans l’aorte descendante ou abdominale.\n- Un reflux holodiastolique soutient une IA significative/sévère.\n- Vérifier la position de l’échantillon et l’échelle Doppler.",
@@ -2099,7 +2254,27 @@ const infoContent = {
   inf_drug_info: { title: "Médicament en perfusion d’urgence", body: "Choisir la famille du médicament selon le contexte clinique.\nNoradrénaline, dobutamine et adrénaline sont des drogues vasoactives utilisées dans les états de choc.\nL’amiodarone est utilisée dans certaines tachyarythmies.\nNicardipine/Loxen et Risordan sont utilisés dans les urgences hypertensives ou les stratégies vasodilatatrices.\nToujours vérifier le rythme ECG, la pression artérielle, les contre-indications, la surveillance et le protocole local." },
   inf_dose_info: { title: "Dose cible", body: "La dose cible ne se calcule pas directement à partir de la pression artérielle. On commence par une dose prudente, puis on titre selon la réponse.\nPour les vasopresseurs/inotropes : titrer selon la perfusion, la PAM cible et le débit cardiaque.\nPour la nicardipine : titration progressive selon la réponse tensionnelle.\nPour le Risordan : titration selon la pression artérielle, la douleur thoracique et l’œdème pulmonaire.\nSurveillance continue obligatoire." },
   inf_nicardipine: { title: "Nicardipine / Loxen", body: "Indication : urgence hypertensive nécessitant une baisse contrôlée de la pression artérielle par voie IV.\nDébut habituel : 1–5 mg/h selon la sévérité et le protocole local.\nTitration : augmentation progressive selon la réponse tensionnelle.\nÉviter les chutes tensionnelles brutales.\nPrudence : rétrécissement aortique serré, insuffisance cardiaque décompensée, hypotension, sujet âgé ou insuffisance rénale/hépatique." },
-  inf_risordan: { title: "Dinitrate d’isosorbide / Risordan", body: "Indication : OAP hypertensif, syndrome coronarien aigu avec hypertension, ou stratégie vasodilatatrice adaptée.\nPlage habituelle : 2–10 mg/h, à titrer selon la réponse.\nSurveiller la pression artérielle et les symptômes.\nContre-indications/prudence : hypotension, infarctus du ventricule droit, rétrécissement aortique serré, prise récente d’inhibiteurs de la PDE5." }
+  inf_risordan: { title: "Dinitrate d’isosorbide / Risordan", body: "Indication : OAP hypertensif, syndrome coronarien aigu avec hypertension, ou stratégie vasodilatatrice adaptée.\nPlage habituelle : 2–10 mg/h, à titrer selon la réponse.\nSurveiller la pression artérielle et les symptômes.\nContre-indications/prudence : hypotension, infarctus du ventricule droit, rétrécissement aortique serré, prise récente d’inhibiteurs de la PDE5." },
+  nav_lv_function: { title: "Fonction systolique VG", body: "Définition : FEVG globale et cinétique segmentaire.\nVue : PLAX, PSAX, apicale 4 et 2 cavités.\nIntérêt : identifie défaillance de pompe, profil SCA ou choc cardiogénique.\nPiège : conditions de charge et vues apicales tronquées trompent l’estimation visuelle." },
+  nav_rv_function: { title: "Taille et fonction VD", body: "Définition : dilatation VD, rapport VD/VG, TAPSE/S’ et septum.\nVue : apicale 4 cavités centrée VD, PSAX et sous-costale.\nIntérêt : soutient EP, infarctus VD ou HTP.\nPiège : une atteinte VD chronique peut mimer une contrainte aiguë." },
+  nav_tr_paps: { title: "Vitesse IT / PAPs", body: "Définition : vitesse IT en Doppler continu avec estimation de la POD.\nVue : apicale 4 cavités, inflow VD, PSAX ou sous-costale.\nIntérêt : estime la pression pulmonaire et la postcharge VD.\nPiège : mauvais alignement = sous-estimation." },
+  nav_ivc: { title: "Évaluation de la VCI", body: "Définition : diamètre et collapsibilité inspiratoire comme indice de POD/volémie.\nVue : sous-costale longitudinale, 1-2 cm de l’OD.\nIntérêt : aide à distinguer congestion, hypovolémie et obstacle.\nPiège : ventilation et effort inspiratoire faible limitent la fiabilité." },
+  nav_effusion: { title: "Épanchement péricardique", body: "Définition : liquide péricardique et signes de tamponnade.\nVue : PLAX, PSAX, apicale et sous-costale.\nIntérêt : cause urgente réversible de choc, dyspnée ou douleur.\nPiège : épanchement cloisonné ou pleural peut prêter à confusion." },
+  nav_blines: { title: "Lignes B pulmonaires", body: "Définition : artefacts verticaux suggérant liquide interstitiel/alvéolaire.\nFenêtre : zones pulmonaires antérieures et latérales bilatérales.\nIntérêt : soutient l’œdème pulmonaire avec les données cardiaques.\nPiège : aussi présentes dans SDRA, pneumonie ou fibrose." },
+  nav_valves: { title: "Valvulopathie sévère", body: "Définition : dépistage rapide de sténose ou régurgitation sévère.\nVue : vues focalisées valvulaires PLAX/PSAX/apicales avec Doppler.\nIntérêt : une valvulopathie aiguë peut causer douleur, choc ou dyspnée.\nPiège : l’aire du jet couleur seule ne suffit pas." },
+  nav_lvot_vti: { title: "VTI LVOT", body: "Définition : substitut de distance d’éjection et du débit antérograde.\nVue : apicale 5 cavités, Doppler pulsé juste sous la valve aortique.\nIntérêt : VTI basse en faveur d’un bas débit dans le choc.\nPiège : position de l’échantillon et alignement modifient fortement la valeur." },
+  nav_av_assessment: { title: "Évaluation valve aortique", body: "Définition : Vmax, gradient moyen et surface aortique.\nVue : Doppler continu multi-fenêtres avec mesure LVOT en PLAX.\nIntérêt : RA sévère = cause structurelle majeure de syncope.\nPiège : bas débit peut masquer un RA sévère si surface et débit ne sont pas vérifiés." },
+  nav_la_volume: { title: "Taille / volume OG", body: "Définition : volume OG indexé à la surface corporelle si possible.\nVue : apicale 4 et 2 cavités sans foreshortening.\nIntérêt : reflète charge chronique et substrat de FA.\nPiège : une pathologie aiguë peut précéder la dilatation OG." },
+  nav_mitral_valve: { title: "Dépistage mitral", body: "Définition : morphologie RM/IM, gradients et sévérité de l’IM.\nVue : PLAX, PSAX, apicale 4 et 2 cavités avec Doppler.\nIntérêt : le RM rhumatismal modifie l’anticoagulation en FA.\nPiège : FA et tachycardie faussent les gradients du RM." },
+  nav_valve_morphology: { title: "Morphologie valvulaire", body: "Définition : mobilité, épaississement, calcification, prolapsus/flail.\nVue : PLAX/PSAX et vues apicales focalisées.\nIntérêt : guide sévérité et faisabilité interventionnelle.\nPiège : gain excessif exagère la calcification." },
+  nav_gradients: { title: "Gradients valvulaires", body: "Définition : gradients de pression dérivés du Doppler à travers une valve sténosée.\nVue : Doppler continu aligné depuis la meilleure fenêtre.\nIntérêt : grade la sténose et le retentissement.\nPiège : gradients dépendants du débit." },
+  nav_regurgitation: { title: "Sévérité de régurgitation", body: "Définition : intégration couleur, vena contracta, densité CW et retentissement.\nVue : PLAX et vues apicales focalisées.\nIntérêt : une régurgitation aiguë sévère peut décompenser vite.\nPiège : les jets excentrés sont souvent sous-estimés." },
+  nav_chamber_impact: { title: "Retentissement cavitaire", body: "Définition : dilatation ou dysfonction VG/VD/OG/OD liée à la valve.\nVue : vues standard de quantification cavitaire.\nIntérêt : renseigne chronicité et conséquence de sévérité.\nPiège : cavités normales possibles dans une régurgitation aiguë sévère." },
+  wilkins_mobility: { title: "Wilkins - mobilité valvulaire", body: "Définition : score 1-4 de restriction de mobilité des feuillets mitraux.\nVue : PLAX, PSAX et vues apicales.\nIntérêt : bonne mobilité favorise la commissurotomie mitrale percutanée.\nPiège : la fusion/calcification commissurale doit être évaluée à part." },
+  wilkins_thickening: { title: "Wilkins - épaississement", body: "Définition : score 1-4 d’épaisseur du corps des feuillets.\nVue : PLAX/PSAX avec gain optimisé.\nIntérêt : épaississement marqué = anatomie moins favorable pour CMP/BMC.\nPiège : gain excessif surestime l’épaississement." },
+  wilkins_calcification: { title: "Wilkins - calcification", body: "Définition : score 1-4 de tissu valvulaire hyperéchogène/calcifié.\nVue : PLAX/PSAX et inspection commissurale en petit axe.\nIntérêt : calcification diminue le succès et augmente le risque de CMP/BMC.\nPiège : la calcification commissurale compte beaucoup même si le score total est bas." },
+  wilkins_subvalvular: { title: "Wilkins - atteinte sous-valvulaire", body: "Définition : score 1-4 d’épaississement/raccourcissement des cordages.\nVue : PLAX et vues apicales jusqu’aux piliers.\nIntérêt : atteinte sévère limite l’ouverture après CMP/BMC.\nPiège : vues tronquées peuvent masquer l’atteinte chordale." },
+  wilkins_mr: { title: "Insuffisance mitrale avant CMP/BMC", body: "Définition : vérifier si l’IM est supérieure à modérée.\nVue : évaluation intégrée en PLAX/apical avec couleur et Doppler continu.\nIntérêt : IM significative = facteur défavorable majeur/contre-indication à la CMP/BMC.\nPiège : IM excentrée souvent sous-estimée." }
 };
 
 function showInfo(key) {
@@ -2662,6 +2837,50 @@ if (backBtn) {
       s('ms_alerts', '');
       status('ms_status', 'neutral', 'En attente des données...');
       s('ms_conclusion', 'Remplissez les champs puis lancez le calcul.');
+    }
+
+    function calculateWilkinsScore() {
+      const ids = ['wilkins_mobility', 'wilkins_thickening', 'wilkins_calcification', 'wilkins_subvalvular'];
+      const scores = ids.map(id => {
+        const el = document.getElementById(id);
+        return el ? parseInt(el.value, 10) : NaN;
+      });
+
+      if (scores.some(Number.isNaN)) {
+        s('wilkins_results', '');
+        s('wilkins_alerts', '');
+        status('wilkins_status', 'warning', 'Sélectionnez les quatre composantes du score de Wilkins.');
+        s('wilkins_conclusion', 'Toujours vérifier la calcification commissurale, le thrombus de l’OG, la sévérité de l’IM, la morphologie valvulaire et le contexte clinique avant de décider une CMP/BMC.');
+        return;
+      }
+
+      const total = scores.reduce((sum, value) => sum + value, 0);
+      const mrMoreThanModerate = document.getElementById('wilkins_mr')?.value === 'yes';
+      renderWilkinsInterpretation(total, mrMoreThanModerate);
+    }
+
+    function renderWilkinsInterpretation(total, mrMoreThanModerate) {
+      let klass = 'success';
+      let message = 'Score <= 8 : anatomie habituellement favorable à la commissurotomie mitrale percutanée en l’absence de contre-indication.';
+
+      if (total >= 9 && total <= 10) {
+        klass = 'warning';
+        message = 'Score 9-10 : anatomie intermédiaire ; la décision dépend des commissures, de la sévérité de l’IM, du thrombus et du contexte clinique.';
+      }
+      if (total > 10) {
+        klass = 'danger';
+        message = 'Score > 10 : anatomie habituellement défavorable à la commissurotomie mitrale percutanée.';
+      }
+
+      const alerts = [];
+      if (mrMoreThanModerate) {
+        alerts.push(alertBox('danger', 'Une insuffisance mitrale significative est un facteur défavorable majeur / une contre-indication à la commissurotomie mitrale percutanée. Réévaluer l’anatomie et l’indication.'));
+      }
+
+      s('wilkins_results', metric('Score total Wilkins', total, '/16'));
+      status('wilkins_status', klass, message);
+      s('wilkins_alerts', alerts.join(''));
+      s('wilkins_conclusion', 'Toujours vérifier la calcification commissurale, le thrombus de l’OG, la sévérité de l’IM, la morphologie valvulaire et le contexte clinique avant de décider une CMP/BMC.');
     }
 
     function calculateAR() {

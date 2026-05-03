@@ -1013,8 +1013,104 @@
         <button class="primary module-btn" data-tab="emergency-infusions">Open Emergency Infusions</button>
       </div>
     </div>
+
+    <div class="card home-card">
+      <h2>Chief Complaint Navigator</h2>
+      <p class="sub">
+        Start from the presenting symptom, check the first echo targets, then jump to the relevant module.
+      </p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="chief-complaint">Open Chief Complaint Navigator</button>
+      </div>
+    </div>
   </div>
     </section>
+<section id="chief-complaint" class="panel">
+  <div class="card">
+    <h2>Chief Complaint Navigator</h2>
+    <p class="sub">Clinical entry point for urgent symptoms before choosing a measurement or diagnostic module.</p>
+    <div class="actions">
+      <button type="button" class="btn secondary" onclick="showPanel('dashboard')">Back</button>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Acute dyspnea</h3>
+      <p><strong>Think:</strong> pulmonary edema, pulmonary embolism, tamponade, acute valve disease, LV/RV failure.</p>
+      <p><strong>First echo checks:</strong> LV systolic function <button type="button" class="info-btn" onclick="showInfo('nav_lv_function')">?</button>, RV size/function <button type="button" class="info-btn" onclick="showInfo('nav_rv_function')">?</button>, TR velocity/PAPs <button type="button" class="info-btn" onclick="showInfo('nav_tr_paps')">?</button>, IVC <button type="button" class="info-btn" onclick="showInfo('nav_ivc')">?</button>, pericardial effusion <button type="button" class="info-btn" onclick="showInfo('nav_effusion')">?</button>, lung B-lines if available <button type="button" class="info-btn" onclick="showInfo('nav_blines')">?</button>.</p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="pulmonary-edema">Pulmonary edema</button>
+        <button class="primary module-btn" data-tab="pe">Pulmonary embolism</button>
+        <button class="primary module-btn" data-tab="tamponade">Tamponade</button>
+        <button class="primary module-btn" data-tab="tr">TR/PAPs</button>
+        <button class="primary module-btn" data-tab="function">Systolic/diastolic function</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Chest pain</h3>
+      <p><strong>Think:</strong> ACS, aortic stenosis, pulmonary embolism, pericardial disease.</p>
+      <p><strong>First echo checks:</strong> LV regional/global function <button type="button" class="info-btn" onclick="showInfo('nav_lv_function')">?</button>, RV strain <button type="button" class="info-btn" onclick="showInfo('nav_rv_function')">?</button>, pericardial effusion <button type="button" class="info-btn" onclick="showInfo('nav_effusion')">?</button>, severe valvular disease <button type="button" class="info-btn" onclick="showInfo('nav_valves')">?</button>.</p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="function">Systolic function</button>
+        <button class="primary module-btn" data-tab="as">Aortic stenosis</button>
+        <button class="primary module-btn" data-tab="pe">Pulmonary embolism</button>
+        <button class="primary module-btn" data-tab="tamponade">Tamponade</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Shock / hypotension</h3>
+      <p><strong>Think:</strong> cardiogenic shock, obstructive shock, hypovolemia, distributive shock.</p>
+      <p><strong>First echo checks:</strong> LV function <button type="button" class="info-btn" onclick="showInfo('nav_lv_function')">?</button>, RV dilation <button type="button" class="info-btn" onclick="showInfo('nav_rv_function')">?</button>, pericardial effusion <button type="button" class="info-btn" onclick="showInfo('nav_effusion')">?</button>, IVC <button type="button" class="info-btn" onclick="showInfo('nav_ivc')">?</button>, VTI/LVOT if available <button type="button" class="info-btn" onclick="showInfo('nav_lvot_vti')">?</button>.</p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="shock">Shock module</button>
+        <button class="primary module-btn" data-tab="tamponade">Tamponade</button>
+        <button class="primary module-btn" data-tab="pe">Pulmonary embolism</button>
+        <button class="primary module-btn" data-tab="function">Systolic function</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Syncope</h3>
+      <p><strong>Think:</strong> severe AS, pulmonary embolism, tamponade, rhythm disorder.</p>
+      <p><strong>First echo checks:</strong> AV Vmax/mean gradient/AVA <button type="button" class="info-btn" onclick="showInfo('nav_av_assessment')">?</button>, RV size/function <button type="button" class="info-btn" onclick="showInfo('nav_rv_function')">?</button>, pericardial effusion <button type="button" class="info-btn" onclick="showInfo('nav_effusion')">?</button>, LV function <button type="button" class="info-btn" onclick="showInfo('nav_lv_function')">?</button>.</p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="as">Aortic stenosis</button>
+        <button class="primary module-btn" data-tab="pe">Pulmonary embolism</button>
+        <button class="primary module-btn" data-tab="tamponade">Tamponade</button>
+        <button class="primary module-btn" data-tab="function">Systolic function</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Palpitations / atrial fibrillation</h3>
+      <p><strong>Think:</strong> AF with rapid ventricular response, structural heart disease, mitral stenosis, LA dilation, LV dysfunction.</p>
+      <p><strong>First echo checks:</strong> LA size/volume <button type="button" class="info-btn" onclick="showInfo('nav_la_volume')">?</button>, LV function <button type="button" class="info-btn" onclick="showInfo('nav_lv_function')">?</button>, mitral stenosis/regurgitation <button type="button" class="info-btn" onclick="showInfo('nav_mitral_valve')">?</button>, PAPs <button type="button" class="info-btn" onclick="showInfo('nav_tr_paps')">?</button>.</p>
+      <p class="sub">If rheumatic mitral stenosis is present, DOACs are not recommended; VKA is preferred.</p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="ms">Mitral stenosis</button>
+        <button class="primary module-btn" data-tab="mr">Mitral regurgitation</button>
+        <button class="primary module-btn" data-tab="tr">TR/PAPs</button>
+        <button class="primary module-btn" data-tab="function">Systolic/diastolic function</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Newly discovered murmur</h3>
+      <p><strong>Think:</strong> AS, AR, MS, MR, TR.</p>
+      <p><strong>First echo checks:</strong> valve morphology <button type="button" class="info-btn" onclick="showInfo('nav_valve_morphology')">?</button>, gradients <button type="button" class="info-btn" onclick="showInfo('nav_gradients')">?</button>, regurgitation severity <button type="button" class="info-btn" onclick="showInfo('nav_regurgitation')">?</button>, chamber impact <button type="button" class="info-btn" onclick="showInfo('nav_chamber_impact')">?</button>, PAPs <button type="button" class="info-btn" onclick="showInfo('nav_tr_paps')">?</button>.</p>
+      <div class="actions">
+        <button class="primary module-btn" data-tab="as">Aortic stenosis</button>
+        <button class="primary module-btn" data-tab="ar">Aortic regurgitation</button>
+        <button class="primary module-btn" data-tab="ms">Mitral stenosis</button>
+        <button class="primary module-btn" data-tab="mr">Mitral regurgitation</button>
+        <button class="primary module-btn" data-tab="tr">TR/PAPs</button>
+      </div>
+    </div>
+  </div>
+</section>
 <section id="emergency-infusions" class="panel">
   <div class="card">
     <h2>Emergency Infusions</h2>
@@ -1277,6 +1373,65 @@
           <div id="ms_status" class="status-box neutral">Awaiting data...</div>
           <div id="ms_alerts" class="alerts"></div>
           <div id="ms_conclusion" class="summary-box" style="margin-top:12px;">Fill the fields and calculate.</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>Wilkins Score — Mitral Valve Anatomy</h3>
+          <label>Leaflet mobility <button type="button" class="info-btn" onclick="showInfo('wilkins_mobility')">?</button></label>
+          <select id="wilkins_mobility" onchange="calculateWilkinsScore()">
+            <option value="">Select</option>
+            <option value="1">1 - Highly mobile, only leaflet tips restricted</option>
+            <option value="2">2 - Mid/base motion preserved</option>
+            <option value="3">3 - Forward motion mainly at base</option>
+            <option value="4">4 - Minimal or no forward leaflet motion</option>
+          </select>
+
+          <label>Leaflet thickening <button type="button" class="info-btn" onclick="showInfo('wilkins_thickening')">?</button></label>
+          <select id="wilkins_thickening" onchange="calculateWilkinsScore()">
+            <option value="">Select</option>
+            <option value="1">1 - Near-normal thickness</option>
+            <option value="2">2 - Mild thickening, mainly margins</option>
+            <option value="3">3 - Thickening through entire leaflet</option>
+            <option value="4">4 - Marked thickening of all leaflet tissue</option>
+          </select>
+
+          <label>Leaflet calcification <button type="button" class="info-btn" onclick="showInfo('wilkins_calcification')">?</button></label>
+          <select id="wilkins_calcification" onchange="calculateWilkinsScore()">
+            <option value="">Select</option>
+            <option value="1">1 - Single bright area</option>
+            <option value="2">2 - Scattered leaflet margin brightness</option>
+            <option value="3">3 - Brightness into mid-leaflet</option>
+            <option value="4">4 - Extensive brightness through most leaflet tissue</option>
+          </select>
+
+          <label>Subvalvular thickening <button type="button" class="info-btn" onclick="showInfo('wilkins_subvalvular')">?</button></label>
+          <select id="wilkins_subvalvular" onchange="calculateWilkinsScore()">
+            <option value="">Select</option>
+            <option value="1">1 - Minimal chordal thickening</option>
+            <option value="2">2 - Thickening extends to one-third of chordal length</option>
+            <option value="3">3 - Thickening extends to distal third</option>
+            <option value="4">4 - Extensive thickening/shortening down to papillary muscles</option>
+          </select>
+
+          <label>Mitral regurgitation &gt; moderate? <button type="button" class="info-btn" onclick="showInfo('wilkins_mr')">?</button></label>
+          <select id="wilkins_mr" onchange="calculateWilkinsScore()">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+
+          <div class="actions">
+            <button class="primary" onclick="calculateWilkinsScore()">Calculate Wilkins Score</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Wilkins Interpretation</h3>
+          <div id="wilkins_results" class="result-grid"></div>
+          <div id="wilkins_status" class="status-box neutral">Awaiting Wilkins anatomy data...</div>
+          <div id="wilkins_alerts" class="alerts"></div>
+          <div id="wilkins_conclusion" class="summary-box" style="margin-top:12px;">Always check commissural calcification, LA thrombus, MR severity, valve morphology and clinical context before deciding BMC.</div>
         </div>
       </div>
     </section>
@@ -2013,10 +2168,10 @@ const infoContent = {
   mr_velocity: "MR peak velocity:\n- Measured using continuous-wave Doppler.\n- Align beam parallel to MR jet.\n- Used in EROA/PISA calculations.",
   mr_vti: "MR VTI:\n- Trace the full CW Doppler envelope of the MR jet.\n- Represents the velocity-time integral of regurgitant flow.",
   vena_contracta_mr: "MR vena contracta:\n- Narrowest part of the MR jet just downstream of the orifice.\n- Use zoomed color Doppler.\n- <3 mm suggests mild MR; >7 mm supports severe MR.",
-  mitral_pht: "Pressure half-time:\n- CW Doppler of transmitral flow.\n- Used to estimate mitral valve area: MVA = 220 / PHT.\n- Less reliable with altered compliance, significant AR, or post-valvuloplasty.",
-  mitral_mean_gradient: "Mitral mean gradient:\n- CW Doppler transmitral gradient.\n- Depends strongly on heart rate and flow.\n- Average several beats, especially in atrial fibrillation.",
-  heart_rate_gradient: "Heart rate:\n- Important when interpreting gradients.\n- Tachycardia increases transmitral gradients and can overestimate severity.",
-  rhythm_gradient: "Rhythm:\n- Atrial fibrillation makes gradients variable.\n- Average multiple beats with similar R-R intervals.",
+  mitral_pht: "Pressure half-time:\n- What: transmitral deceleration time used to estimate MVA = 220 / PHT.\n- View: apical 4-chamber CW Doppler through mitral inflow.\n- Why: supports MS severity grading.\n- Pitfall: unreliable with altered compliance, significant AR, or after valvuloplasty.",
+  mitral_mean_gradient: "Mitral mean gradient:\n- What: average diastolic pressure gradient across the mitral valve.\n- View: apical 4-chamber CW Doppler aligned with inflow.\n- Why: reflects hemodynamic burden.\n- Pitfall: tachycardia, high flow and AF can overestimate severity.",
+  heart_rate_gradient: "Heart rate:\n- What: rhythm speed at the time of gradient measurement.\n- View: ECG/monitor during Doppler acquisition.\n- Why: tachycardia raises transmitral gradients.\n- Pitfall: interpreting gradient without the simultaneous heart rate.",
+  rhythm_gradient: "Rhythm:\n- What: sinus rhythm or AF during Doppler measurement.\n- View: ECG trace while acquiring mitral inflow.\n- Why: AF makes gradients beat-to-beat variable.\n- Pitfall: use several similar R-R beats in AF.",
   ar_pht: "AR pressure half-time:\n- CW Doppler of the aortic regurgitation jet.\n- Short PHT suggests severe AR, but depends on LV compliance and aortic pressure.\n- Use multiparametric assessment.",
   vena_contracta_ar: "AR vena contracta:\n- Narrowest width of the AR jet near the aortic valve.\n- Measure in zoomed color Doppler.\n- Interpret with jet width, flow reversal, LV size, and Doppler.",
   holodiastolic_flow_reversal: "Holodiastolic flow reversal:\n- PW Doppler in descending or abdominal aorta.\n- Holodiastolic reversal supports significant/severe AR.\n- Ensure proper sample position and Doppler scale.",
@@ -2097,7 +2252,27 @@ const infoContent = {
   inf_drug_info: { title: "Emergency infusion drug", body: "Choose the drug family according to the clinical situation.\nNoradrenaline, dobutamine and adrenaline are vasoactive drugs used in shock.\nAmiodarone is used for selected tachyarrhythmias.\nNicardipine/Loxen and Risordan are used for hypertensive emergencies or vasodilator strategies.\nAlways verify ECG rhythm, blood pressure, contraindications, monitoring and local protocol." },
   inf_dose_info: { title: "Target dose", body: "The target dose is not calculated from blood pressure. Start with a safe initial dose, then titrate according to response.\nFor vasopressors/inotropes: titrate to perfusion, MAP target and cardiac output.\nFor nicardipine: titrate gradually according to blood pressure response.\nFor Risordan: titrate according to blood pressure, chest pain and pulmonary edema response.\nContinuous monitoring is required." },
   inf_nicardipine: { title: "Nicardipine / Loxen", body: "Indication: hypertensive emergency requiring controlled IV blood pressure reduction.\nUsual start: 1–5 mg/h depending on severity and local protocol.\nTitration: increase gradually according to blood pressure response.\nAvoid rapid blood pressure drops.\nCaution: severe aortic stenosis, decompensated heart failure, hypotension, elderly or renal/hepatic impairment." },
-  inf_risordan: { title: "Isosorbide dinitrate / Risordan", body: "Indication: hypertensive pulmonary edema, acute coronary syndrome with hypertension, or vasodilator strategy when appropriate.\nUsual range: 2–10 mg/h, titrated to response.\nMonitor blood pressure and symptoms.\nAvoid/caution: hypotension, right ventricular infarction, severe aortic stenosis, recent PDE5 inhibitor use." }
+  inf_risordan: { title: "Isosorbide dinitrate / Risordan", body: "Indication: hypertensive pulmonary edema, acute coronary syndrome with hypertension, or vasodilator strategy when appropriate.\nUsual range: 2–10 mg/h, titrated to response.\nMonitor blood pressure and symptoms.\nAvoid/caution: hypotension, right ventricular infarction, severe aortic stenosis, recent PDE5 inhibitor use." },
+  nav_lv_function: { title: "LV systolic function", body: "What: global EF and regional wall motion.\nView: PLAX, PSAX, apical 4- and 2-chamber.\nWhy: identifies pump failure, ACS pattern, or cardiogenic shock.\nPitfall: loading conditions and poor apical views can mislead visual EF." },
+  nav_rv_function: { title: "RV size and function", body: "What: RV dilation, RV/LV ratio, TAPSE/S' and septal shape.\nView: RV-focused apical 4-chamber, PSAX and subcostal.\nWhy: supports PE, RV infarction or pulmonary hypertension physiology.\nPitfall: chronic RV disease can mimic acute strain." },
+  nav_tr_paps: { title: "TR velocity / PAPs", body: "What: CW Doppler TR velocity plus RAP estimate for sPAP.\nView: apical 4-chamber, RV inflow, PSAX or subcostal.\nWhy: screens pulmonary pressure and RV afterload.\nPitfall: poor Doppler alignment underestimates pressure." },
+  nav_ivc: { title: "IVC assessment", body: "What: IVC size and inspiratory collapse as a RAP/volume clue.\nView: subcostal long-axis, 1-2 cm from RA junction.\nWhy: helps distinguish congestion, hypovolemia and obstructive physiology.\nPitfall: ventilation and poor inspiratory effort reduce reliability." },
+  nav_effusion: { title: "Pericardial effusion", body: "What: pericardial fluid and tamponade signs.\nView: PLAX, PSAX, apical and subcostal.\nWhy: urgent reversible cause of shock, dyspnea or chest pain.\nPitfall: loculated effusions and pleural effusions can be confusing." },
+  nav_blines: { title: "Lung B-lines", body: "What: vertical artifacts suggesting interstitial/alveolar fluid.\nView: anterior and lateral lung zones bilaterally.\nWhy: supports pulmonary edema when paired with cardiac findings.\nPitfall: B-lines also occur in ARDS, pneumonia and fibrosis." },
+  nav_valves: { title: "Severe valve disease", body: "What: rapid screen for severe stenosis or regurgitation.\nView: valve-focused PLAX/PSAX/apical views with Doppler.\nWhy: acute valve disease can cause pain, shock or dyspnea.\nPitfall: color jet area alone is not enough for severity." },
+  nav_lvot_vti: { title: "LVOT VTI", body: "What: stroke-distance surrogate for forward flow.\nView: apical 5-chamber PW Doppler just below the aortic valve.\nWhy: low VTI supports low cardiac output in shock.\nPitfall: sample position and Doppler alignment strongly affect values." },
+  nav_av_assessment: { title: "Aortic valve assessment", body: "What: AV Vmax, mean gradient and valve area.\nView: CW Doppler from multiple windows plus PLAX LVOT measurement.\nWhy: severe AS is a key structural cause of syncope.\nPitfall: low-flow states may hide severe AS unless AVA and flow are checked." },
+  nav_la_volume: { title: "LA size / volume", body: "What: LA volume indexed to BSA when possible.\nView: apical 4- and 2-chamber without foreshortening.\nWhy: suggests chronic pressure/volume burden and AF substrate.\nPitfall: acute disease may occur before LA enlargement." },
+  nav_mitral_valve: { title: "Mitral valve screen", body: "What: MS/MR morphology, gradients and regurgitation severity.\nView: PLAX, PSAX, apical 4- and 2-chamber with Doppler.\nWhy: rheumatic MS changes AF anticoagulation decisions.\nPitfall: AF and tachycardia distort MS gradients." },
+  nav_valve_morphology: { title: "Valve morphology", body: "What: leaflet motion, thickening, calcification and prolapse/flail.\nView: PLAX/PSAX and focused apical views.\nWhy: anatomy guides severity and intervention suitability.\nPitfall: poor gain can exaggerate calcification." },
+  nav_gradients: { title: "Valve gradients", body: "What: Doppler-derived pressure gradients across stenotic valves.\nView: CW Doppler aligned from the best window.\nWhy: grades stenosis and hemodynamic burden.\nPitfall: gradients are flow-dependent." },
+  nav_regurgitation: { title: "Regurgitation severity", body: "What: integrated color Doppler, vena contracta, CW density and chamber impact.\nView: valve-focused PLAX/apical views.\nWhy: severe acute regurgitation can decompensate quickly.\nPitfall: eccentric jets are often underestimated by color area." },
+  nav_chamber_impact: { title: "Chamber impact", body: "What: LV/RV/LA/RA dilation or dysfunction caused by valve disease.\nView: standard chamber quantification views.\nWhy: shows chronicity and severity consequence.\nPitfall: chamber size may be normal in acute severe regurgitation." },
+  wilkins_mobility: { title: "Wilkins leaflet mobility", body: "What: 1-4 score for restriction of mitral leaflet motion.\nView: PLAX and PSAX, plus apical views.\nWhy: better mobility favors balloon mitral commissurotomy.\nPitfall: score commissural fusion separately; Wilkins does not fully capture it." },
+  wilkins_thickening: { title: "Wilkins leaflet thickening", body: "What: 1-4 score for leaflet body thickness.\nView: PLAX/PSAX with optimized gain.\nWhy: marked thickening predicts less favorable BMC anatomy.\nPitfall: excess gain can make leaflets look thicker." },
+  wilkins_calcification: { title: "Wilkins leaflet calcification", body: "What: 1-4 score for bright calcified leaflet tissue.\nView: PLAX/PSAX and short-axis commissural inspection.\nWhy: calcification lowers BMC success and raises complication risk.\nPitfall: commissural calcification is especially important even if total score is low." },
+  wilkins_subvalvular: { title: "Wilkins subvalvular thickening", body: "What: 1-4 score for chordal thickening/shortening.\nView: PLAX and apical views following chordae to papillary muscles.\nWhy: severe subvalvular disease limits valve opening after BMC.\nPitfall: foreshortened views can hide chordal involvement." },
+  wilkins_mr: { title: "Mitral regurgitation before BMC", body: "What: check whether MR is more than moderate.\nView: integrated MR assessment in PLAX/apical views with color and CW Doppler.\nWhy: significant MR is a major unfavorable/contraindication factor for BMC.\nPitfall: eccentric MR may be underestimated." }
 };
 
 function showInfo(key) {
@@ -2769,6 +2944,50 @@ if (backBtn) {
       s('ms_alerts', '');
       status('ms_status', 'neutral', 'Awaiting data...');
       s('ms_conclusion', 'Fill the fields and calculate.');
+    }
+
+    function calculateWilkinsScore() {
+      const ids = ['wilkins_mobility', 'wilkins_thickening', 'wilkins_calcification', 'wilkins_subvalvular'];
+      const scores = ids.map(id => {
+        const el = document.getElementById(id);
+        return el ? parseInt(el.value, 10) : NaN;
+      });
+
+      if (scores.some(Number.isNaN)) {
+        s('wilkins_results', '');
+        s('wilkins_alerts', '');
+        status('wilkins_status', 'warning', 'Select the four Wilkins components.');
+        s('wilkins_conclusion', 'Always check commissural calcification, LA thrombus, MR severity, valve morphology and clinical context before deciding BMC.');
+        return;
+      }
+
+      const total = scores.reduce((sum, value) => sum + value, 0);
+      const mrMoreThanModerate = document.getElementById('wilkins_mr')?.value === 'yes';
+      renderWilkinsInterpretation(total, mrMoreThanModerate);
+    }
+
+    function renderWilkinsInterpretation(total, mrMoreThanModerate) {
+      let klass = 'success';
+      let message = 'Score <= 8: anatomy usually favorable for balloon mitral commissurotomy if no contraindication.';
+
+      if (total >= 9 && total <= 10) {
+        klass = 'warning';
+        message = 'Score 9-10: intermediate anatomy; decision depends on commissures, MR severity, thrombus, and clinical context.';
+      }
+      if (total > 10) {
+        klass = 'danger';
+        message = 'Score > 10: anatomy usually unfavorable for balloon mitral commissurotomy.';
+      }
+
+      const alerts = [];
+      if (mrMoreThanModerate) {
+        alerts.push(alertBox('danger', 'Significant mitral regurgitation is a major unfavorable/contraindication factor for balloon mitral commissurotomy. Reassess anatomy and indication.'));
+      }
+
+      s('wilkins_results', metric('Wilkins total', total, '/16'));
+      status('wilkins_status', klass, message);
+      s('wilkins_alerts', alerts.join(''));
+      s('wilkins_conclusion', 'Always check commissural calcification, LA thrombus, MR severity, valve morphology and clinical context before deciding BMC.');
     }
 
     function calculateAR() {
